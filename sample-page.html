@@ -1,22 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Traceable Quran — Surah Al-Fatiha</title>
 
-  <!-- Amiri: best free Arabic font for Quran -->
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
 
   <style>
-    /* ─── PAGE SETUP ──────────────────────────────────────── */
+    /* ─── RESET & PAGE ─────────────────────────────────────── */
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background: #f0ece4;
+      background: #eae6de;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
       padding: 30px 20px;
       min-height: 100vh;
     }
@@ -25,195 +23,201 @@
       background: #ffffff;
       width: 210mm;
       min-height: 297mm;
-      padding: 14mm 12mm 12mm 12mm;
-      box-shadow: 0 4px 30px rgba(0,0,0,0.18);
+      padding: 13mm 11mm 11mm 11mm;
+      box-shadow: 0 4px 32px rgba(0,0,0,0.18);
       display: flex;
       flex-direction: column;
-      gap: 0;
-      position: relative;
     }
 
-    /* ─── PAGE HEADER ─────────────────────────────────────── */
+    /* ─── PAGE HEADER ──────────────────────────────────────── */
     .page-header {
       border-top: 2.5px solid #1a1a1a;
       border-bottom: 2.5px solid #1a1a1a;
-      padding: 8px 0;
+      padding: 7px 0;
       text-align: center;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .surah-title {
       font-family: 'EB Garamond', serif;
-      font-size: 20px;
+      font-size: 19px;
       font-weight: 600;
-      letter-spacing: 0.5px;
       color: #1a1a1a;
+      letter-spacing: 0.4px;
     }
 
     .surah-meta {
       font-family: 'EB Garamond', serif;
-      font-size: 12px;
-      color: #555;
+      font-size: 11.5px;
+      color: #666;
       margin-top: 3px;
-      letter-spacing: 0.3px;
     }
 
-    /* ─── VERSE BLOCK ─────────────────────────────────────── */
-    .verse-block {
+    /* ─── BODY — TWO COLUMNS ───────────────────────────────── */
+    .page-body {
       display: flex;
       flex-direction: row;
-      border: 1px solid #c8c0b0;
-      margin-bottom: 0;
-      background: #fff;
+      flex: 1;
+      gap: 0;
+      border: 1px solid #c5bdb0;
     }
 
-    /* ─── LEFT COLUMN — MEANING ───────────────────────────── */
-    .verse-meaning {
-      width: 27%;
-      min-width: 27%;
-      border-right: 1px solid #c8c0b0;
-      padding: 12px 10px;
+    /* ─── LEFT COLUMN — ALL VERSE MEANINGS ────────────────── */
+    .meanings-column {
+      width: 26%;
+      min-width: 26%;
+      border-right: 1.5px solid #c5bdb0;
+      background: #faf8f4;
+      padding: 8px 8px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background: #faf8f4;
+      gap: 0;
     }
 
-    .verse-num-badge {
+    .meaning-entry {
+      display: flex;
+      flex-direction: column;
+      padding: 7px 4px 9px 4px;
+      border-bottom: 1px dashed #d5cfc5;
+    }
+
+    .meaning-entry:last-child {
+      border-bottom: none;
+    }
+
+    .verse-badge {
       font-family: 'EB Garamond', serif;
-      font-size: 10px;
+      font-size: 9.5px;
+      font-weight: 600;
       color: #888;
       border: 1px solid #ccc;
       border-radius: 50%;
-      width: 22px;
-      height: 22px;
-      display: flex;
+      width: 18px;
+      height: 18px;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 8px;
+      margin-bottom: 5px;
       flex-shrink: 0;
+      align-self: center;
     }
 
-    .meaning-text {
+    .meaning-para {
       font-family: 'EB Garamond', serif;
-      font-size: 12.5px;
+      font-size: 11.5px;
       font-style: italic;
       color: #2a2a2a;
       text-align: center;
-      line-height: 1.65;
+      line-height: 1.6;
     }
 
-    /* ─── RIGHT COLUMN — WORD BOXES ───────────────────────── */
-    .verse-words {
-      width: 73%;
-      padding: 10px 12px 12px 12px;
+    /* ─── RIGHT COLUMN — WORD ROWS ─────────────────────────── */
+    .words-column {
+      flex: 1;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-    }
-
-    .direction-label {
-      font-size: 9px;
-      color: #bbb;
-      letter-spacing: 2px;
-      text-align: right;
-      margin-bottom: 6px;
-      font-family: 'EB Garamond', serif;
-    }
-
-    .words-row {
-      display: flex;
-      flex-direction: row-reverse;
-      flex-wrap: wrap;
+      padding: 8px 8px;
       gap: 7px;
-      justify-content: flex-start;
     }
 
-    /* ─── INDIVIDUAL WORD BOX ─────────────────────────────── */
-    .word-box {
-      border: 1px solid #b0a898;
-      min-width: 72px;
-      max-width: 110px;
-      flex: 0 0 auto;
+    /* ─── WORD ROW — ONE BOX PER LINE ──────────────────────── */
+    .word-row {
+      display: flex;
+      flex-direction: row-reverse; /* RTL: W1 appears on the right */
+      border: 1px solid #b5ada0;
+      background: #fff;
+      min-height: 70px;
+    }
+
+    /* ─── WORD CELL — inside the row ───────────────────────── */
+    .word-cell {
+      flex: 1;
       display: flex;
       flex-direction: column;
-      background: #fff;
+      border-left: 1px solid #d8d0c6; /* internal divider */
+      position: relative;
     }
 
-    .arabic-cell {
-      font-family: 'Amiri', serif;
-      font-size: 26px;
-      direction: rtl;
-      unicode-bidi: bidi-override;
-      text-align: center;
-      padding: 10px 8px 6px 8px;
-      min-height: 52px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      /* ══ GRAY SHADOW — the traceable effect ══ */
-      color: rgba(0, 0, 0, 0.13);
-      letter-spacing: 0;
+    /* Remove divider on the rightmost cell (first in DOM = rightmost visually) */
+    .word-cell:first-child {
+      border-left: none;
     }
 
-    .word-divider {
-      height: 1px;
-      background: #d0c8bc;
-      margin: 0;
-    }
-
-    .meaning-cell {
+    /* ─── VERSE START BADGE ─────────────────────────────────── */
+    /* Marks the first word of a new verse when it starts mid-row */
+    .verse-start::before {
+      content: attr(data-verse);
+      position: absolute;
+      top: 3px;
+      right: 4px;
       font-family: 'EB Garamond', serif;
-      font-size: 10px;
-      text-align: center;
-      padding: 5px 6px 6px 6px;
-      min-height: 28px;
+      font-size: 8px;
+      font-weight: 600;
+      color: #fff;
+      background: #888;
+      border-radius: 50%;
+      width: 14px;
+      height: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #1a1a1a;
-      line-height: 1.3;
+      z-index: 1;
+      line-height: 1;
     }
 
-    /* ─── VERSE SEPARATOR ─────────────────────────────────── */
-    .verse-separator {
-      border: none;
-      border-top: 1px dashed #c0b8a8;
+    /* ─── ARABIC TEXT — gray shadow for tracing ─────────────── */
+    .arabic-text {
+      font-family: 'Amiri', serif;
+      font-size: 27px;
+      direction: rtl;
+      text-align: center;
+      padding: 9px 6px 5px 6px;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      /* THE TRACEABLE GRAY SHADOW */
+      color: rgba(0, 0, 0, 0.13);
+    }
+
+    /* ─── INTERNAL HORIZONTAL DIVIDER ──────────────────────── */
+    .cell-divider {
+      height: 1px;
+      background: #d8d0c6;
       margin: 0;
     }
 
-    /* ─── SPACER BETWEEN VERSE BLOCKS ────────────────────── */
-    .verse-gap {
-      height: 10px;
+    /* ─── ENGLISH MEANING INSIDE CELL ──────────────────────── */
+    .cell-meaning {
+      font-family: 'EB Garamond', serif;
+      font-size: 9.5px;
+      text-align: center;
+      color: #1a1a1a;
+      padding: 4px 4px 5px 4px;
+      line-height: 1.3;
+      min-height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    /* ─── PAGE FOOTER ─────────────────────────────────────── */
+    /* ─── PAGE FOOTER ───────────────────────────────────────── */
     .page-footer {
-      margin-top: auto;
-      padding-top: 8px;
+      margin-top: 12px;
+      padding-top: 7px;
       border-top: 2px solid #1a1a1a;
       display: flex;
       justify-content: space-between;
-      align-items: center;
       font-family: 'EB Garamond', serif;
       font-size: 11px;
       color: #444;
     }
 
-    /* ─── PRINT STYLES ────────────────────────────────────── */
+    /* ─── PRINT ─────────────────────────────────────────────── */
     @media print {
-      body {
-        background: white;
-        padding: 0;
-      }
-      .page {
-        box-shadow: none;
-        width: 100%;
-        min-height: 100vh;
-        padding: 14mm 12mm 12mm 12mm;
-      }
+      body { background: white; padding: 0; }
+      .page { box-shadow: none; width: 100%; }
     }
   </style>
 </head>
@@ -221,351 +225,309 @@
 <body>
 <div class="page">
 
-  <!-- ══════════════════════════════════════════════════════════
+  <!-- ══════════════════════════════════════════════
        PAGE HEADER
-  ══════════════════════════════════════════════════════════ -->
+  ══════════════════════════════════════════════ -->
   <div class="page-header">
-    <div class="surah-title">SURAH AL-FATIHA &nbsp;—&nbsp; The Opening</div>
+    <div class="surah-title">SURAH AL-FATIHA — The Opening</div>
     <div class="surah-meta">
       Surah No. 1 &nbsp;|&nbsp; Revealed in Makkah &nbsp;|&nbsp; 7 Verses &nbsp;|&nbsp; Juz 1
     </div>
   </div>
 
-  <!-- ══════════════════════════════════════════════════════════
-       VERSE 1 — 4 words
-  ══════════════════════════════════════════════════════════ -->
-  <div class="verse-block">
+  <!-- ══════════════════════════════════════════════
+       BODY — TWO COLUMNS
+  ══════════════════════════════════════════════ -->
+  <div class="page-body">
 
-    <div class="verse-meaning">
-      <div class="verse-num-badge">1</div>
-      <div class="meaning-text">
-        "In the name of Allah, the Most Gracious, the Most Merciful."
+    <!-- ▌LEFT — ALL VERSE MEANINGS ▌ -->
+    <div class="meanings-column">
+
+      <div class="meaning-entry">
+        <span class="verse-badge">1</span>
+        <span class="meaning-para">"In the name of Allah, the Most Gracious, the Most Merciful."</span>
       </div>
+
+      <div class="meaning-entry">
+        <span class="verse-badge">2</span>
+        <span class="meaning-para">"All praise and thanks belong to Allah, Lord of all the worlds."</span>
+      </div>
+
+      <div class="meaning-entry">
+        <span class="verse-badge">3</span>
+        <span class="meaning-para">"The Most Gracious, the Most Merciful."</span>
+      </div>
+
+      <div class="meaning-entry">
+        <span class="verse-badge">4</span>
+        <span class="meaning-para">"Master of the Day of Judgment."</span>
+      </div>
+
+      <div class="meaning-entry">
+        <span class="verse-badge">5</span>
+        <span class="meaning-para">"You alone we worship, and You alone we ask for help."</span>
+      </div>
+
+      <div class="meaning-entry">
+        <span class="verse-badge">6</span>
+        <span class="meaning-para">"Guide us to the straight path."</span>
+      </div>
+
+      <div class="meaning-entry">
+        <span class="verse-badge">7</span>
+        <span class="meaning-para">"The path of those upon whom You have bestowed favour — not of those who earned Your anger, nor of those who went astray."</span>
+      </div>
+
     </div>
 
-    <div class="verse-words">
-      <div class="direction-label">← ← ← READ RIGHT TO LEFT ← ← ←</div>
-      <div class="words-row">
+    <!-- ▌RIGHT — CONTINUOUS WORD ROWS ▌ -->
+    <div class="words-column">
 
-        <div class="word-box">
-          <div class="arabic-cell">بِسْمِ</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">In the name</div>
+      <!-- ─────────────────────────────────────────
+           ROW 1 — Verse 1 (W1–W4) — full row
+      ───────────────────────────────────────── -->
+      <div class="word-row">
+
+        <div class="word-cell verse-start" data-verse="1">
+          <div class="arabic-text">بِسْمِ</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">In the name</div>
         </div>
 
-        <div class="word-box">
-          <div class="arabic-cell">ٱللَّهِ</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">of Allah</div>
+        <div class="word-cell">
+          <div class="arabic-text">ٱللَّهِ</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">of Allah</div>
         </div>
 
-        <div class="word-box">
-          <div class="arabic-cell">ٱلرَّحْمَـٰنِ</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">the Most Gracious</div>
+        <div class="word-cell">
+          <div class="arabic-text">ٱلرَّحْمَـٰنِ</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">the Most Gracious</div>
         </div>
 
-        <div class="word-box">
-          <div class="arabic-cell">ٱلرَّحِيمِ</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">the Most Merciful</div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <div class="verse-gap"></div>
-
-  <!-- ══════════════════════════════════════════════════════════
-       VERSE 2 — 4 words
-  ══════════════════════════════════════════════════════════ -->
-  <div class="verse-block">
-
-    <div class="verse-meaning">
-      <div class="verse-num-badge">2</div>
-      <div class="meaning-text">
-        "All praise and thanks belong to Allah, Lord of all the worlds."
-      </div>
-    </div>
-
-    <div class="verse-words">
-      <div class="direction-label">← ← ← READ RIGHT TO LEFT ← ← ←</div>
-      <div class="words-row">
-
-        <div class="word-box">
-          <div class="arabic-cell">ٱلْحَمْدُ</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">All praise &amp; thanks</div>
-        </div>
-
-        <div class="word-box">
-          <div class="arabic-cell">لِلَّهِ</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">be to Allah</div>
-        </div>
-
-        <div class="word-box">
-          <div class="arabic-cell">رَبِّ</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">the Lord</div>
-        </div>
-
-        <div class="word-box">
-          <div class="arabic-cell">ٱلْعَـٰلَمِينَ</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">of all the worlds</div>
+        <div class="word-cell">
+          <div class="arabic-text">ٱلرَّحِيمِ</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">the Most Merciful</div>
         </div>
 
       </div>
-    </div>
-  </div>
 
-  <div class="verse-gap"></div>
+      <!-- ─────────────────────────────────────────
+           ROW 2 — Verse 2 (W1–W4) — full row
+      ───────────────────────────────────────── -->
+      <div class="word-row">
 
-  <!-- ══════════════════════════════════════════════════════════
-       VERSE 3 — 2 words
-  ══════════════════════════════════════════════════════════ -->
-  <div class="verse-block">
-
-    <div class="verse-meaning">
-      <div class="verse-num-badge">3</div>
-      <div class="meaning-text">
-        "The Most Gracious, the Most Merciful."
-      </div>
-    </div>
-
-    <div class="verse-words">
-      <div class="direction-label">← ← ← READ RIGHT TO LEFT ← ← ←</div>
-      <div class="words-row">
-
-        <div class="word-box">
-          <div class="arabic-cell">ٱلرَّحْمَـٰنِ</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">The Most Gracious</div>
+        <div class="word-cell verse-start" data-verse="2">
+          <div class="arabic-text">ٱلْحَمْدُ</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">All praise &amp; thanks</div>
         </div>
 
-        <div class="word-box">
-          <div class="arabic-cell">ٱلرَّحِيمِ</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">the Most Merciful</div>
+        <div class="word-cell">
+          <div class="arabic-text">لِلَّهِ</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">be to Allah</div>
+        </div>
+
+        <div class="word-cell">
+          <div class="arabic-text">رَبِّ</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">the Lord</div>
+        </div>
+
+        <div class="word-cell">
+          <div class="arabic-text">ٱلْعَـٰلَمِينَ</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">of all the worlds</div>
         </div>
 
       </div>
-    </div>
-  </div>
 
-  <div class="verse-gap"></div>
+      <!-- ─────────────────────────────────────────
+           ROW 3 — Verse 3 (W1–W2) + Verse 4 (W1–W2)
+           V3 ends at W2, V4 picks up immediately
+      ───────────────────────────────────────── -->
+      <div class="word-row">
 
-  <!-- ══════════════════════════════════════════════════════════
-       VERSE 4 — 3 words
-  ══════════════════════════════════════════════════════════ -->
-  <div class="verse-block">
-
-    <div class="verse-meaning">
-      <div class="verse-num-badge">4</div>
-      <div class="meaning-text">
-        "Master of the Day of Judgment."
-      </div>
-    </div>
-
-    <div class="verse-words">
-      <div class="direction-label">← ← ← READ RIGHT TO LEFT ← ← ←</div>
-      <div class="words-row">
-
-        <div class="word-box">
-          <div class="arabic-cell">مَـٰلِكِ</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">Master</div>
+        <div class="word-cell verse-start" data-verse="3">
+          <div class="arabic-text">ٱلرَّحْمَـٰنِ</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">The Most Gracious</div>
         </div>
 
-        <div class="word-box">
-          <div class="arabic-cell">يَوْمِ</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">of the Day</div>
+        <div class="word-cell">
+          <div class="arabic-text">ٱلرَّحِيمِ</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">the Most Merciful</div>
         </div>
 
-        <div class="word-box">
-          <div class="arabic-cell">ٱلدِّينِ</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">of Judgment</div>
+        <div class="word-cell verse-start" data-verse="4">
+          <div class="arabic-text">مَـٰلِكِ</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">Master</div>
+        </div>
+
+        <div class="word-cell">
+          <div class="arabic-text">يَوْمِ</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">of the Day</div>
         </div>
 
       </div>
-    </div>
-  </div>
 
-  <div class="verse-gap"></div>
+      <!-- ─────────────────────────────────────────
+           ROW 4 — Verse 4 (W3) + Verse 5 (W1–W3)
+           V4 ends at W3, V5 picks up immediately
+      ───────────────────────────────────────── -->
+      <div class="word-row">
 
-  <!-- ══════════════════════════════════════════════════════════
-       VERSE 5 — 4 words
-  ══════════════════════════════════════════════════════════ -->
-  <div class="verse-block">
-
-    <div class="verse-meaning">
-      <div class="verse-num-badge">5</div>
-      <div class="meaning-text">
-        "You alone we worship, and You alone we ask for help."
-      </div>
-    </div>
-
-    <div class="verse-words">
-      <div class="direction-label">← ← ← READ RIGHT TO LEFT ← ← ←</div>
-      <div class="words-row">
-
-        <div class="word-box">
-          <div class="arabic-cell">إِيَّاكَ</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">You alone</div>
+        <div class="word-cell">
+          <div class="arabic-text">ٱلدِّينِ</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">of Judgment</div>
         </div>
 
-        <div class="word-box">
-          <div class="arabic-cell">نَعْبُدُ</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">we worship</div>
+        <div class="word-cell verse-start" data-verse="5">
+          <div class="arabic-text">إِيَّاكَ</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">You alone</div>
         </div>
 
-        <div class="word-box">
-          <div class="arabic-cell">وَإِيَّاكَ</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">and You alone</div>
+        <div class="word-cell">
+          <div class="arabic-text">نَعْبُدُ</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">we worship</div>
         </div>
 
-        <div class="word-box">
-          <div class="arabic-cell">نَسْتَعِينُ</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">we ask for help</div>
+        <div class="word-cell">
+          <div class="arabic-text">وَإِيَّاكَ</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">and You alone</div>
         </div>
 
       </div>
-    </div>
-  </div>
 
-  <div class="verse-gap"></div>
+      <!-- ─────────────────────────────────────────
+           ROW 5 — Verse 5 (W4) + Verse 6 (W1–W3)
+           V5 ends at W4, V6 picks up immediately
+      ───────────────────────────────────────── -->
+      <div class="word-row">
 
-  <!-- ══════════════════════════════════════════════════════════
-       VERSE 6 — 3 words
-  ══════════════════════════════════════════════════════════ -->
-  <div class="verse-block">
-
-    <div class="verse-meaning">
-      <div class="verse-num-badge">6</div>
-      <div class="meaning-text">
-        "Guide us to the straight path."
-      </div>
-    </div>
-
-    <div class="verse-words">
-      <div class="direction-label">← ← ← READ RIGHT TO LEFT ← ← ←</div>
-      <div class="words-row">
-
-        <div class="word-box">
-          <div class="arabic-cell">ٱهْدِنَا</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">Guide us</div>
+        <div class="word-cell">
+          <div class="arabic-text">نَسْتَعِينُ</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">we ask for help</div>
         </div>
 
-        <div class="word-box">
-          <div class="arabic-cell">ٱلصِّرَٰطَ</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">to the path</div>
+        <div class="word-cell verse-start" data-verse="6">
+          <div class="arabic-text">ٱهْدِنَا</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">Guide us</div>
         </div>
 
-        <div class="word-box">
-          <div class="arabic-cell">ٱلْمُسْتَقِيمَ</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">the straight</div>
+        <div class="word-cell">
+          <div class="arabic-text">ٱلصِّرَٰطَ</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">to the path</div>
+        </div>
+
+        <div class="word-cell">
+          <div class="arabic-text">ٱلْمُسْتَقِيمَ</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">the straight</div>
         </div>
 
       </div>
-    </div>
-  </div>
 
-  <div class="verse-gap"></div>
+      <!-- ─────────────────────────────────────────
+           ROW 6 — Verse 7 (W1–W4) — full row
+      ───────────────────────────────────────── -->
+      <div class="word-row">
 
-  <!-- ══════════════════════════════════════════════════════════
-       VERSE 7 — 9 words (wraps to 3 rows)
-  ══════════════════════════════════════════════════════════ -->
-  <div class="verse-block">
-
-    <div class="verse-meaning">
-      <div class="verse-num-badge">7</div>
-      <div class="meaning-text">
-        "The path of those upon whom You have bestowed Your favour — not of those who earned Your anger, nor of those who went astray."
-      </div>
-    </div>
-
-    <div class="verse-words">
-      <div class="direction-label">← ← ← READ RIGHT TO LEFT ← ← ←</div>
-      <div class="words-row">
-
-        <div class="word-box">
-          <div class="arabic-cell">صِرَٰطَ</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">The path</div>
+        <div class="word-cell verse-start" data-verse="7">
+          <div class="arabic-text">صِرَٰطَ</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">The path</div>
         </div>
 
-        <div class="word-box">
-          <div class="arabic-cell">ٱلَّذِينَ</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">of those</div>
+        <div class="word-cell">
+          <div class="arabic-text">ٱلَّذِينَ</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">of those</div>
         </div>
 
-        <div class="word-box">
-          <div class="arabic-cell">أَنْعَمْتَ</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">You have bestowed favour</div>
+        <div class="word-cell">
+          <div class="arabic-text">أَنْعَمْتَ</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">You bestowed favour</div>
         </div>
 
-        <div class="word-box">
-          <div class="arabic-cell">عَلَيْهِمْ</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">on them</div>
-        </div>
-
-        <div class="word-box">
-          <div class="arabic-cell">غَيْرِ</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">not of</div>
-        </div>
-
-        <div class="word-box">
-          <div class="arabic-cell">ٱلْمَغْضُوبِ</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">those who earned wrath</div>
-        </div>
-
-        <div class="word-box">
-          <div class="arabic-cell">عَلَيْهِمْ</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">upon themselves</div>
-        </div>
-
-        <div class="word-box">
-          <div class="arabic-cell">وَلَا</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">and not</div>
-        </div>
-
-        <div class="word-box">
-          <div class="arabic-cell">ٱلضَّآلِّينَ</div>
-          <div class="word-divider"></div>
-          <div class="meaning-cell">those who go astray</div>
+        <div class="word-cell">
+          <div class="arabic-text">عَلَيْهِمْ</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">on them</div>
         </div>
 
       </div>
-    </div>
-  </div>
 
-  <!-- ══════════════════════════════════════════════════════════
+      <!-- ─────────────────────────────────────────
+           ROW 7 — Verse 7 (W5–W8) — continues
+      ───────────────────────────────────────── -->
+      <div class="word-row">
+
+        <div class="word-cell">
+          <div class="arabic-text">غَيْرِ</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">not of</div>
+        </div>
+
+        <div class="word-cell">
+          <div class="arabic-text">ٱلْمَغْضُوبِ</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">those who earned wrath</div>
+        </div>
+
+        <div class="word-cell">
+          <div class="arabic-text">عَلَيْهِمْ</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">upon themselves</div>
+        </div>
+
+        <div class="word-cell">
+          <div class="arabic-text">وَلَا</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">and not</div>
+        </div>
+
+      </div>
+
+      <!-- ─────────────────────────────────────────
+           ROW 8 — Verse 7 (W9) — final word
+           Single word stretches full row width
+      ───────────────────────────────────────── -->
+      <div class="word-row">
+
+        <div class="word-cell">
+          <div class="arabic-text">ٱلضَّآلِّينَ</div>
+          <div class="cell-divider"></div>
+          <div class="cell-meaning">those who go astray</div>
+        </div>
+
+      </div>
+
+    </div><!-- end words-column -->
+  </div><!-- end page-body -->
+
+  <!-- ══════════════════════════════════════════════
        PAGE FOOTER
-  ══════════════════════════════════════════════════════════ -->
-  <div style="flex-grow: 1; min-height: 12px;"></div>
+  ══════════════════════════════════════════════ -->
   <div class="page-footer">
     <span>Surah Al-Fatiha — The Opening</span>
     <span>Page 1 &nbsp;|&nbsp; Juz 1</span>
   </div>
 
-</div>
+</div><!-- end page -->
 </body>
 </html>
