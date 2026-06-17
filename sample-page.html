@@ -47,7 +47,6 @@
       margin-top: 3px;
     }
 
-
     /* ── TWO COLUMNS ── */
     .page-body {
       display: flex;
@@ -66,8 +65,6 @@
       display: flex;
       flex-direction: column;
     }
-
-    /* dashed divider RESTORED — accurately spaced */
     .meaning-entry {
       display: flex;
       flex-direction: column;
@@ -75,10 +72,7 @@
       padding: 8px 4px;
       border-bottom: 1px dashed #c8c0b4;
     }
-    .meaning-entry:last-child {
-      border-bottom: none;
-    }
-
+    .meaning-entry:last-child { border-bottom: none; }
     .verse-badge {
       font-family: 'EB Garamond', serif;
       font-size: 9.5px;
@@ -104,25 +98,24 @@
     }
 
 
-    /* ── RIGHT COLUMN — WORD ROWS ── */
+    /* ── RIGHT COLUMN ── */
     .words-column {
       flex: 1;
       display: flex;
       flex-direction: column;
       padding: 8px 8px;
-      gap: 7px;
+      gap: 6px;
     }
 
-    /* ONE BOX per line — no internal vertical dividers */
+    /* ONE BOX per line */
     .word-row {
       display: flex;
       flex-direction: row-reverse;
       border: 1px solid #b5ada0;
       background: #fff;
-      min-height: 68px;
     }
 
-    /* word cells — NO border-left, NO vertical dividers */
+    /* WORD CELL — 3 sections: translit / arabic / meaning */
     .word-cell {
       flex: 1;
       display: flex;
@@ -130,14 +123,14 @@
       position: relative;
     }
 
-    /* verse-start badge — marks new verse beginning mid-row */
+    /* verse-start badge */
     .verse-start::before {
       content: attr(data-verse);
       position: absolute;
       top: 3px;
-      right: 4px;
+      right: 3px;
       font-family: 'EB Garamond', serif;
-      font-size: 7.5px;
+      font-size: 7px;
       font-weight: 600;
       color: #fff;
       background: #999;
@@ -150,38 +143,53 @@
       z-index: 1;
     }
 
-    /* Arabic — gray shadow traceable */
-    .arabic-text {
-      font-family: 'Amiri', serif;
-      font-size: 25px;
-      direction: rtl;
+    /* ── SECTION 1: TRANSLITERATION (top) ── */
+    .translit-text {
+      font-family: 'EB Garamond', serif;
+      font-size: 9px;
+      font-style: italic;
+      color: #777;
       text-align: center;
-      padding: 8px 5px 4px 5px;
-      flex: 1;
+      padding: 4px 3px 3px 3px;
+      min-height: 20px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: rgba(0, 0, 0, 0.13);
+      letter-spacing: 0.2px;
     }
 
-    /* horizontal divider inside cell */
+    /* ── DIVIDER ── */
     .cell-divider {
       height: 1px;
       background: #d8d0c6;
     }
 
-    /* English meaning */
+    /* ── SECTION 2: ARABIC — gray shadow traceable ── */
+    .arabic-text {
+      font-family: 'Amiri', serif;
+      font-size: 24px;
+      direction: rtl;
+      text-align: center;
+      padding: 7px 5px 5px 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(0, 0, 0, 0.13);
+      flex: 1;
+    }
+
+    /* ── SECTION 3: ENGLISH MEANING (bottom) ── */
     .cell-meaning {
       font-family: 'EB Garamond', serif;
       font-size: 9px;
       text-align: center;
       color: #1a1a1a;
-      padding: 4px 3px 5px 3px;
+      padding: 3px 3px 5px 3px;
       line-height: 1.3;
+      min-height: 22px;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 22px;
     }
 
     /* ── FOOTER ── */
@@ -205,8 +213,6 @@
 <body>
 <div class="page">
 
-
-  <!-- HEADER -->
   <div class="page-header">
     <div class="surah-title">SURAH AL-FATIHA — The Opening</div>
     <div class="surah-meta">Surah No. 1 &nbsp;|&nbsp; Revealed in Makkah &nbsp;|&nbsp; 7 Verses &nbsp;|&nbsp; Juz 1</div>
@@ -214,7 +220,7 @@
 
   <div class="page-body">
 
-    <!-- ▌ LEFT — VERSE MEANINGS ▌ -->
+    <!-- LEFT — VERSE MEANINGS -->
     <div class="meanings-column">
       <div class="meaning-entry">
         <span class="verse-badge">1</span>
@@ -246,38 +252,50 @@
       </div>
     </div>
 
-    <!-- ▌ RIGHT — WORD ROWS (variable words per line) ▌ -->
-    <div class="words-column">
 
+    <!-- RIGHT — WORD ROWS -->
+    <div class="words-column">
 
       <!-- ROW 1 — 6 words: V1(W1-W4) + V2(W1-W2) -->
       <div class="word-row">
         <div class="word-cell verse-start" data-verse="1">
+          <div class="translit-text">bis'mi</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">بِسْمِ</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">In the name</div>
         </div>
         <div class="word-cell">
+          <div class="translit-text">l-lahi</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">ٱللَّهِ</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">of Allah</div>
         </div>
         <div class="word-cell">
+          <div class="translit-text">l-raḥmāni</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">ٱلرَّحْمَـٰنِ</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">the Most Gracious</div>
         </div>
         <div class="word-cell">
+          <div class="translit-text">l-raḥīmi</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">ٱلرَّحِيمِ</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">the Most Merciful</div>
         </div>
         <div class="word-cell verse-start" data-verse="2">
+          <div class="translit-text">al-ḥamdu</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">ٱلْحَمْدُ</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">All praise &amp; thanks</div>
         </div>
         <div class="word-cell">
+          <div class="translit-text">lillahi</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">لِلَّهِ</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">be to Allah</div>
@@ -287,31 +305,43 @@
       <!-- ROW 2 — 6 words: V2(W3-W4) + V3(W1-W2) + V4(W1-W2) -->
       <div class="word-row">
         <div class="word-cell">
+          <div class="translit-text">rabbi</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">رَبِّ</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">the Lord</div>
         </div>
         <div class="word-cell">
+          <div class="translit-text">l-ʿālamīna</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">ٱلْعَـٰلَمِينَ</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">of all the worlds</div>
         </div>
         <div class="word-cell verse-start" data-verse="3">
+          <div class="translit-text">al-raḥmāni</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">ٱلرَّحْمَـٰنِ</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">The Most Gracious</div>
         </div>
         <div class="word-cell">
+          <div class="translit-text">l-raḥīmi</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">ٱلرَّحِيمِ</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">the Most Merciful</div>
         </div>
         <div class="word-cell verse-start" data-verse="4">
+          <div class="translit-text">māliki</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">مَـٰلِكِ</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">Master</div>
         </div>
         <div class="word-cell">
+          <div class="translit-text">yawmi</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">يَوْمِ</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">of the Day</div>
@@ -322,26 +352,36 @@
       <!-- ROW 3 — 5 words: V4(W3) + V5(W1-W4) -->
       <div class="word-row">
         <div class="word-cell">
+          <div class="translit-text">l-dīni</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">ٱلدِّينِ</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">of Judgment</div>
         </div>
         <div class="word-cell verse-start" data-verse="5">
+          <div class="translit-text">iyyāka</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">إِيَّاكَ</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">You alone</div>
         </div>
         <div class="word-cell">
+          <div class="translit-text">naʿbudu</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">نَعْبُدُ</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">we worship</div>
         </div>
         <div class="word-cell">
+          <div class="translit-text">wa-iyyāka</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">وَإِيَّاكَ</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">and You alone</div>
         </div>
         <div class="word-cell">
+          <div class="translit-text">nastaʿīnu</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">نَسْتَعِينُ</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">we ask for help</div>
@@ -351,66 +391,89 @@
       <!-- ROW 4 — 6 words: V6(W1-W3) + V7(W1-W3) -->
       <div class="word-row">
         <div class="word-cell verse-start" data-verse="6">
+          <div class="translit-text">ih'dinā</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">ٱهْدِنَا</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">Guide us</div>
         </div>
         <div class="word-cell">
+          <div class="translit-text">l-ṣirāṭa</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">ٱلصِّرَٰطَ</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">to the path</div>
         </div>
         <div class="word-cell">
+          <div class="translit-text">l-mus'taqīma</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">ٱلْمُسْتَقِيمَ</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">the straight</div>
         </div>
         <div class="word-cell verse-start" data-verse="7">
+          <div class="translit-text">ṣirāṭa</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">صِرَٰطَ</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">The path</div>
         </div>
         <div class="word-cell">
+          <div class="translit-text">alladhīna</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">ٱلَّذِينَ</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">of those</div>
         </div>
         <div class="word-cell">
+          <div class="translit-text">anʿamta</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">أَنْعَمْتَ</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">You bestowed favour</div>
         </div>
       </div>
 
-
       <!-- ROW 5 — 6 words: V7(W4-W9) -->
       <div class="word-row">
         <div class="word-cell">
+          <div class="translit-text">ʿalayhim</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">عَلَيْهِمْ</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">on them</div>
         </div>
         <div class="word-cell">
+          <div class="translit-text">ghayri</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">غَيْرِ</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">not of</div>
         </div>
         <div class="word-cell">
+          <div class="translit-text">l-maghḍūbi</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">ٱلْمَغْضُوبِ</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">who earned wrath</div>
         </div>
         <div class="word-cell">
+          <div class="translit-text">ʿalayhim</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">عَلَيْهِمْ</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">upon themselves</div>
         </div>
         <div class="word-cell">
+          <div class="translit-text">walā</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">وَلَا</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">and not</div>
         </div>
         <div class="word-cell">
+          <div class="translit-text">l-ḍālīna</div>
+          <div class="cell-divider"></div>
           <div class="arabic-text">ٱلضَّآلِّينَ</div>
           <div class="cell-divider"></div>
           <div class="cell-meaning">those who go astray</div>
@@ -420,7 +483,6 @@
     </div><!-- end words-column -->
   </div><!-- end page-body -->
 
-  <!-- FOOTER -->
   <div class="page-footer">
     <span>Surah Al-Fatiha — The Opening</span>
     <span>Page 1 &nbsp;|&nbsp; Juz 1</span>
