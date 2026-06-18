@@ -224,7 +224,7 @@ def build_pages():
     ))
 
     # ── PAGES 2+ — Al-Baqarah greedy pack to ~16 rows (160 items at wpr=10)
-    target  = 160
+    target  = 120   # 12 rows × 10 wpr — optimised for A4 print
     page_no = 2
     bucket  = []
     items   = 0
@@ -465,24 +465,24 @@ CSS += """
 /* ── 3-SECTION WORD CELL CONTENT ── */
 
 /* Transliteration — top, halved horizontal padding */
-.tr{font-family:'EB Garamond',serif;font-size:7.5px;font-style:italic;
-    color:#a07830;text-align:center;padding:0px 1px;
-    min-height:8px;display:flex;align-items:center;justify-content:center;
+.tr{font-family:'EB Garamond',serif;font-size:8px;font-style:italic;
+    color:#a07830;text-align:center;padding:3px 1px 1px;
+    min-height:12px;display:flex;align-items:center;justify-content:center;
     letter-spacing:.1px;line-height:1}
 
-/* Horizontal hairline — minimal margin */
-.hd{height:0.5px;background:#e4d0a8;margin:0 1px}
+/* Horizontal hairline — slightly more margin with bigger rows */
+.hd{height:0.5px;background:#e4d0a8;margin:0 2px}
 
-/* Arabic — visual king, line-height tightened, font size preserved at 27px */
-.aw{font-family:'Amiri',serif;font-size:27px;direction:rtl;text-align:center;
-    padding:1px 1px;flex:1;display:flex;align-items:center;
-    justify-content:center;color:rgba(0,0,0,.13);line-height:1.05;
+/* Arabic — print-optimised size, more vertical space with 12 rows/page */
+.aw{font-family:'Amiri',serif;font-size:34px;direction:rtl;text-align:center;
+    padding:4px 1px 3px;flex:1;display:flex;align-items:center;
+    justify-content:center;color:rgba(0,0,0,.13);line-height:1.1;
     overflow:hidden}
 
-/* English meaning — bottom, halved horizontal padding */
-.mn{font-family:'EB Garamond',serif;font-size:8px;text-align:center;
-    color:#1e1206;padding:0px 1px;min-height:10px;
-    display:flex;align-items:center;justify-content:center;line-height:1.1}
+/* English meaning — more room with 12 rows/page */
+.mn{font-family:'EB Garamond',serif;font-size:9px;text-align:center;
+    color:#1e1206;padding:2px 1px 3px;min-height:16px;
+    display:flex;align-items:center;justify-content:center;line-height:1.2}
 
 /* FOOTER — gold rule */
 .pf{padding-top:5px;border-top:2px solid #8b6c14;display:flex;
