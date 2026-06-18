@@ -232,18 +232,14 @@ CSS_STD = f"""
 .cell:last-child {{ border-left: none; }}
 
 .tr {{
-  flex: 0 0 {TR_H}mm; height: {TR_H}mm;
+  flex: 1;
   display: flex; align-items: center; justify-content: center;
   font-size: {TR_PT}pt; font-style: italic; color: {AMBER};
-  overflow: hidden;
-}}
-.div {{
-  flex: 0 0 {DIV_H}mm; height: {DIV_H}mm;
-  background: {HAIRLINE};
+  padding: 1px;
   overflow: hidden;
 }}
 .ar {{
-  flex: 0 0 {AR_H}mm; height: {AR_H}mm;
+  flex: 3;
   display: flex; align-items: center; justify-content: center;
   font-family: 'Amiri', serif;
   font-size: {AR_PT}pt;
@@ -252,9 +248,10 @@ CSS_STD = f"""
   overflow: hidden; white-space: nowrap;
 }}
 .mn {{
-  flex: 0 0 {MN_H}mm; height: {MN_H}mm;
+  flex: 1;
   display: flex; align-items: center; justify-content: center;
   font-size: {MN_PT_CELL}pt; color: {INK_BODY};
+  padding: 1px;
   overflow: hidden;
 }}
 """
@@ -550,9 +547,7 @@ def render_standard(juz_no=1, page_no=3, surah_label='[ SURAH PLACEHOLDER ]'):
     cells = ''.join(
         f'<div class="cell">'
         f'<div class="tr">tr-{i+1}</div>'
-        f'<div class="div"></div>'
         f'<div class="ar">&#1593;</div>'
-        f'<div class="div"></div>'
         f'<div class="mn">m-{i+1}</div>'
         f'</div>'
         for i in range(WORDS_PER_ROW)

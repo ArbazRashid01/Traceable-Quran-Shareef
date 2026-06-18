@@ -62,22 +62,17 @@ def emit_cell(arabic, translit, meaning, weight=3):
     return (
         f'<div class="cell" style="flex:{weight}">'
         f'<div class="tr">{translit}</div>'
-        f'<div class="div"></div>'
         f'<div class="ar">{arabic}</div>'
-        f'<div class="div"></div>'
         f'<div class="mn">{meaning}</div>'
         f'</div>'
     )
 
 def emit_marker_cell(verse_num: int):
-    """Ayah-end marker — narrow fixed width, gold ۝ + Arabic-Indic numeral."""
     glyph = f'&#1757;{ar(verse_num)}'
     return (
         f'<div class="cell" style="flex:2">'
         f'<div class="tr">&middot;</div>'
-        f'<div class="div"></div>'
         f'<div class="ar" style="color:#c9a84c;font-size:18pt;">{glyph}</div>'
-        f'<div class="div"></div>'
         f'<div class="mn">&middot;</div>'
         f'</div>'
     )
@@ -86,9 +81,7 @@ def emit_blank_cell():
     return (
         '<div class="cell">'
         '<div class="tr">&nbsp;</div>'
-        '<div class="div"></div>'
         '<div class="ar">&nbsp;</div>'
-        '<div class="div"></div>'
         '<div class="mn">&nbsp;</div>'
         '</div>'
     )
