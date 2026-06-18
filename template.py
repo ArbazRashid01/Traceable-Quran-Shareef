@@ -157,20 +157,17 @@ body {{
 CSS_STD = f"""
 .body-c {{
   flex: 0 0 {BODY_H}mm;
-  height: {BODY_H}mm;
   display: flex; flex-direction: row;
   border: 0.3mm solid {ROW_BORDER};
-  overflow: hidden;
 }}
 
-/* LEFT — meaning panel, free-flowing, no slot height constraints */
+/* LEFT — meaning panel, free-flowing */
 .panel {{
   flex: 0 0 {LEFT_PCT}%;
   width: {LEFT_PCT}%;
   background: {PARCHMENT_2};
   border-right: 0.4mm solid {ROW_BORDER};
   display: flex; flex-direction: column;
-  overflow: hidden;
   padding: 2mm 2mm;
   gap: 0;
 }}
@@ -190,11 +187,10 @@ CSS_STD = f"""
   word-wrap: break-word;
 }}
 
-/* RIGHT — word rows, no fixed row count or height */
+/* RIGHT — word rows, free-flowing */
 .grid {{
   flex: 1 1 auto;
   display: flex; flex-direction: column;
-  overflow: hidden;
   background: {PARCHMENT};
 }}
 /* Each row sizes to tallest cell — no fixed height */
@@ -441,10 +437,11 @@ CSS_PRINT = """
 @media print {
   @page { size: A4; margin: 0; }
   body  { background: #fdf7ed; padding: 0; gap: 0; }
-  .page { box-shadow: none; margin: 0; page-break-after: always; break-after: page; }
-  .page:last-of-type { page-break-after: auto; break-after: auto; }
-  .row, .slot { page-break-inside: avoid; break-inside: avoid; }
-}
+  .page {{ box-shadow: none; margin: 0; page-break-after: always; break-after: page; overflow: visible; }}
+  .page:last-of-type {{ page-break-after: auto; break-after: auto; }}
+  .body-c, .panel, .grid {{ overflow: visible; }}
+  .row, .slot {{ page-break-inside: avoid; break-inside: avoid; }}
+}}
 """
 
 CSS = CSS_BASE + CSS_STD + CSS_SURAH + CSS_JUZ + CSS_PRINT
