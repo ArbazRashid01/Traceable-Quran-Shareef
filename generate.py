@@ -224,7 +224,7 @@ def build_pages():
     ))
 
     # ── PAGES 2+ — Al-Baqarah greedy pack to ~16 rows (160 items at wpr=10)
-    target  = 160
+    target  = 120   # ~12 rows × 10 wpr — spacious, readable, A4-balanced
     page_no = 2
     bucket  = []
     items   = 0
@@ -448,10 +448,11 @@ CSS += """
 /* RIGHT — continuous word flow across all verses */
 .vw{flex:1;display:flex;flex-direction:column;padding:0 3px}
 
-/* WORD ROW — fills column height, words sit flush, no gap */
+/* WORD ROW — no row ever splits across a page break */
 .wr{flex:1;display:flex;flex-direction:row-reverse;
     align-items:stretch;border-bottom:0.5px solid #e8d8b8;
-    gap:0;justify-content:flex-start}
+    gap:0;justify-content:flex-start;
+    page-break-inside:avoid;break-inside:avoid}
 .wr:last-child{border-bottom:none}
 
 /* WORD CELL — adaptive base width + grow to fill row width */
@@ -464,25 +465,24 @@ CSS += """
 
 /* ── 3-SECTION WORD CELL CONTENT ── */
 
-/* Transliteration — top, halved horizontal padding */
-.tr{font-family:'EB Garamond',serif;font-size:7.5px;font-style:italic;
-    color:#a07830;text-align:center;padding:0px 1px;
-    min-height:8px;display:flex;align-items:center;justify-content:center;
+/* Transliteration — +45% size, more breathing room */
+.tr{font-family:'EB Garamond',serif;font-size:11px;font-style:italic;
+    color:#a07830;text-align:center;padding:3px 1px 2px;
+    min-height:16px;display:flex;align-items:center;justify-content:center;
     letter-spacing:.1px;line-height:1}
 
 /* Horizontal hairline — minimal margin */
 .hd{height:0.5px;background:#e4d0a8;margin:0 1px}
 
-/* Arabic — visual king, line-height tightened, font size preserved at 27px */
+/* Arabic — unchanged: 27px, same opacity, same weight */
 .aw{font-family:'Amiri',serif;font-size:27px;direction:rtl;text-align:center;
-    padding:1px 1px;flex:1;display:flex;align-items:center;
-    justify-content:center;color:rgba(0,0,0,.13);line-height:1.05;
-    overflow:hidden}
+    padding:4px 1px 3px;flex:1;display:flex;align-items:center;
+    justify-content:center;color:rgba(0,0,0,.13);line-height:1.45}
 
-/* English meaning — bottom, halved horizontal padding */
-.mn{font-family:'EB Garamond',serif;font-size:8px;text-align:center;
-    color:#1e1206;padding:0px 1px;min-height:10px;
-    display:flex;align-items:center;justify-content:center;line-height:1.1}
+/* English meaning — +35% size, more breathing room */
+.mn{font-family:'EB Garamond',serif;font-size:11px;text-align:center;
+    color:#1e1206;padding:2px 1px 3px;min-height:16px;
+    display:flex;align-items:center;justify-content:center;line-height:1.3}
 
 /* FOOTER — gold rule */
 .pf{padding-top:5px;border-top:2px solid #8b6c14;display:flex;
