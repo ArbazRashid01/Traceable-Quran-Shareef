@@ -63,7 +63,7 @@ PARCHMENT_2  = '#f6ead6'
 AMBER        = '#a07830'
 HAIRLINE     = '#e4d0a8'
 ROW_BORDER   = '#d4b870'
-GRAY_TRACE   = 'rgba(0,0,0,0.13)'
+GRAY_TRACE   = 'rgba(0,0,0,0.18)'
 PH_BG        = '#f8f1dc'
 PH_TX        = '#bfa770'
 
@@ -203,53 +203,57 @@ CSS_STD = f"""
 }}
 .row:last-child {{ border-bottom: none; }}
 
-/* Cells: CSS grid with 3 guaranteed rows — transliteration / arabic / meaning.
-   Each section has a hard minimum slot. Text wraps within its slot.
-   Nothing can collapse into or overlap another section. */
+/* ── WORD CELL — unified learning unit, three zones, no dividers ── */
 .cell {{
   flex: 3;
   min-width: 0;
-  display: grid;
-  grid-template-rows: minmax(8mm, auto) minmax(11mm, auto) minmax(8mm, auto);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   border-left: 0.2mm dotted rgba(200,180,140,.35);
+  padding: 2px 1px;
 }}
 .cell:last-child {{ border-left: none; }}
 
-/* Transliteration — top grid row, wraps freely within its slot */
+/* Zone 1 — Transliteration: sits flush above Arabic */
 .tr {{
-  font-size: {TR_PT}pt; font-style: italic;
+  font-size: {TR_PT}pt;
+  font-style: italic;
   color: {AMBER};
   text-align: center;
-  padding: 2px 3px;
-  line-height: 1.4;
+  width: 100%;
+  padding: 2px 2px 1px;
+  line-height: 1.3;
+  white-space: normal;
   word-break: break-word;
   overflow-wrap: break-word;
-  white-space: normal;
-  align-self: center;
 }}
 
-/* Arabic — middle grid row, always occupies its full minimum slot */
+/* Zone 2 — Arabic trace: dominant centrepiece */
 .ar {{
   font-family: 'Amiri', serif;
   font-size: {AR_PT}pt;
   color: {GRAY_TRACE};
-  direction: rtl; text-align: center;
-  padding: 3px 2px;
+  direction: rtl;
+  text-align: center;
+  width: 100%;
+  padding: 1px 2px;
   white-space: nowrap;
-  align-self: center;
+  line-height: 1.3;
 }}
 
-/* Meaning — bottom grid row, wraps freely within its slot */
+/* Zone 3 — Meaning: sits flush below Arabic */
 .mn {{
   font-size: {MN_PT_CELL}pt;
   color: {INK_BODY};
   text-align: center;
-  padding: 2px 3px;
-  line-height: 1.4;
+  width: 100%;
+  padding: 1px 2px 2px;
+  line-height: 1.3;
+  white-space: normal;
   word-break: break-word;
   overflow-wrap: break-word;
-  white-space: normal;
-  align-self: center;
 }}
 
 """
