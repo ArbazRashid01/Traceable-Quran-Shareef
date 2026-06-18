@@ -156,16 +156,66 @@ def em_marker(it):
 def em_row(r):
     return '<div class="row">'+''.join(em_marker(it) if it['k']=='M' else em_word(it) for it in r)+'</div>'
 
-def panel(page_rows):
-    done=[]
-    for r in page_rows:
-        for it in r:
-            if it['k']=='M' and it['vk'] not in done:
-                done.append(it['vk'])
-    out=[]
-    for vk in done:
-        out.append(f'<div class="pslot"><div class="pnum">{ar(int(vk.split(":")[1]))}</div>'
-                   f'<div class="ptxt">{_esc(clean_m(VS[vk]["m"]))}</div></div>')
+# ─── PANEL FLOW (meanings carry across pages; nothing truncated) ──
+PANEL_W_MM        = (BODY_W * PANEL_PCT/100) - 4 - 3   # usable text width inside pslot
+PANEL_CPL         = max(12, int(PANEL_W_MM / 1.95))    # chars per line @ 11pt
+PANEL_LINE_MM     = 11 * 0.3528 * 1.5                   # 11pt * 1.5 line-height
+PANEL_HEAD_MM     = 7.0                                  # verse-number heading + slot padding
+PANEL_CONT_MM     = 3.0                                  # continuation block top padding
+PANEL_USABLE_MM   = BODY_H - 8
+
+def wrap_lines(text):
+    words=(text or '').split(); lines=[]; cur=''
+    for w in words:
+        if len(w) > PANEL_CPL:
+            if cur: lines.append(cur); cur=''
+            while len(w) > PANEL_CPL:
+                lines.append(w[:PANEL_CPL]); w=w[PANEL_CPL:]
+            cur=w
+        elif not cur:
+            cur=w
+        elif len(cur)+1+len(w) <= PANEL_CPL:
+            cur+=' '+w
+        else:
+            lines.append(cur); cur=w
+    if cur: lines.append(cur)
+    return lines or ['']
+
+def meaning_block(vk):
+    return {'num': int(vk.split(':')[1]), 'lines': wrap_lines(clean_m(VS[vk]['m']))}
+
+def flow_panel(new_blocks, carry):
+    """Place blocks into one page's panel; return (rendered_html, leftover_carry)."""
+    avail = PANEL_USABLE_MM
+    queue = list(carry) + list(new_blocks)
+    out = []; leftover = []
+    i = 0
+    while i < len(queue):
+        blk = queue[i]
+        head = PANEL_HEAD_MM if blk['num'] is not None else PANEL_CONT_MM
+        if out and avail < head + PANEL_LINE_MM:
+            leftover = queue[i:]; break
+        avail -= head
+        fit = int(avail // PANEL_LINE_MM)
+        if fit >= len(blk['lines']):
+            avail -= len(blk['lines']) * PANEL_LINE_MM
+            out.append(blk); i += 1
+        else:
+            if fit > 0:
+                out.append({'num': blk['num'], 'lines': blk['lines'][:fit]})
+                leftover = [{'num': None, 'lines': blk['lines'][fit:]}] + queue[i+1:]
+            else:
+                leftover = queue[i:]
+            break
+    return render_panel(out), leftover
+
+def render_panel(blocks):
+    out = []
+    for b in blocks:
+        num = (f'<div class="pnum">{ar(b["num"])}</div>' if b['num'] is not None
+               else '<div class="pnum pcont">&#8230;</div>')
+        txt = _esc(' '.join(b['lines']))
+        out.append(f'<div class="pslot">{num}<div class="ptxt">{txt}</div></div>')
     return '<div class="panel">'+''.join(out)+'</div>'
 
 def header(juz,mid,pg):
@@ -177,10 +227,37 @@ def footer(left,pg,juz):
     return (f'<div class="footer"><span>{left}</span>'
             f'<span>Page {pg} &middot; Juz {juz}</span></div>')
 
-def page_std(juz,pg,label,rows):
+def completing_keys(rows):
+    done=[]
+    for r in rows:
+        for it in r:
+            if it['k']=='M' and it['vk'] not in done:
+                done.append(it['vk'])
+    return done
+
+def row_fill_mm(rows):
+    return sum(row_h(r) for r in rows)
+
+def end_ornament(label):
+    return (f'<div class="endmark"><div class="endmark-orn">&#10059;</div>'
+            f'<div class="endmark-txt">End of Surah {label}</div>'
+            f'<div class="endmark-orn">&#10059;</div></div>')
+
+def page_std(juz,pg,label,rows,panel_html,decorate=False):
+    words = ''.join(em_row(r) for r in rows)
+    if decorate:
+        words += end_ornament(label.title())
     return (f'<div class="page"><div class="inner">{header(juz,label,pg)}'
-            f'<div class="body">{panel(rows)}<div class="words">'
-            f'{"".join(em_row(r) for r in rows)}</div></div>'
+            f'<div class="body">{panel_html}<div class="words">'
+            f'{words}</div></div>'
+            f'{footer(label,pg,juz)}</div></div>')
+
+def page_panel_cont(juz,pg,label,panel_html):
+    """Panel-only continuation page (carries leftover verse meanings)."""
+    note = ('<div class="contnote"><div class="endmark-orn">&#10059;</div>'
+            '<div class="endmark-txt">Continued verse meanings</div></div>')
+    return (f'<div class="page"><div class="inner">{header(juz,label,pg)}'
+            f'<div class="body">{panel_html}<div class="words">{note}</div></div>'
             f'{footer(label,pg,juz)}</div></div>')
 
 
@@ -236,16 +313,36 @@ def chapter_segments(juz):
 
 def build_juz(juz):
     rmap = ruku_end_map(juz_verse_keys(juz))
-    pages=[]; pno=0
-    pno+=1; pages.append(page_juz_opener(juz,pno))
+    # 1) Build layout: openers + standard pages (rows + completing verse keys)
+    layout=[('openjuz',)]
     for ch,vks in chapter_segments(juz):
-        m=CH[ch]
-        # surah opener only when the surah STARTS in this juz (verse 1 present)
+        label=CH[ch]['name_en'].upper()
         if vks and vks[0].endswith(':1'):
-            pno+=1; pages.append(page_surah_opener(juz,pno,ch))
-        rows=pack(make_items(vks,rmap))
-        for pr in paginate(rows):
-            pno+=1; pages.append(page_std(juz,pno,m['name_en'].upper(),pr))
+            layout.append(('opensurah', ch))
+        rows_pages=paginate(pack(make_items(vks,rmap)))
+        for k,pr in enumerate(rows_pages):
+            is_last = (k==len(rows_pages)-1)
+            layout.append(('std', label, pr, completing_keys(pr), is_last))
+
+    # 2) Render pages, flowing panel meanings with carry-over
+    pages=[]; pno=0; carry=[]; FILL_LIMIT=BODY_H*0.55
+    for item in layout:
+        if item[0]=='openjuz':
+            pno+=1; pages.append(page_juz_opener(juz,pno)); continue
+        if item[0]=='opensurah':
+            pno+=1; pages.append(page_surah_opener(juz,pno,item[1])); continue
+        _,label,rows,comp,is_last=item
+        blocks=[meaning_block(vk) for vk in comp]
+        panel_html, carry = flow_panel(blocks, carry)
+        decorate = is_last and (row_fill_mm(rows) < FILL_LIMIT) and not carry
+        pno+=1
+        pages.append(page_std(juz,pno,label,rows,panel_html,decorate))
+    # 3) Flush remaining carried meanings onto continuation pages
+    last_label = layout[-1][1] if layout[-1][0]=='std' else 'JUZ'
+    while carry:
+        panel_html, carry = flow_panel([], carry)
+        pno+=1
+        pages.append(page_panel_cont(juz,pno,last_label,panel_html))
     return pages
 
 
@@ -311,6 +408,13 @@ body{{display:flex;flex-direction:column;align-items:center;padding:28px 0;gap:2
 .ruku-n{{position:absolute;bottom:-2.2mm;font-size:6pt;font-style:normal;color:#1a7a4a;
   font-family:'EB Garamond',serif;font-weight:700}}
 .marker .tr{{color:#1a7a4a;font-weight:700;font-size:7pt}}
+.pcont{{color:#b08820;font-weight:400}}
+.endmark{{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2mm;padding:10mm 0;margin-top:6mm}}
+.endmark-orn{{font-size:18pt;color:#c9a84c}}
+.endmark-txt{{font-size:11pt;font-style:italic;letter-spacing:2px;color:#8b6c14}}
+.contnote{{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2mm;height:100%;color:#b8a988}}
 .open{{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;
   border:0.3mm solid #d4b870}}
 .open-juz{{justify-content:flex-start;padding:20mm 16mm}}
