@@ -34,23 +34,22 @@ PANEL_PCT      = 24                                  # left meaning panel
 WORD_W_MM      = BODY_W * (100 - PANEL_PCT) / 100    # ~140.6 mm usable for words
 
 # ─── TYPOGRAPHY (pt) ─────────────────────────────────────────────
-AR_PT          = 24      # Arabic — traceable, dominant (large-print, very readable)
-TR_PT          = 10      # transliteration
-MN_PT          = 10      # word meaning
+AR_PT          = 15      # Arabic — traceable, dense layout (target <30 pages)
+TR_PT          = 9       # transliteration
+MN_PT          = 9       # word meaning
 PANEL_NUM_PT   = 12      # ayah number in panel
 PANEL_TXT_PT   = 11      # verse meaning in panel
 
 # ─── WIDTH MODEL (mm per character, empirically calibrated) ──────
-AR_CHAR_MM     = 3.8     # 24pt Amiri base char (connected-script calibrated, safe)
-TR_CHAR_MM     = 2.0     # 10pt EB Garamond
-MN_CHAR_MM     = 2.0
-CELL_PAD_MM    = 4       # horizontal breathing room per cell
-CELL_MIN_MM    = 14      # never narrower than this
-CELL_MAX_MM    = WORD_W_MM   # never wider than the word area
+AR_CHAR_MM     = 2.45    # 15pt Amiri base char (connected-script calibrated, safe)
+TR_CHAR_MM     = 1.55
+MN_CHAR_MM     = 1.55
+CELL_PAD_MM    = 3
+CELL_MIN_MM    = 10
+CELL_MAX_MM    = WORD_W_MM
 
-# ─── ROW HEIGHT MODEL (mm) ───────────────────────────────────────
-ROW_BASE_MM    = 24      # 1-line tr + 24pt arabic + 1-line mn + tight padding (measured safe)
-ROW_LINE_MM    = 4.6     # extra height when tr or mn wraps to 2 lines
+ROW_BASE_MM    = 15      # 1-line tr + 15pt arabic + 1-line mn + tight padding
+ROW_LINE_MM    = 3.4
 
 # ─── DIACRITIC STRIP (for width measurement only) ────────────────
 _DIAC  = re.compile(r'[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06E4\u06E7\u06E8\u06EA-\u06ED]')
@@ -131,6 +130,51 @@ def row_height(row):
 
 def block_height(rows):
     return sum(row_height(r) for r in rows)
+
+
+# ─── CONTINUOUS DENSE PACKING (cross-verse, fills every page) ─────
+
+def pack_all_rows(verse_keys):
+    """All words of all verses flow continuously into full rows."""
+    items = []
+    for vk in verse_keys:
+        for i in range(len(WORDS[vk])):
+            items.append(make_word_item(vk, i))
+        items.append(make_marker_item(vk))
+    rows, cur, cur_w = [], [], 0.0
+    for it in items:
+        w = it['width']
+        if cur and cur_w + w > WORD_W_MM:
+            rows.append(cur)
+            cur, cur_w = [], 0.0
+        cur.append(it)
+        cur_w += w
+    if cur:
+        rows.append(cur)
+    return rows
+
+def paginate_rows(rows):
+    """Fill each page with rows up to BODY_H — near-100% fill on all but last."""
+    limit = BODY_H - 2
+    pages, cur, cur_h = [], [], 0.0
+    for r in rows:
+        h = row_height(r)
+        if cur and cur_h + h > limit:
+            pages.append(cur)
+            cur, cur_h = [], 0.0
+        cur.append(r)
+        cur_h += h
+    if cur:
+        pages.append(cur)
+    return pages
+
+def verses_in_rows(page_rows):
+    seen = []
+    for row in page_rows:
+        for it in row:
+            if it['vk'] not in seen:
+                seen.append(it['vk'])
+    return seen
 
 
 # ─── PAGINATION — pages end at a complete ayah whenever possible ──
@@ -273,12 +317,9 @@ def footer(left, page, juz):
         f'</div>'
     )
 
-def page_standard(juz, page_no, surah_label, page_blocks):
-    panel = emit_panel(verses_in_blocks(page_blocks))
-    rows_html = ''
-    for vk, rows in page_blocks:
-        for r in rows:
-            rows_html += emit_row(r)
+def page_standard(juz, page_no, surah_label, page_rows):
+    panel = emit_panel(verses_in_rows(page_rows))
+    rows_html = ''.join(emit_row(r) for r in page_rows)
     return (
         f'<div class="page"><div class="inner">'
         f'{header(juz, surah_label, page_no)}'
@@ -379,14 +420,14 @@ body{{display:flex;flex-direction:column;align-items:center;padding:28px 0;gap:2
 
 /* WORD CELL — unified unit, no dividers */
 .cell{{display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:1.2mm 1mm}}
+  padding:0.6mm 1mm}}
 .tr{{font-size:{TR_PT}pt;font-style:italic;color:#a07830;text-align:center;
-  line-height:1.25;width:100%;word-break:break-word;overflow-wrap:break-word}}
+  line-height:1.1;width:100%;word-break:break-word;overflow-wrap:break-word}}
 .ar{{font-family:'Amiri',serif;font-size:{AR_PT}pt;color:rgba(0,0,0,.18);
-  direction:rtl;text-align:center;line-height:1.3;width:100%;
-  white-space:nowrap;padding:0.6mm 0}}
+  direction:rtl;text-align:center;line-height:1.15;width:100%;
+  white-space:nowrap;padding:0.2mm 0}}
 .mn{{font-size:{MN_PT}pt;color:#1e1206;text-align:center;
-  line-height:1.25;width:100%;word-break:break-word;overflow-wrap:break-word}}
+  line-height:1.1;width:100%;word-break:break-word;overflow-wrap:break-word}}
 .marker .ar.mk{{color:#c9a84c;font-size:18pt}}
 """
 
@@ -493,10 +534,10 @@ def build():
         pno += 1
         pages.append(page_surah_opener(1, pno, sd))
 
-        blocks = build_verse_blocks(vks)
-        for page_blocks in paginate_blocks(blocks):
+        rows = pack_all_rows(vks)
+        for page_rows in paginate_rows(rows):
             pno += 1
-            pages.append(page_standard(1, pno, sd['english'], page_blocks))
+            pages.append(page_standard(1, pno, sd['english'], page_rows))
 
     css = build_css() + CSS_OPEN
     html = (f'<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/>'
