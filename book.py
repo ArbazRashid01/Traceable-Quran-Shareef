@@ -49,8 +49,8 @@ CELL_MIN_MM    = 14      # never narrower than this
 CELL_MAX_MM    = WORD_W_MM   # never wider than the word area
 
 # ─── ROW HEIGHT MODEL (mm) ───────────────────────────────────────
-ROW_BASE_MM    = 26      # 1-line tr + arabic + 1-line mn + padding
-ROW_LINE_MM    = 4.4     # extra height when tr or mn wraps to 2 lines
+ROW_BASE_MM    = 30      # 1-line tr + 28pt arabic + 1-line mn + padding (measured)
+ROW_LINE_MM    = 5.0     # extra height when tr or mn wraps to 2 lines
 
 # ─── DIACRITIC STRIP (for width measurement only) ────────────────
 _DIAC  = re.compile(r'[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06E4\u06E7\u06E8\u06EA-\u06ED]')
@@ -127,11 +127,13 @@ def row_height(row):
 # ─── PAGINATION (pre-computed) ───────────────────────────────────
 
 def paginate(rows):
-    """Group rows into pages so total row height <= BODY_H. No row split."""
+    """Group rows into pages so total row height <= BODY_H. No row split.
+    A safety margin keeps the last row clear of the page boundary."""
+    limit = BODY_H - 3      # 3mm safety buffer against rendering variance
     pages, cur, cur_h = [], [], 0.0
     for r in rows:
         h = row_height(r)
-        if cur and cur_h + h > BODY_H:
+        if cur and cur_h + h > limit:
             pages.append(cur)
             cur, cur_h = [], 0.0
         cur.append(r)
@@ -349,8 +351,7 @@ body{{display:flex;flex-direction:column;align-items:center;padding:28px 0;gap:2
 
 /* WORD CELL — unified unit, no dividers */
 .cell{{display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:2.5mm 1mm;border-left:0.2mm dotted rgba(200,180,140,.3)}}
-.cell:last-child{{border-left:none}}
+  padding:2.5mm 1mm}}
 .tr{{font-size:{TR_PT}pt;font-style:italic;color:#a07830;text-align:center;
   line-height:1.25;width:100%;word-break:break-word;overflow-wrap:break-word}}
 .ar{{font-family:'Amiri',serif;font-size:{AR_PT}pt;color:rgba(0,0,0,.18);
