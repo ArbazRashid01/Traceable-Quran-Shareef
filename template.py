@@ -20,12 +20,13 @@ PAGE_H          = 297
 PAD             = 10               # uniform inner padding
 HEADER_H        = 14
 FOOTER_H        = 10
-BODY_W          = PAGE_W - 2 * PAD                              # 190
-BODY_H          = PAGE_H - 2 * PAD - HEADER_H - FOOTER_H        # 253
 
 # Frame (decorative border)
 FRAME_W         = 0.5
 FRAME_GAP       = 1.5
+
+BODY_W          = PAGE_W - 2 * PAD                              # 190
+BODY_H          = PAGE_H - 2*PAD - HEADER_H - FOOTER_H - 2*FRAME_W  # 252.0
 
 # Standard page row grid
 ROW_COUNT       = 12
@@ -106,7 +107,6 @@ body {{
   position: relative;
   width: 100%; height: 100%;
   display: flex; flex-direction: column;
-  overflow: hidden;
 }}
 
 /* HEADER (identical on A, B, C) */
