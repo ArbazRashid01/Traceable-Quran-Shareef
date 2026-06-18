@@ -297,11 +297,40 @@ def page_footer(p):
             f'</div>')
 
 def render_page(p):
-    sections = ''.join(verse_section(vk, p['wpr']) for vk in p['verses'])
+    wpr = p['wpr']
     bm = bismillah() if p['bismillah_separate'] else ''
+
+    # LEFT — compact numbered meaning list (no height sync needed)
+    me_parts = []
+    for vk in p['verses']:
+        vnum = ar(int(vk.split(':')[1]))
+        me_parts.append(
+            f'<div class="me">'
+            f'<span class="vn">{vnum}</span>'
+            f'<span class="vt">&#8220;{MEANINGS[vk]}&#8221;</span>'
+            f'</div>'
+        )
+    left = f'<div class="mc">{"".join(me_parts)}</div>'
+
+    # RIGHT — all verses flow continuously, no empty rows after short verses
+    items = []
+    for vk in p['verses']:
+        for i in range(len(WORDS[vk])):
+            items.append(('W', vk, i))
+        items.append(('M', vk, -1))   # inline Ayah marker
+
+    row_parts = []
+    for chunk in [items[i:i+wpr] for i in range(0, len(items), wpr)]:
+        cells = ''.join(
+            marker_cell(vk) if t == 'M' else word_cell(vk, wi)
+            for t, vk, wi in chunk
+        )
+        row_parts.append(f'<div class="wr">{cells}</div>')
+    right = f'<div class="vw">{"".join(row_parts)}</div>'
+
     return (f'<div class="page">'
             f'{page_header(p)}{bm}'
-            f'<div class="vb">{sections}</div>'
+            f'<div class="vb">{left}{right}</div>'
             f'{page_footer(p)}'
             f'</div>')
 
@@ -356,31 +385,29 @@ body{background:#9e8f72;display:flex;flex-direction:column;align-items:center;
 
 
 CSS += """
-/* VERSE BODY — fills all remaining page space */
-.vb{flex:1;display:flex;flex-direction:column;
+/* VERSE BODY — flex-ROW: left meaning list | right continuous word flow */
+.vb{flex:1;display:flex;flex-direction:row;
     border:1px solid #d4b870;background:#fdf7ed;overflow:hidden}
 
-/* VERSE SECTION — synchronized left meaning + right word rows */
-.vs{display:flex;flex-direction:row;border-bottom:1px solid #d4b870;min-height:0}
-.vs:last-child{border-bottom:none}
-
-/* LEFT — verse meaning, compact, vertically centred */
-.vm{width:21%;min-width:21%;border-right:1px solid #d4b870;
-    background:#f6ead6;padding:5px 5px;
-    display:flex;flex-direction:column;justify-content:center;align-items:center;
-    gap:3px}
+/* LEFT — compact numbered meaning list, full page height */
+.mc{width:21%;min-width:21%;border-right:1px solid #d4b870;
+    background:#f6ead6;padding:4px 5px;
+    display:flex;flex-direction:column;gap:0}
+.me{display:flex;align-items:flex-start;gap:4px;
+    padding:5px 2px;border-bottom:1px dashed #d4b870}
+.me:last-child{border-bottom:none}
 .vn{font-family:'Amiri',serif;font-size:10px;font-weight:700;color:#8b6c14;
     border:1px solid #c9a84c;border-radius:50%;width:15px;height:15px;
     display:inline-flex;align-items:center;justify-content:center;
-    flex-shrink:0;background:#fdf7ed;direction:rtl}
+    flex-shrink:0;background:#fdf7ed;direction:rtl;margin-top:1px}
 .vt{font-family:'EB Garamond',serif;font-size:9.5px;font-style:italic;
-    color:#2a1a06;text-align:center;line-height:1.5}
+    color:#2a1a06;line-height:1.5}
 
-/* RIGHT — word rows for this verse, tighter padding */
+/* RIGHT — continuous word flow across all verses */
 .vw{flex:1;display:flex;flex-direction:column;padding:1px 4px 0px}
 
-/* WORD ROW — zero gap, words sit flush for connected sentence feel */
-.wr{flex:1;display:flex;flex-direction:row-reverse;
+/* WORD ROW — natural height, zero gap, words sit flush */
+.wr{display:flex;flex-direction:row-reverse;
     align-items:stretch;border-bottom:0.5px solid #e8d8b8;
     gap:0;justify-content:flex-start}
 .wr:last-child{border-bottom:none}
