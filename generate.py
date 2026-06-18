@@ -465,9 +465,9 @@ CSS += """
 /* ── 3-SECTION WORD CELL CONTENT ── */
 
 /* Transliteration — top, halved horizontal padding */
-.tr{font-family:'EB Garamond',serif;font-size:8px;font-style:italic;
+.tr{font-family:'EB Garamond',serif;font-size:16px;font-style:italic;
     color:#a07830;text-align:center;padding:3px 1px 1px;
-    min-height:12px;display:flex;align-items:center;justify-content:center;
+    min-height:20px;display:flex;align-items:center;justify-content:center;
     letter-spacing:.1px;line-height:1}
 
 /* Horizontal hairline — slightly more margin with bigger rows */
@@ -479,9 +479,9 @@ CSS += """
     justify-content:center;color:rgba(0,0,0,.13);line-height:1.1;
     overflow:hidden}
 
-/* English meaning — more room with 12 rows/page */
-.mn{font-family:'EB Garamond',serif;font-size:9px;text-align:center;
-    color:#1e1206;padding:2px 1px 3px;min-height:16px;
+/* English meaning — 2x size */
+.mn{font-family:'EB Garamond',serif;font-size:18px;text-align:center;
+    color:#1e1206;padding:2px 1px 3px;min-height:28px;
     display:flex;align-items:center;justify-content:center;line-height:1.2}
 
 /* FOOTER — gold rule */
