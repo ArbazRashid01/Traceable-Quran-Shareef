@@ -2,492 +2,1446 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Traceable Quran — Surah Al-Fatiha</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Traceable Quran — 5 Page Preview</title>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#ddd8ce;display:flex;flex-direction:column;align-items:center;padding:30px 20px;gap:30px;font-family:'EB Garamond',serif}
+.page{background:#fff;width:210mm;min-height:297mm;padding:10mm 11mm 10mm 11mm;box-shadow:0 4px 32px rgba(0,0,0,.18);display:flex;flex-direction:column;gap:0;position:relative}
 
-    body {
-      background: #eae6de;
-      display: flex;
-      justify-content: center;
-      padding: 30px 20px;
-      min-height: 100vh;
-    }
+/* ── HEADER BAR ── */
+.ph{margin-bottom:0}
+.ph-bar{display:flex;justify-content:space-between;align-items:center;border-top:2.5px solid #1a1a1a;border-bottom:1px solid #888;padding:5px 4px;background:#fdfaf5}
+.ph-juz{font-size:10px;color:#555;letter-spacing:.5px;font-weight:600;text-transform:uppercase;min-width:50px}
+.ph-center{display:flex;align-items:center;gap:8px}
+.ph-orn{font-size:13px;color:#8b7355}
+.ph-name{font-size:14px;font-weight:700;letter-spacing:1.5px;color:#1a1a1a;text-transform:uppercase}
+.ph-pg{font-size:10px;color:#555;text-align:right;min-width:50px;letter-spacing:.5px;font-weight:600}
 
-    .page {
-      background: #ffffff;
-      width: 210mm;
-      min-height: 297mm;
-      padding: 13mm 11mm 11mm 11mm;
-      box-shadow: 0 4px 32px rgba(0,0,0,0.18);
-      display: flex;
-      flex-direction: column;
-    }
+/* ── SURAH DETAILS BAND ── */
+.surah-band{background:#f5f0e8;border-bottom:2px solid #c8b89a;padding:7px 8px;text-align:center}
+.surah-band-ar{font-family:'Amiri',serif;font-size:22px;direction:rtl;color:#3a2a1a;margin-bottom:3px}
+.surah-band-info{font-size:10.5px;color:#666;letter-spacing:.3px}
 
-    /* ── HEADER ── */
-    .page-header {
-      border-top: 2.5px solid #1a1a1a;
-      border-bottom: 2.5px solid #1a1a1a;
-      padding: 7px 0;
-      text-align: center;
-      margin-bottom: 14px;
-    }
-    .surah-title {
-      font-family: 'EB Garamond', serif;
-      font-size: 19px;
-      font-weight: 600;
-      color: #1a1a1a;
-    }
-    .surah-meta {
-      font-family: 'EB Garamond', serif;
-      font-size: 11.5px;
-      color: #666;
-      margin-top: 3px;
-    }
+/* ── BISMILLAH ROW ── */
+.bism-row{border:1px solid #c8b89a;background:#fdfaf5;padding:8px 10px;text-align:center;margin-bottom:0}
+.bism-tr{font-size:9.5px;font-style:italic;color:#888;margin-bottom:3px;letter-spacing:.5px}
+.bism-ar{font-family:'Amiri',serif;font-size:30px;direction:rtl;color:rgba(0,0,0,.13);letter-spacing:2px}
 
-    /* ── TWO COLUMNS ── */
-    .page-body {
-      display: flex;
-      flex-direction: row;
-      flex: 1;
-      border: 1px solid #c5bdb0;
-    }
+/* ── BODY TWO COLUMNS ── */
+.body{display:flex;flex:1;border:1px solid #c5bdb0}
 
-    /* ── LEFT COLUMN — MEANINGS ── */
-    .meanings-column {
-      width: 26%;
-      min-width: 26%;
-      border-right: 1.5px solid #c5bdb0;
-      background: #faf8f4;
-      padding: 10px 8px;
-      display: flex;
-      flex-direction: column;
-    }
-    .meaning-entry {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 8px 4px;
-      border-bottom: 1px dashed #c8c0b4;
-    }
-    .meaning-entry:last-child { border-bottom: none; }
-    .verse-badge {
-      font-family: 'EB Garamond', serif;
-      font-size: 9.5px;
-      font-weight: 600;
-      color: #888;
-      border: 1px solid #bbb;
-      border-radius: 50%;
-      width: 18px;
-      height: 18px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 5px;
-      flex-shrink: 0;
-    }
-    .meaning-para {
-      font-family: 'EB Garamond', serif;
-      font-size: 11px;
-      font-style: italic;
-      color: #2a2a2a;
-      text-align: center;
-      line-height: 1.6;
-    }
+/* ── LEFT — MEANINGS ── */
+.mc{width:26%;min-width:26%;border-right:1.5px solid #c5bdb0;background:#faf8f4;padding:8px 7px;display:flex;flex-direction:column}
+.me{display:flex;flex-direction:column;align-items:center;padding:7px 3px;border-bottom:1px dashed #c8c0b4}
+.me:last-child{border-bottom:none}
+.vb{font-size:9px;font-weight:700;color:#888;border:1px solid #bbb;border-radius:50%;width:17px;height:17px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:4px;flex-shrink:0}
+.mp{font-size:10.5px;font-style:italic;color:#2a2a2a;text-align:center;line-height:1.55}
 
+/* ── RIGHT — WORD ROWS ── */
+.wc{flex:1;display:flex;flex-direction:column;padding:7px 7px;gap:5px}
+.word-row{display:flex;flex-direction:row-reverse;border:1px solid #b5ada0;background:#fff}
+.word-cell{flex:1;display:flex;flex-direction:column;position:relative}
+.verse-start::before{content:attr(data-verse);position:absolute;top:2px;right:3px;font-family:'EB Garamond',serif;font-size:7px;font-weight:700;color:#fff;background:#a09080;border-radius:50%;width:12px;height:12px;display:flex;align-items:center;justify-content:center;z-index:1}
+.translit{font-family:'EB Garamond',serif;font-size:8.5px;font-style:italic;color:#888;text-align:center;padding:3px 3px 2px;min-height:18px;display:flex;align-items:center;justify-content:center;letter-spacing:.2px}
+.cdiv{height:1px;background:#ddd6cc}
+.arabic{font-family:'Amiri',serif;font-size:22px;direction:rtl;text-align:center;padding:5px 4px 3px;flex:1;display:flex;align-items:center;justify-content:center;color:rgba(0,0,0,.13)}
+.meaning{font-family:'EB Garamond',serif;font-size:8.5px;text-align:center;color:#1a1a1a;padding:3px 3px 4px;min-height:20px;display:flex;align-items:center;justify-content:center;line-height:1.25}
 
-    /* ── RIGHT COLUMN ── */
-    .words-column {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      padding: 8px 8px;
-      gap: 6px;
-    }
+/* ── FOOTER ── */
+.pf{padding-top:6px;border-top:2px solid #1a1a1a;display:flex;justify-content:space-between;font-size:10px;color:#555;margin-top:8px;letter-spacing:.3px}
 
-    /* ONE BOX per line */
-    .word-row {
-      display: flex;
-      flex-direction: row-reverse;
-      border: 1px solid #b5ada0;
-      background: #fff;
-    }
-
-    /* WORD CELL — 3 sections: translit / arabic / meaning */
-    .word-cell {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-    }
-
-    /* verse-start badge */
-    .verse-start::before {
-      content: attr(data-verse);
-      position: absolute;
-      top: 3px;
-      right: 3px;
-      font-family: 'EB Garamond', serif;
-      font-size: 7px;
-      font-weight: 600;
-      color: #fff;
-      background: #999;
-      border-radius: 50%;
-      width: 13px;
-      height: 13px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1;
-    }
-
-    /* ── SECTION 1: TRANSLITERATION (top) ── */
-    .translit-text {
-      font-family: 'EB Garamond', serif;
-      font-size: 9px;
-      font-style: italic;
-      color: #777;
-      text-align: center;
-      padding: 4px 3px 3px 3px;
-      min-height: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      letter-spacing: 0.2px;
-    }
-
-    /* ── DIVIDER ── */
-    .cell-divider {
-      height: 1px;
-      background: #d8d0c6;
-    }
-
-    /* ── SECTION 2: ARABIC — gray shadow traceable ── */
-    .arabic-text {
-      font-family: 'Amiri', serif;
-      font-size: 24px;
-      direction: rtl;
-      text-align: center;
-      padding: 7px 5px 5px 5px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: rgba(0, 0, 0, 0.13);
-      flex: 1;
-    }
-
-    /* ── SECTION 3: ENGLISH MEANING (bottom) ── */
-    .cell-meaning {
-      font-family: 'EB Garamond', serif;
-      font-size: 9px;
-      text-align: center;
-      color: #1a1a1a;
-      padding: 3px 3px 5px 3px;
-      line-height: 1.3;
-      min-height: 22px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    /* ── FOOTER ── */
-    .page-footer {
-      margin-top: 12px;
-      padding-top: 7px;
-      border-top: 2px solid #1a1a1a;
-      display: flex;
-      justify-content: space-between;
-      font-family: 'EB Garamond', serif;
-      font-size: 11px;
-      color: #444;
-    }
-
-    @media print {
-      body { background: white; padding: 0; }
-      .page { box-shadow: none; width: 100%; }
-    }
-  </style>
+@media print{body{background:#fff;padding:0;gap:0}.page{box-shadow:none;page-break-after:always}}
+</style>
 </head>
 <body>
 <div class="page">
-
-  <div class="page-header">
-    <div class="surah-title">SURAH AL-FATIHA — The Opening</div>
-    <div class="surah-meta">Surah No. 1 &nbsp;|&nbsp; Revealed in Makkah &nbsp;|&nbsp; 7 Verses &nbsp;|&nbsp; Juz 1</div>
-  </div>
-
-  <div class="page-body">
-
-    <!-- LEFT — VERSE MEANINGS -->
-    <div class="meanings-column">
-      <div class="meaning-entry">
-        <span class="verse-badge">1</span>
-        <span class="meaning-para">"In the name of Allah, the Most Gracious, the Most Merciful."</span>
+  <div class="ph">
+    <div class="ph-bar">
+      <span class="ph-juz">JUZ 1</span>
+      <div class="ph-center">
+        <span class="ph-orn">&#10022;</span>
+        <span class="ph-name">AL-FATIHA</span>
+        <span class="ph-orn">&#10022;</span>
       </div>
-      <div class="meaning-entry">
-        <span class="verse-badge">2</span>
-        <span class="meaning-para">"All praise and thanks belong to Allah, Lord of all the worlds."</span>
-      </div>
-      <div class="meaning-entry">
-        <span class="verse-badge">3</span>
-        <span class="meaning-para">"The Most Gracious, the Most Merciful."</span>
-      </div>
-      <div class="meaning-entry">
-        <span class="verse-badge">4</span>
-        <span class="meaning-para">"Master of the Day of Judgment."</span>
-      </div>
-      <div class="meaning-entry">
-        <span class="verse-badge">5</span>
-        <span class="meaning-para">"You alone we worship, and You alone we ask for help."</span>
-      </div>
-      <div class="meaning-entry">
-        <span class="verse-badge">6</span>
-        <span class="meaning-para">"Guide us to the straight path."</span>
-      </div>
-      <div class="meaning-entry">
-        <span class="verse-badge">7</span>
-        <span class="meaning-para">"The path of those upon whom You have bestowed favour — not of those who earned Your anger, nor of those who went astray."</span>
+      <span class="ph-pg">PAGE 1</span>
+    </div>
+    <div class="surah-band">
+      <div class="surah-band-ar">سُورَةُ الْفَاتِحَة</div>
+      <div class="surah-band-info">
+        Surah 1 &nbsp;&#8226;&nbsp; The Opening &nbsp;&#8226;&nbsp;
+        Revealed in Makkah &nbsp;&#8226;&nbsp; 7 Verses
       </div>
     </div>
-
-
-    <!-- RIGHT — WORD ROWS -->
-    <div class="words-column">
-
-      <!-- ROW 1 — 6 words: V1(W1-W4) + V2(W1-W2) -->
-      <div class="word-row">
-        <div class="word-cell verse-start" data-verse="1">
-          <div class="translit-text">bis'mi</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">بِسْمِ</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">In the name</div>
-        </div>
-        <div class="word-cell">
-          <div class="translit-text">l-lahi</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">ٱللَّهِ</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">of Allah</div>
-        </div>
-        <div class="word-cell">
-          <div class="translit-text">l-raḥmāni</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">ٱلرَّحْمَـٰنِ</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">the Most Gracious</div>
-        </div>
-        <div class="word-cell">
-          <div class="translit-text">l-raḥīmi</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">ٱلرَّحِيمِ</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">the Most Merciful</div>
-        </div>
-        <div class="word-cell verse-start" data-verse="2">
-          <div class="translit-text">al-ḥamdu</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">ٱلْحَمْدُ</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">All praise &amp; thanks</div>
-        </div>
-        <div class="word-cell">
-          <div class="translit-text">lillahi</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">لِلَّهِ</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">be to Allah</div>
-        </div>
-      </div>
-
-      <!-- ROW 2 — 6 words: V2(W3-W4) + V3(W1-W2) + V4(W1-W2) -->
-      <div class="word-row">
-        <div class="word-cell">
-          <div class="translit-text">rabbi</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">رَبِّ</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">the Lord</div>
-        </div>
-        <div class="word-cell">
-          <div class="translit-text">l-ʿālamīna</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">ٱلْعَـٰلَمِينَ</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">of all the worlds</div>
-        </div>
-        <div class="word-cell verse-start" data-verse="3">
-          <div class="translit-text">al-raḥmāni</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">ٱلرَّحْمَـٰنِ</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">The Most Gracious</div>
-        </div>
-        <div class="word-cell">
-          <div class="translit-text">l-raḥīmi</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">ٱلرَّحِيمِ</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">the Most Merciful</div>
-        </div>
-        <div class="word-cell verse-start" data-verse="4">
-          <div class="translit-text">māliki</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">مَـٰلِكِ</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">Master</div>
-        </div>
-        <div class="word-cell">
-          <div class="translit-text">yawmi</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">يَوْمِ</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">of the Day</div>
-        </div>
-      </div>
-
-
-      <!-- ROW 3 — 5 words: V4(W3) + V5(W1-W4) -->
-      <div class="word-row">
-        <div class="word-cell">
-          <div class="translit-text">l-dīni</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">ٱلدِّينِ</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">of Judgment</div>
-        </div>
-        <div class="word-cell verse-start" data-verse="5">
-          <div class="translit-text">iyyāka</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">إِيَّاكَ</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">You alone</div>
-        </div>
-        <div class="word-cell">
-          <div class="translit-text">naʿbudu</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">نَعْبُدُ</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">we worship</div>
-        </div>
-        <div class="word-cell">
-          <div class="translit-text">wa-iyyāka</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">وَإِيَّاكَ</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">and You alone</div>
-        </div>
-        <div class="word-cell">
-          <div class="translit-text">nastaʿīnu</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">نَسْتَعِينُ</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">we ask for help</div>
-        </div>
-      </div>
-
-      <!-- ROW 4 — 6 words: V6(W1-W3) + V7(W1-W3) -->
-      <div class="word-row">
-        <div class="word-cell verse-start" data-verse="6">
-          <div class="translit-text">ih'dinā</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">ٱهْدِنَا</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">Guide us</div>
-        </div>
-        <div class="word-cell">
-          <div class="translit-text">l-ṣirāṭa</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">ٱلصِّرَٰطَ</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">to the path</div>
-        </div>
-        <div class="word-cell">
-          <div class="translit-text">l-mus'taqīma</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">ٱلْمُسْتَقِيمَ</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">the straight</div>
-        </div>
-        <div class="word-cell verse-start" data-verse="7">
-          <div class="translit-text">ṣirāṭa</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">صِرَٰطَ</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">The path</div>
-        </div>
-        <div class="word-cell">
-          <div class="translit-text">alladhīna</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">ٱلَّذِينَ</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">of those</div>
-        </div>
-        <div class="word-cell">
-          <div class="translit-text">anʿamta</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">أَنْعَمْتَ</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">You bestowed favour</div>
-        </div>
-      </div>
-
-      <!-- ROW 5 — 6 words: V7(W4-W9) -->
-      <div class="word-row">
-        <div class="word-cell">
-          <div class="translit-text">ʿalayhim</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">عَلَيْهِمْ</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">on them</div>
-        </div>
-        <div class="word-cell">
-          <div class="translit-text">ghayri</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">غَيْرِ</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">not of</div>
-        </div>
-        <div class="word-cell">
-          <div class="translit-text">l-maghḍūbi</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">ٱلْمَغْضُوبِ</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">who earned wrath</div>
-        </div>
-        <div class="word-cell">
-          <div class="translit-text">ʿalayhim</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">عَلَيْهِمْ</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">upon themselves</div>
-        </div>
-        <div class="word-cell">
-          <div class="translit-text">walā</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">وَلَا</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">and not</div>
-        </div>
-        <div class="word-cell">
-          <div class="translit-text">l-ḍālīna</div>
-          <div class="cell-divider"></div>
-          <div class="arabic-text">ٱلضَّآلِّينَ</div>
-          <div class="cell-divider"></div>
-          <div class="cell-meaning">those who go astray</div>
-        </div>
-      </div>
-
-    </div><!-- end words-column -->
-  </div><!-- end page-body -->
-
-  <div class="page-footer">
-    <span>Surah Al-Fatiha — The Opening</span>
-    <span>Page 1 &nbsp;|&nbsp; Juz 1</span>
   </div>
 
+  <div class="body">
+    <div class="mc">
+      <div class="me">
+        <span class="vb">1</span>
+        <span class="mp">&#8220;In the name of Allah, the Most Gracious, the Most Merciful.&#8221;</span>
+      </div>
+      <div class="me">
+        <span class="vb">2</span>
+        <span class="mp">&#8220;All praise and thanks belong to Allah, Lord of all the worlds.&#8221;</span>
+      </div>
+      <div class="me">
+        <span class="vb">3</span>
+        <span class="mp">&#8220;The Most Gracious, the Most Merciful.&#8221;</span>
+      </div>
+      <div class="me">
+        <span class="vb">4</span>
+        <span class="mp">&#8220;Master of the Day of Judgment.&#8221;</span>
+      </div>
+      <div class="me">
+        <span class="vb">5</span>
+        <span class="mp">&#8220;You alone we worship, and You alone we ask for help.&#8221;</span>
+      </div>
+      <div class="me">
+        <span class="vb">6</span>
+        <span class="mp">&#8220;Guide us to the straight path —&#8221;</span>
+      </div>
+      <div class="me">
+        <span class="vb">7</span>
+        <span class="mp">&#8220;The path of those upon whom You have bestowed favour, not of those who earned anger, nor those who went astray.&#8221;</span>
+      </div>
+    </div>
+    <div class="wc">
+      <div class="word-row">
+        <div class="word-cell verse-start" data-verse="1">
+          <div class="translit">bis'mi</div>
+          <div class="cdiv"></div>
+          <div class="arabic">بِسْمِ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">In the name</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">l-lahi</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱللَّهِ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">of Allah</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">l-raḥmāni</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱلرَّحْمَـٰنِ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">the Most Gracious</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">l-raḥīmi</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱلرَّحِيمِ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">the Most Merciful</div>
+        </div>
+        <div class="word-cell verse-start" data-verse="2">
+          <div class="translit">al-ḥamdu</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱلْحَمْدُ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">All praise</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">lillahi</div>
+          <div class="cdiv"></div>
+          <div class="arabic">لِلَّهِ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">be to Allah</div>
+        </div>
+      </div>
+      <div class="word-row">
+        <div class="word-cell">
+          <div class="translit">rabbi</div>
+          <div class="cdiv"></div>
+          <div class="arabic">رَبِّ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">the Lord</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">l-ʿālamīna</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱلْعَـٰلَمِينَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">of all the worlds</div>
+        </div>
+        <div class="word-cell verse-start" data-verse="3">
+          <div class="translit">al-raḥmāni</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱلرَّحْمَـٰنِ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">The Most Gracious</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">l-raḥīmi</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱلرَّحِيمِ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">the Most Merciful</div>
+        </div>
+        <div class="word-cell verse-start" data-verse="4">
+          <div class="translit">māliki</div>
+          <div class="cdiv"></div>
+          <div class="arabic">مَـٰلِكِ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">Master</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">yawmi</div>
+          <div class="cdiv"></div>
+          <div class="arabic">يَوْمِ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">of the Day</div>
+        </div>
+      </div>
+      <div class="word-row">
+        <div class="word-cell">
+          <div class="translit">l-dīni</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱلدِّينِ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">of Judgment</div>
+        </div>
+        <div class="word-cell verse-start" data-verse="5">
+          <div class="translit">iyyāka</div>
+          <div class="cdiv"></div>
+          <div class="arabic">إِيَّاكَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">You alone</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">naʿbudu</div>
+          <div class="cdiv"></div>
+          <div class="arabic">نَعْبُدُ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">we worship</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">wa-iyyāka</div>
+          <div class="cdiv"></div>
+          <div class="arabic">وَإِيَّاكَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">and You alone</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">nastaʿīnu</div>
+          <div class="cdiv"></div>
+          <div class="arabic">نَسْتَعِينُ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">we ask for help</div>
+        </div>
+      </div>
+      <div class="word-row">
+        <div class="word-cell verse-start" data-verse="6">
+          <div class="translit">ih'dinā</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱهْدِنَا</div>
+          <div class="cdiv"></div>
+          <div class="meaning">Guide us</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">l-ṣirāṭa</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱلصِّرَٰطَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">to the path</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">l-mus'taqīma</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱلْمُسْتَقِيمَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">the straight</div>
+        </div>
+        <div class="word-cell verse-start" data-verse="7">
+          <div class="translit">ṣirāṭa</div>
+          <div class="cdiv"></div>
+          <div class="arabic">صِرَٰطَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">The path</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">alladhīna</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱلَّذِينَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">of those</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">anʿamta</div>
+          <div class="cdiv"></div>
+          <div class="arabic">أَنْعَمْتَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">You bestowed favour</div>
+        </div>
+      </div>
+      <div class="word-row">
+        <div class="word-cell">
+          <div class="translit">ʿalayhim</div>
+          <div class="cdiv"></div>
+          <div class="arabic">عَلَيْهِمْ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">on them</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">ghayri</div>
+          <div class="cdiv"></div>
+          <div class="arabic">غَيْرِ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">not of</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">l-maghḍūbi</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱلْمَغْضُوبِ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">who earned wrath</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">ʿalayhim</div>
+          <div class="cdiv"></div>
+          <div class="arabic">عَلَيْهِمْ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">upon themselves</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">walā</div>
+          <div class="cdiv"></div>
+          <div class="arabic">وَلَا</div>
+          <div class="cdiv"></div>
+          <div class="meaning">and not</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">l-ḍālīna</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱلضَّآلِّينَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">those who go astray</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pf">
+    <span>Surah AL-FATIHA &mdash; The Opening</span>
+    <span>Page 1 &nbsp;|&nbsp; Juz 1 — Para 1</span>
+  </div>
+</div>
+
+<div class="page">
+  <div class="ph">
+    <div class="ph-bar">
+      <span class="ph-juz">JUZ 1</span>
+      <div class="ph-center">
+        <span class="ph-orn">&#10022;</span>
+        <span class="ph-name">AL-BAQARAH</span>
+        <span class="ph-orn">&#10022;</span>
+      </div>
+      <span class="ph-pg">PAGE 2</span>
+    </div>
+    <div class="surah-band">
+      <div class="surah-band-ar">سُورَةُ الْبَقَرَة</div>
+      <div class="surah-band-info">
+        Surah 2 &nbsp;&#8226;&nbsp; The Cow &nbsp;&#8226;&nbsp;
+        Revealed in Madinah &nbsp;&#8226;&nbsp; 286 Verses
+      </div>
+    </div>
+  </div>
+  <div class="bism-row">
+    <div class="bism-tr">Bis-mil-lā-hir &nbsp; Raḥ-mā-nir &nbsp; Raḥīm</div>
+    <div class="bism-ar">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</div>
+  </div>
+  <div class="body">
+    <div class="mc">
+      <div class="me">
+        <span class="vb">1</span>
+        <span class="mp">&#8220;Alif, Lam, Meem. [These are letters of the Arabic alphabet whose precise meaning is known only to Allah.]&#8221;</span>
+      </div>
+      <div class="me">
+        <span class="vb">2</span>
+        <span class="mp">&#8220;This is the Book in which there is no doubt, a guidance for those mindful of Allah.&#8221;</span>
+      </div>
+      <div class="me">
+        <span class="vb">3</span>
+        <span class="mp">&#8220;Who believe in the unseen, establish prayer, and spend out of what We have provided for them.&#8221;</span>
+      </div>
+      <div class="me">
+        <span class="vb">4</span>
+        <span class="mp">&#8220;And who believe in what was revealed to you and what was revealed before you, and of the Hereafter they are certain.&#8221;</span>
+      </div>
+    </div>
+    <div class="wc">
+      <div class="word-row">
+        <div class="word-cell verse-start" data-verse="1">
+          <div class="translit">alif-lām-meem</div>
+          <div class="cdiv"></div>
+          <div class="arabic">الٓمٓ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">Alif • Lam • Meem</div>
+        </div>
+      </div>
+      <div class="word-row">
+        <div class="word-cell verse-start" data-verse="2">
+          <div class="translit">dhālika</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ذَٰلِكَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">That</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">l-kitābu</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱلْكِتَـٰبُ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">is the Book</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">lā</div>
+          <div class="cdiv"></div>
+          <div class="arabic">لَا</div>
+          <div class="cdiv"></div>
+          <div class="meaning">no</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">rayba</div>
+          <div class="cdiv"></div>
+          <div class="arabic">رَيْبَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">doubt</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">fīhi</div>
+          <div class="cdiv"></div>
+          <div class="arabic">فِيهِ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">in it</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">hudan</div>
+          <div class="cdiv"></div>
+          <div class="arabic">هُدًى</div>
+          <div class="cdiv"></div>
+          <div class="meaning">a Guidance</div>
+        </div>
+      </div>
+      <div class="word-row">
+        <div class="word-cell">
+          <div class="translit">lil'muttaqīna</div>
+          <div class="cdiv"></div>
+          <div class="arabic">لِّلْمُتَّقِينَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">for the God-conscious</div>
+        </div>
+        <div class="word-cell verse-start" data-verse="3">
+          <div class="translit">alladhīna</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱلَّذِينَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">Those who</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">yu'minūna</div>
+          <div class="cdiv"></div>
+          <div class="arabic">يُؤْمِنُونَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">believe</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">bil-ghaybi</div>
+          <div class="cdiv"></div>
+          <div class="arabic">بِٱلْغَيْبِ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">in the unseen</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">wayuqīmūna</div>
+          <div class="cdiv"></div>
+          <div class="arabic">وَيُقِيمُونَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">and establish</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">l-ṣalata</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱلصَّلَوٰةَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">the prayer</div>
+        </div>
+      </div>
+      <div class="word-row">
+        <div class="word-cell">
+          <div class="translit">wamimmā</div>
+          <div class="cdiv"></div>
+          <div class="arabic">وَمِمَّا</div>
+          <div class="cdiv"></div>
+          <div class="meaning">and out of what</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">razaqnāhum</div>
+          <div class="cdiv"></div>
+          <div class="arabic">رَزَقْنَـٰهُمْ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">We provided them</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">yunfiqūna</div>
+          <div class="cdiv"></div>
+          <div class="arabic">يُنفِقُونَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">they spend</div>
+        </div>
+        <div class="word-cell verse-start" data-verse="4">
+          <div class="translit">wa-alladhīna</div>
+          <div class="cdiv"></div>
+          <div class="arabic">وَٱلَّذِينَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">And those who</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">yu'minūna</div>
+          <div class="cdiv"></div>
+          <div class="arabic">يُؤْمِنُونَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">believe</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">bimā</div>
+          <div class="cdiv"></div>
+          <div class="arabic">بِمَآ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">in what</div>
+        </div>
+      </div>
+      <div class="word-row">
+        <div class="word-cell">
+          <div class="translit">unzila</div>
+          <div class="cdiv"></div>
+          <div class="arabic">أُنزِلَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">was revealed</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">ilayka</div>
+          <div class="cdiv"></div>
+          <div class="arabic">إِلَيْكَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">to you</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">wamā</div>
+          <div class="cdiv"></div>
+          <div class="arabic">وَمَآ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">and what</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">unzila</div>
+          <div class="cdiv"></div>
+          <div class="arabic">أُنزِلَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">was revealed</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">min</div>
+          <div class="cdiv"></div>
+          <div class="arabic">مِن</div>
+          <div class="cdiv"></div>
+          <div class="meaning">from</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">qablika</div>
+          <div class="cdiv"></div>
+          <div class="arabic">قَبْلِكَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">before you</div>
+        </div>
+      </div>
+      <div class="word-row">
+        <div class="word-cell">
+          <div class="translit">wabil-ākhirati</div>
+          <div class="cdiv"></div>
+          <div class="arabic">وَبِٱلْـَٔاخِرَةِ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">and in the Hereafter</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">hum</div>
+          <div class="cdiv"></div>
+          <div class="arabic">هُمْ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">they</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">yūqinūna</div>
+          <div class="cdiv"></div>
+          <div class="arabic">يُوقِنُونَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">firmly believe</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pf">
+    <span>Surah AL-BAQARAH &mdash; The Cow</span>
+    <span>Page 2 &nbsp;|&nbsp; Juz 1 — Para 1</span>
+  </div>
+</div>
+
+<div class="page">
+  <div class="ph">
+    <div class="ph-bar">
+      <span class="ph-juz">JUZ 1</span>
+      <div class="ph-center">
+        <span class="ph-orn">&#10022;</span>
+        <span class="ph-name">AL-BAQARAH</span>
+        <span class="ph-orn">&#10022;</span>
+      </div>
+      <span class="ph-pg">PAGE 3</span>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="mc">
+      <div class="me">
+        <span class="vb">5</span>
+        <span class="mp">&#8220;Those are upon guidance from their Lord, and those are the successful ones.&#8221;</span>
+      </div>
+      <div class="me">
+        <span class="vb">6</span>
+        <span class="mp">&#8220;Indeed, those who disbelieve — it is all the same whether you warn them or not — they will not believe.&#8221;</span>
+      </div>
+      <div class="me">
+        <span class="vb">7</span>
+        <span class="mp">&#8220;Allah has set a seal upon their hearts and upon their hearing, and over their vision is a veil. For them is a great punishment.&#8221;</span>
+      </div>
+    </div>
+    <div class="wc">
+      <div class="word-row">
+        <div class="word-cell verse-start" data-verse="5">
+          <div class="translit">ulāika</div>
+          <div class="cdiv"></div>
+          <div class="arabic">أُو۟لَـٰٓئِكَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">Those</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">ʿalā</div>
+          <div class="cdiv"></div>
+          <div class="arabic">عَلَىٰ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">are on</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">hudan</div>
+          <div class="cdiv"></div>
+          <div class="arabic">هُدًى</div>
+          <div class="cdiv"></div>
+          <div class="meaning">Guidance</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">min</div>
+          <div class="cdiv"></div>
+          <div class="arabic">مِّن</div>
+          <div class="cdiv"></div>
+          <div class="meaning">from</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">rabbihim</div>
+          <div class="cdiv"></div>
+          <div class="arabic">رَّبِّهِمْ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">their Lord</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">wa-ulāika</div>
+          <div class="cdiv"></div>
+          <div class="arabic">وَأُو۟لَـٰٓئِكَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">and those</div>
+        </div>
+      </div>
+      <div class="word-row">
+        <div class="word-cell">
+          <div class="translit">humu</div>
+          <div class="cdiv"></div>
+          <div class="arabic">هُمُ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">they are</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">l-muf'liḥūna</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱلْمُفْلِحُونَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">the successful ones</div>
+        </div>
+        <div class="word-cell verse-start" data-verse="6">
+          <div class="translit">inna</div>
+          <div class="cdiv"></div>
+          <div class="arabic">إِنَّ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">Indeed</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">alladhīna</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱلَّذِينَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">those who</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">kafarū</div>
+          <div class="cdiv"></div>
+          <div class="arabic">كَفَرُوا۟</div>
+          <div class="cdiv"></div>
+          <div class="meaning">disbelieved</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">sawāon</div>
+          <div class="cdiv"></div>
+          <div class="arabic">سَوَآءٌ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">it is the same</div>
+        </div>
+      </div>
+      <div class="word-row">
+        <div class="word-cell">
+          <div class="translit">ʿalayhim</div>
+          <div class="cdiv"></div>
+          <div class="arabic">عَلَيْهِمْ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">to them</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">a-andhartahum</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ءَأَنذَرْتَهُمْ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">whether you warn them</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">am</div>
+          <div class="cdiv"></div>
+          <div class="arabic">أَمْ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">or</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">lam</div>
+          <div class="cdiv"></div>
+          <div class="arabic">لَمْ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">not</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">tundhir'hum</div>
+          <div class="cdiv"></div>
+          <div class="arabic">تُنذِرْهُمْ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">you warn them</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">lā</div>
+          <div class="cdiv"></div>
+          <div class="arabic">لَا</div>
+          <div class="cdiv"></div>
+          <div class="meaning">not</div>
+        </div>
+      </div>
+      <div class="word-row">
+        <div class="word-cell">
+          <div class="translit">yu'minūna</div>
+          <div class="cdiv"></div>
+          <div class="arabic">يُؤْمِنُونَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">they will believe</div>
+        </div>
+        <div class="word-cell verse-start" data-verse="7">
+          <div class="translit">khatama</div>
+          <div class="cdiv"></div>
+          <div class="arabic">خَتَمَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">Has set a seal</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">l-lahu</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱللَّهُ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">Allah</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">ʿalā</div>
+          <div class="cdiv"></div>
+          <div class="arabic">عَلَىٰ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">on</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">qulūbihim</div>
+          <div class="cdiv"></div>
+          <div class="arabic">قُلُوبِهِمْ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">their hearts</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">waʿalā</div>
+          <div class="cdiv"></div>
+          <div class="arabic">وَعَلَىٰ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">and on</div>
+        </div>
+      </div>
+      <div class="word-row">
+        <div class="word-cell">
+          <div class="translit">samʿihim</div>
+          <div class="cdiv"></div>
+          <div class="arabic">سَمْعِهِمْ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">their hearing</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">waʿalā</div>
+          <div class="cdiv"></div>
+          <div class="arabic">وَعَلَىٰٓ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">and on</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">abṣārihim</div>
+          <div class="cdiv"></div>
+          <div class="arabic">أَبْصَـٰرِهِمْ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">their vision</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">ghishāwatun</div>
+          <div class="cdiv"></div>
+          <div class="arabic">غِشَـٰوَةٌ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">is a veil</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">walahum</div>
+          <div class="cdiv"></div>
+          <div class="arabic">وَلَهُمْ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">and for them</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">ʿadhābun</div>
+          <div class="cdiv"></div>
+          <div class="arabic">عَذَابٌ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">is a punishment</div>
+        </div>
+      </div>
+      <div class="word-row">
+        <div class="word-cell">
+          <div class="translit">ʿaẓīmun</div>
+          <div class="cdiv"></div>
+          <div class="arabic">عَظِيمٌ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">great</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pf">
+    <span>Surah AL-BAQARAH &mdash; The Cow</span>
+    <span>Page 3 &nbsp;|&nbsp; Juz 1 — Para 1</span>
+  </div>
+</div>
+
+<div class="page">
+  <div class="ph">
+    <div class="ph-bar">
+      <span class="ph-juz">JUZ 1</span>
+      <div class="ph-center">
+        <span class="ph-orn">&#10022;</span>
+        <span class="ph-name">AL-BAQARAH</span>
+        <span class="ph-orn">&#10022;</span>
+      </div>
+      <span class="ph-pg">PAGE 4</span>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="mc">
+      <div class="me">
+        <span class="vb">8</span>
+        <span class="mp">&#8220;And among people are those who say "We believe in Allah and the Last Day," but they are not believers.&#8221;</span>
+      </div>
+      <div class="me">
+        <span class="vb">9</span>
+        <span class="mp">&#8220;They seek to deceive Allah and those who believe, but they deceive none except themselves, and they do not realize it.&#8221;</span>
+      </div>
+      <div class="me">
+        <span class="vb">10</span>
+        <span class="mp">&#8220;In their hearts is a disease, and Allah has increased their disease. For them is a painful punishment because they used to lie.&#8221;</span>
+      </div>
+    </div>
+    <div class="wc">
+      <div class="word-row">
+        <div class="word-cell verse-start" data-verse="8">
+          <div class="translit">wamina</div>
+          <div class="cdiv"></div>
+          <div class="arabic">وَمِنَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">And of</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">l-nāsi</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱلنَّاسِ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">the people</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">man</div>
+          <div class="cdiv"></div>
+          <div class="arabic">مَن</div>
+          <div class="cdiv"></div>
+          <div class="meaning">(are some) who</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">yaqūlu</div>
+          <div class="cdiv"></div>
+          <div class="arabic">يَقُولُ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">say</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">āmannā</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ءَامَنَّا</div>
+          <div class="cdiv"></div>
+          <div class="meaning">We believe</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">bil-lahi</div>
+          <div class="cdiv"></div>
+          <div class="arabic">بِٱللَّهِ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">in Allah</div>
+        </div>
+      </div>
+      <div class="word-row">
+        <div class="word-cell">
+          <div class="translit">wabil-yawmi</div>
+          <div class="cdiv"></div>
+          <div class="arabic">وَبِٱلْيَوْمِ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">and in the Day</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">l-ākhiri</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱلْـَٔاخِرِ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">the Last</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">wamā</div>
+          <div class="cdiv"></div>
+          <div class="arabic">وَمَا</div>
+          <div class="cdiv"></div>
+          <div class="meaning">but not</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">hum</div>
+          <div class="cdiv"></div>
+          <div class="arabic">هُم</div>
+          <div class="cdiv"></div>
+          <div class="meaning">they</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">bimu'minīna</div>
+          <div class="cdiv"></div>
+          <div class="arabic">بِمُؤْمِنِينَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">are believers</div>
+        </div>
+        <div class="word-cell verse-start" data-verse="9">
+          <div class="translit">yukhādiʿūna</div>
+          <div class="cdiv"></div>
+          <div class="arabic">يُخَـٰدِعُونَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">They seek to deceive</div>
+        </div>
+      </div>
+      <div class="word-row">
+        <div class="word-cell">
+          <div class="translit">l-laha</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱللَّهَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">Allah</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">wa-alladhīna</div>
+          <div class="cdiv"></div>
+          <div class="arabic">وَٱلَّذِينَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">and those who</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">āmanū</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ءَامَنُوا۟</div>
+          <div class="cdiv"></div>
+          <div class="meaning">believed</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">wamā</div>
+          <div class="cdiv"></div>
+          <div class="arabic">وَمَا</div>
+          <div class="cdiv"></div>
+          <div class="meaning">and not</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">yakhdaʿūna</div>
+          <div class="cdiv"></div>
+          <div class="arabic">يَخْدَعُونَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">they deceive</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">illā</div>
+          <div class="cdiv"></div>
+          <div class="arabic">إِلَّآ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">except</div>
+        </div>
+      </div>
+      <div class="word-row">
+        <div class="word-cell">
+          <div class="translit">anfusahum</div>
+          <div class="cdiv"></div>
+          <div class="arabic">أَنفُسَهُمْ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">themselves</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">wamā</div>
+          <div class="cdiv"></div>
+          <div class="arabic">وَمَا</div>
+          <div class="cdiv"></div>
+          <div class="meaning">and not</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">yashʿurūna</div>
+          <div class="cdiv"></div>
+          <div class="arabic">يَشْعُرُونَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">they realize</div>
+        </div>
+        <div class="word-cell verse-start" data-verse="10">
+          <div class="translit">fī</div>
+          <div class="cdiv"></div>
+          <div class="arabic">فِى</div>
+          <div class="cdiv"></div>
+          <div class="meaning">In</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">qulūbihim</div>
+          <div class="cdiv"></div>
+          <div class="arabic">قُلُوبِهِم</div>
+          <div class="cdiv"></div>
+          <div class="meaning">their hearts</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">maraḍun</div>
+          <div class="cdiv"></div>
+          <div class="arabic">مَّرَضٌ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">is a disease</div>
+        </div>
+      </div>
+      <div class="word-row">
+        <div class="word-cell">
+          <div class="translit">fazādahumu</div>
+          <div class="cdiv"></div>
+          <div class="arabic">فَزَادَهُمُ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">so increased them</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">l-lahu</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱللَّهُ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">Allah</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">maraḍan</div>
+          <div class="cdiv"></div>
+          <div class="arabic">مَرَضًا</div>
+          <div class="cdiv"></div>
+          <div class="meaning">in disease</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">walahum</div>
+          <div class="cdiv"></div>
+          <div class="arabic">وَلَهُمْ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">and for them</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">ʿadhābun</div>
+          <div class="cdiv"></div>
+          <div class="arabic">عَذَابٌ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">is a punishment</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">alīmun</div>
+          <div class="cdiv"></div>
+          <div class="arabic">أَلِيمٌ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">painful</div>
+        </div>
+      </div>
+      <div class="word-row">
+        <div class="word-cell">
+          <div class="translit">bimā</div>
+          <div class="cdiv"></div>
+          <div class="arabic">بِمَا</div>
+          <div class="cdiv"></div>
+          <div class="meaning">because</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">kānū</div>
+          <div class="cdiv"></div>
+          <div class="arabic">كَانُوا۟</div>
+          <div class="cdiv"></div>
+          <div class="meaning">they used to</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">yakdhibūna</div>
+          <div class="cdiv"></div>
+          <div class="arabic">يَكْذِبُونَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">lie</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pf">
+    <span>Surah AL-BAQARAH &mdash; The Cow</span>
+    <span>Page 4 &nbsp;|&nbsp; Juz 1 — Para 1</span>
+  </div>
+</div>
+
+<div class="page">
+  <div class="ph">
+    <div class="ph-bar">
+      <span class="ph-juz">JUZ 1</span>
+      <div class="ph-center">
+        <span class="ph-orn">&#10022;</span>
+        <span class="ph-name">AL-BAQARAH</span>
+        <span class="ph-orn">&#10022;</span>
+      </div>
+      <span class="ph-pg">PAGE 5</span>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="mc">
+      <div class="me">
+        <span class="vb">11</span>
+        <span class="mp">&#8220;And when it is said to them, "Do not cause corruption on the earth," they say, "We are only reformers."&#8221;</span>
+      </div>
+      <div class="me">
+        <span class="vb">12</span>
+        <span class="mp">&#8220;Unquestionably, it is they who are the corrupters, but they do not realize it.&#8221;</span>
+      </div>
+      <div class="me">
+        <span class="vb">13</span>
+        <span class="mp">&#8220;And when it is said to them, "Believe as the people have believed," they say, "Should we believe as the fools believed?" — Beware, it is they who are the fools, but they do not know.&#8221;</span>
+      </div>
+    </div>
+    <div class="wc">
+      <div class="word-row">
+        <div class="word-cell verse-start" data-verse="11">
+          <div class="translit">wa-idhā</div>
+          <div class="cdiv"></div>
+          <div class="arabic">وَإِذَا</div>
+          <div class="cdiv"></div>
+          <div class="meaning">And when</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">qīla</div>
+          <div class="cdiv"></div>
+          <div class="arabic">قِيلَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">it is said</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">lahum</div>
+          <div class="cdiv"></div>
+          <div class="arabic">لَهُمْ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">to them</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">lā</div>
+          <div class="cdiv"></div>
+          <div class="arabic">لَا</div>
+          <div class="cdiv"></div>
+          <div class="meaning">Do not</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">tuf'sidū</div>
+          <div class="cdiv"></div>
+          <div class="arabic">تُفْسِدُوا۟</div>
+          <div class="cdiv"></div>
+          <div class="meaning">spread corruption</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">fī</div>
+          <div class="cdiv"></div>
+          <div class="arabic">فِى</div>
+          <div class="cdiv"></div>
+          <div class="meaning">in</div>
+        </div>
+      </div>
+      <div class="word-row">
+        <div class="word-cell">
+          <div class="translit">l-arḍi</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱلْأَرْضِ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">the earth</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">qālū</div>
+          <div class="cdiv"></div>
+          <div class="arabic">قَالُوٓا۟</div>
+          <div class="cdiv"></div>
+          <div class="meaning">they say</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">innamā</div>
+          <div class="cdiv"></div>
+          <div class="arabic">إِنَّمَا</div>
+          <div class="cdiv"></div>
+          <div class="meaning">Only</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">naḥnu</div>
+          <div class="cdiv"></div>
+          <div class="arabic">نَحْنُ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">we</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">muṣ'liḥūna</div>
+          <div class="cdiv"></div>
+          <div class="arabic">مُصْلِحُونَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">are reformers</div>
+        </div>
+        <div class="word-cell verse-start" data-verse="12">
+          <div class="translit">alā</div>
+          <div class="cdiv"></div>
+          <div class="arabic">أَلَآ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">Beware</div>
+        </div>
+      </div>
+      <div class="word-row">
+        <div class="word-cell">
+          <div class="translit">innahum</div>
+          <div class="cdiv"></div>
+          <div class="arabic">إِنَّهُمْ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">indeed they</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">humu</div>
+          <div class="cdiv"></div>
+          <div class="arabic">هُمُ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">themselves</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">l-muf'sidūna</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱلْمُفْسِدُونَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">are the corrupters</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">walākin</div>
+          <div class="cdiv"></div>
+          <div class="arabic">وَلَـٰكِن</div>
+          <div class="cdiv"></div>
+          <div class="meaning">but</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">lā</div>
+          <div class="cdiv"></div>
+          <div class="arabic">لَّا</div>
+          <div class="cdiv"></div>
+          <div class="meaning">not</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">yashʿurūna</div>
+          <div class="cdiv"></div>
+          <div class="arabic">يَشْعُرُونَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">they realize</div>
+        </div>
+      </div>
+      <div class="word-row">
+        <div class="word-cell verse-start" data-verse="13">
+          <div class="translit">wa-idhā</div>
+          <div class="cdiv"></div>
+          <div class="arabic">وَإِذَا</div>
+          <div class="cdiv"></div>
+          <div class="meaning">And when</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">qīla</div>
+          <div class="cdiv"></div>
+          <div class="arabic">قِيلَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">it is said</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">lahum</div>
+          <div class="cdiv"></div>
+          <div class="arabic">لَهُمْ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">to them</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">āminū</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ءَامِنُوا۟</div>
+          <div class="cdiv"></div>
+          <div class="meaning">Believe</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">kamā</div>
+          <div class="cdiv"></div>
+          <div class="arabic">كَمَآ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">as</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">āmana</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ءَامَنَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">believed</div>
+        </div>
+      </div>
+      <div class="word-row">
+        <div class="word-cell">
+          <div class="translit">l-nāsu</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱلنَّاسُ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">the people</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">qālū</div>
+          <div class="cdiv"></div>
+          <div class="arabic">قَالُوٓا۟</div>
+          <div class="cdiv"></div>
+          <div class="meaning">they say</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">anu'minu</div>
+          <div class="cdiv"></div>
+          <div class="arabic">أَنُؤْمِنُ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">Should we believe</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">kamā</div>
+          <div class="cdiv"></div>
+          <div class="arabic">كَمَآ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">as</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">āmana</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ءَامَنَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">believed</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">l-sufahāu</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱلسُّفَهَآءُ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">the fools</div>
+        </div>
+      </div>
+      <div class="word-row">
+        <div class="word-cell">
+          <div class="translit">alā</div>
+          <div class="cdiv"></div>
+          <div class="arabic">أَلَآ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">Beware</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">innahum</div>
+          <div class="cdiv"></div>
+          <div class="arabic">إِنَّهُمْ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">certainly they</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">humu</div>
+          <div class="cdiv"></div>
+          <div class="arabic">هُمُ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">themselves</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">l-sufahāu</div>
+          <div class="cdiv"></div>
+          <div class="arabic">ٱلسُّفَهَآءُ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">are the fools</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">walākin</div>
+          <div class="cdiv"></div>
+          <div class="arabic">وَلَـٰكِن</div>
+          <div class="cdiv"></div>
+          <div class="meaning">but</div>
+        </div>
+        <div class="word-cell">
+          <div class="translit">lā</div>
+          <div class="cdiv"></div>
+          <div class="arabic">لَّا</div>
+          <div class="cdiv"></div>
+          <div class="meaning">not</div>
+        </div>
+      </div>
+      <div class="word-row">
+        <div class="word-cell">
+          <div class="translit">yaʿlamūna</div>
+          <div class="cdiv"></div>
+          <div class="arabic">يَعْلَمُونَ</div>
+          <div class="cdiv"></div>
+          <div class="meaning">they know</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="pf">
+    <span>Surah AL-BAQARAH &mdash; The Cow</span>
+    <span>Page 5 &nbsp;|&nbsp; Juz 1 — Para 1</span>
+  </div>
 </div>
 </body>
 </html>
