@@ -61,6 +61,13 @@ def ar_base_len(s):
 def clean_meaning(s):
     return _PAREN.sub('', s or '').replace('  ', ' ').strip(' ,;:.')
 
+# ─── RUKU ENDINGS (verse that completes a ruku → ruku number in Juz 1) ──
+RUKU_END = {
+    '1:7': 1, '2:7': 2, '2:20': 3, '2:29': 4, '2:39': 5, '2:46': 6,
+    '2:59': 7, '2:61': 8, '2:71': 9, '2:82': 10, '2:86': 11, '2:96': 12,
+    '2:103': 13, '2:112': 14, '2:121': 15, '2:129': 16, '2:141': 17,
+}
+
 
 
 # ─── MEASUREMENT ─────────────────────────────────────────────────
@@ -169,12 +176,15 @@ def paginate_rows(rows):
     return pages
 
 def verses_in_rows(page_rows):
-    seen = []
+    """Only verses that COMPLETE on this page (their ayah marker is here).
+    Prevents a verse spanning two pages from repeating its meaning, and
+    never prints an incomplete verse's meaning."""
+    completed = []
     for row in page_rows:
         for it in row:
-            if it['vk'] not in seen:
-                seen.append(it['vk'])
-    return seen
+            if it['kind'] == 'marker' and it['vk'] not in completed:
+                completed.append(it['vk'])
+    return completed
 
 # ─── DENSE + COMPLETE-AYAH PAGINATION ────────────────────────────
 # Rows fill densely across ayah boundaries (next ayah continues on the
@@ -289,9 +299,11 @@ def make_word_item(vk, widx):
 
 def make_marker_item(vk):
     n = int(vk.split(':')[1])
+    ruku = RUKU_END.get(vk)
+    w = CELL_MIN_MM + (8 if ruku else 0)   # a little extra width for the ruku glyph
     return {
-        'kind': 'marker', 'vk': vk, 'num': n,
-        'width': CELL_MIN_MM, 'height': ROW_BASE_MM,
+        'kind': 'marker', 'vk': vk, 'num': n, 'ruku': ruku,
+        'width': w, 'height': ROW_BASE_MM,
     }
 
 def build_surah_items(verse_keys):
@@ -317,10 +329,14 @@ def emit_word(it):
 
 def emit_marker(it):
     glyph = f'&#1757;{ar(it["num"])}'
+    ruku = it.get('ruku')
+    basis = it['width']
+    ruku_html = (f'<div class="ruku">&#1593;<span class="ruku-n">{ruku}</span></div>'
+                 if ruku else '')
     return (
-        f'<div class="cell marker" style="flex:0 0 {CELL_MIN_MM}mm">'
-        f'<div class="tr">&nbsp;</div>'
-        f'<div class="ar mk">{glyph}</div>'
+        f'<div class="cell marker" style="flex:0 0 {basis:.0f}mm">'
+        f'<div class="tr">{("Ruku " + str(ruku)) if ruku else "&nbsp;"}</div>'
+        f'<div class="ar mk">{glyph}{ruku_html}</div>'
         f'<div class="mn">&nbsp;</div>'
         f'</div>'
     )
@@ -485,7 +501,14 @@ body{{display:flex;flex-direction:column;align-items:center;padding:28px 0;gap:2
 .mn{{font-size:{MN_PT}pt;color:#1e1206;text-align:center;
   line-height:1.2;width:100%;margin-top:1.2mm;
   word-break:break-word;overflow-wrap:break-word}}
-.marker .ar.mk{{color:#c9a84c;font-size:18pt}}
+.marker .ar.mk{{color:#c9a84c;font-size:18pt;display:flex;align-items:center;gap:1mm}}
+.ruku{{display:inline-flex;align-items:center;justify-content:center;
+  font-family:'Amiri',serif;font-size:13pt;color:#1a7a4a;
+  border:0.3mm solid #1a7a4a;border-radius:50%;width:7mm;height:7mm;
+  position:relative;line-height:1}}
+.ruku-n{{position:absolute;bottom:-2.2mm;font-size:6pt;font-style:normal;
+  color:#1a7a4a;font-family:'EB Garamond',serif;font-weight:700}}
+.marker .tr{{color:#1a7a4a;font-weight:700;font-size:7pt}}
 """
 
 
