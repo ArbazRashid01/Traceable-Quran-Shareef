@@ -34,22 +34,22 @@ PANEL_PCT      = 24                                  # left meaning panel
 WORD_W_MM      = BODY_W * (100 - PANEL_PCT) / 100    # ~140.6 mm usable for words
 
 # ─── TYPOGRAPHY (pt) ─────────────────────────────────────────────
-AR_PT          = 15      # Arabic — traceable, dense layout (target <30 pages)
-TR_PT          = 9       # transliteration
-MN_PT          = 9       # word meaning
+AR_PT          = 20      # Arabic — traceable, readable, complete-ayah pagination
+TR_PT          = 10      # transliteration
+MN_PT          = 10      # word meaning
 PANEL_NUM_PT   = 12      # ayah number in panel
 PANEL_TXT_PT   = 11      # verse meaning in panel
 
 # ─── WIDTH MODEL (mm per character, empirically calibrated) ──────
-AR_CHAR_MM     = 2.45    # 15pt Amiri base char (connected-script calibrated, safe)
-TR_CHAR_MM     = 1.55
-MN_CHAR_MM     = 1.55
+AR_CHAR_MM     = 3.3     # 20pt Amiri base char (connected-script calibrated, safe)
+TR_CHAR_MM     = 1.7
+MN_CHAR_MM     = 1.7
 CELL_PAD_MM    = 3
-CELL_MIN_MM    = 10
+CELL_MIN_MM    = 12
 CELL_MAX_MM    = WORD_W_MM
 
-ROW_BASE_MM    = 15      # 1-line tr + 15pt arabic + 1-line mn + tight padding
-ROW_LINE_MM    = 3.4
+ROW_BASE_MM    = 18      # 1-line tr + 20pt arabic + 1-line mn + tight padding (measured safe)
+ROW_LINE_MM    = 3.8
 
 # ─── DIACRITIC STRIP (for width measurement only) ────────────────
 _DIAC  = re.compile(r'[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06E4\u06E7\u06E8\u06EA-\u06ED]')
@@ -175,6 +175,43 @@ def verses_in_rows(page_rows):
             if it['vk'] not in seen:
                 seen.append(it['vk'])
     return seen
+
+# ─── COMPLETE-AYAH PAGINATION ────────────────────────────────────
+# Each page ends at a complete verse. Only a verse longer than a full
+# page is split across pages (Mushaf-style). Returns list of pages,
+# each page = flat list of rows (for row-based rendering).
+
+def paginate_complete_ayah(verse_keys):
+    limit = BODY_H - 2
+    blocks = []
+    for vk in verse_keys:
+        items = [make_word_item(vk, i) for i in range(len(WORDS[vk]))]
+        items.append(make_marker_item(vk))
+        blocks.append(pack_verse_rows(items))
+
+    pages, cur, cur_h = [], [], 0.0
+    def flush():
+        nonlocal cur, cur_h
+        if cur:
+            pages.append(cur); cur, cur_h = [], 0.0
+
+    for rows in blocks:
+        bh = block_height(rows)
+        if bh <= limit:
+            if cur and cur_h + bh > limit:
+                flush()
+            cur.extend(rows); cur_h += bh
+        else:
+            # verse taller than a page — split its rows across pages
+            flush()
+            for r in rows:
+                h = row_height(r)
+                if cur and cur_h + h > limit:
+                    flush()
+                cur.append(r); cur_h += h
+            flush()
+    flush()
+    return pages
 
 
 # ─── PAGINATION — pages end at a complete ayah whenever possible ──
@@ -534,8 +571,7 @@ def build():
         pno += 1
         pages.append(page_surah_opener(1, pno, sd))
 
-        rows = pack_all_rows(vks)
-        for page_rows in paginate_rows(rows):
+        for page_rows in paginate_complete_ayah(vks):
             pno += 1
             pages.append(page_standard(1, pno, sd['english'], page_rows))
 
