@@ -26,23 +26,34 @@ OUT      = BASE / 'Traceable-Quran-Juz1.html'
 # ─── TEXT SHORTENERS ─────────────────────────────────────────────
 PAREN_RX = re.compile(r'[\(\[][^\)\]]*[\)\]]')
 
-def short_word_meaning(text: str, limit: int = 16) -> str:
-    """Strip parentheticals/brackets, collapse whitespace, cap length."""
+def short_word_meaning(text: str, limit: int = 20) -> str:
+    """Strip parentheticals, collapse whitespace — longer limit with adaptive widths."""
     text = PAREN_RX.sub('', text or '').replace('  ', ' ').strip(' ,;:.')
     if len(text) > limit:
-        # Try to cut at last space before limit
         cut = text.rfind(' ', 0, limit)
-        if cut < limit - 4:
+        if cut < limit - 5:
             cut = limit
-        text = text[:cut].rstrip(' ,;:.') + '\u2026'
+        text = text[:cut].rstrip(' ,;:.')
     return text
 
-def short_translit(text: str, limit: int = 12) -> str:
-    text = (text or '').strip()
-    if len(text) > limit:
-        text = text[:limit - 1] + '\u2026'
-    return text
+def short_translit(text: str, limit: int = 18) -> str:
+    """Longer limit now that cells are adaptive width."""
+    return (text or '').strip()[:limit]
 
+# ─── ADAPTIVE WIDTH ───────────────────────────────────────────────
+_DIAC = re.compile(
+    r'[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06E4\u06E7\u06E8\u06EA-\u06ED]'
+)
+
+def flex_weight(arabic: str) -> int:
+    """
+    Proportional flex weight based on Arabic base-character count
+    (diacritics stripped). Short words get less horizontal space;
+    long words get more. Minimum weight = 2.
+    """
+    base = _DIAC.sub('', arabic or '')
+    n = sum(1 for c in base if '\u0600' <= c <= '\u06FF')
+    return max(2, n)
 def clean_verse_meaning(text: str) -> str:
     """Light cleanup — keep simple; CSS clamps to 3 lines."""
     text = PAREN_RX.sub('', text or '').replace('  ', ' ').strip()
@@ -52,9 +63,9 @@ def clean_verse_meaning(text: str) -> str:
 
 # ─── HTML EMITTERS — MIRROR template.py's STRUCTURE EXACTLY ──────
 
-def emit_cell(arabic, translit, meaning):
+def emit_cell(arabic, translit, meaning, weight=3):
     return (
-        f'<div class="cell">'
+        f'<div class="cell" style="flex:{weight}">'
         f'<div class="tr">{translit}</div>'
         f'<div class="div"></div>'
         f'<div class="ar">{arabic}</div>'
@@ -64,10 +75,10 @@ def emit_cell(arabic, translit, meaning):
     )
 
 def emit_marker_cell(verse_num: int):
-    """Ayah-end marker — Arabic ۝ + Arabic-Indic numeral."""
+    """Ayah-end marker — narrow fixed width, gold ۝ + Arabic-Indic numeral."""
     glyph = f'&#1757;{ar(verse_num)}'
     return (
-        f'<div class="cell">'
+        f'<div class="cell" style="flex:2">'
         f'<div class="tr">&middot;</div>'
         f'<div class="div"></div>'
         f'<div class="ar" style="color:#c9a84c;font-size:18pt;">{glyph}</div>'
@@ -148,6 +159,7 @@ def render_row(row_items):
                 ar_text,
                 short_translit(tr_text),
                 short_word_meaning(en_text),
+                weight=flex_weight(ar_text),
             ))
         elif kind == 'M':
             verse_num = int(vk.split(':')[1])

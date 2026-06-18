@@ -217,15 +217,17 @@ CSS_STD = f"""
 .row {{
   height: {ROW_H}mm;
   border-bottom: 0.2mm solid {HAIRLINE};
-  display: grid;
-  grid-template-columns: repeat({WORDS_PER_ROW}, 1fr);
-  direction: rtl;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: stretch;
   overflow: hidden;
 }}
 .row:last-child {{ border-bottom: none; }}
 
 .cell {{
   height: {ROW_H}mm;
+  flex: 3;
+  min-width: 0;
   border-left: 0.2mm dotted #efe2c2;
   display: flex; flex-direction: column;
   direction: ltr;
@@ -238,7 +240,7 @@ CSS_STD = f"""
   display: flex; align-items: center; justify-content: center;
   font-size: {TR_PT}pt; font-style: italic; color: {PH_TX};
   background: {PH_BG};
-  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  overflow: hidden;
 }}
 .div {{
   flex: 0 0 {DIV_H}mm; height: {DIV_H}mm;
@@ -259,7 +261,7 @@ CSS_STD = f"""
   display: flex; align-items: center; justify-content: center;
   font-size: {MN_PT_CELL}pt; color: {PH_TX};
   background: {PH_BG};
-  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  overflow: hidden;
 }}
 """
 
