@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Traceable Quran &mdash; All 30 Juz</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#9e8f72;font-family:'Georgia',serif;color:#1a0e04;padding:40px 20px;
+  display:flex;flex-direction:column;align-items:center}
+h1{color:#fdf7ed;font-size:28px;letter-spacing:2px;margin-bottom:6px;text-align:center}
+.sub{color:#f0e4c0;font-style:italic;margin-bottom:30px;text-align:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
+  gap:14px;max-width:780px;width:100%}
+a.j{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:#fdf7ed;border:1.5px solid #c9a84c;border-radius:8px;
+  padding:16px 8px;text-decoration:none;color:#1a0e04;
+  box-shadow:0 3px 12px rgba(0,0,0,.25);transition:transform .1s}
+a.j:hover{transform:translateY(-3px);background:#f8f0dc}
+.jn{font-size:26px;font-weight:700;color:#8b6c14}
+.jl{font-size:11px;letter-spacing:1px;color:#7a5810;margin-top:4px;text-transform:uppercase}
+</style>
+</head>
+<body>
+<h1>TRACEABLE QURAN</h1>
+<div class="sub">Word-by-word tracing workbook &mdash; all 30 Juz</div>
+<div class="grid" id="g"></div>
+<script>
+const g=document.getElementById('g');
+for(let i=1;i<=30;i++){
+  const a=document.createElement('a');
+  a.className='j';
+  a.href='Juz-'+String(i).padStart(2,'0')+'.html';
+  a.innerHTML='<span class="jn">'+i+'</span><span class="jl">Juz '+i+'</span>';
+  g.appendChild(a);
+}
+</script>
+</body>
+</html>
