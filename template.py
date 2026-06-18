@@ -223,9 +223,14 @@ CSS_STD = f"""
   font-size: {TR_PT}pt; font-style: italic;
   color: {AMBER};
   text-align: center;
-  padding: 3px 2px 1px;
+  padding: 3px 2px 2px;
   width: 100%;
-  white-space: nowrap;
+  line-height: 1.35;
+  min-height: 8mm;
+  display: flex; align-items: center; justify-content: center;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
 }}
 
 /* Arabic — the visual centrepiece, generous natural space */
@@ -244,9 +249,14 @@ CSS_STD = f"""
   font-size: {MN_PT_CELL}pt;
   color: {INK_BODY};
   text-align: center;
-  padding: 1px 2px 4px;
+  padding: 2px 2px 4px;
   width: 100%;
-  white-space: nowrap;
+  line-height: 1.35;
+  min-height: 8mm;
+  display: flex; align-items: center; justify-content: center;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
 }}
 """
 
