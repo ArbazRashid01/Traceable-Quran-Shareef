@@ -156,6 +156,13 @@ WORDS = {
              ('يَعْلَمُونَ',"ya'lamūna",'they know')],
 }
 
+# Merge extra verse data fetched from quran.com API
+try:
+    from _extra_data import EXTRA_WORDS, EXTRA_MEANINGS
+    WORDS.update(EXTRA_WORDS)
+except ImportError:
+    pass
+
 MEANINGS = {
     '1:1': 'In the name of Allah, the Most Gracious, the Most Merciful.',
     '1:2': 'All praise and thanks belong to Allah, Lord of all the worlds.',
@@ -179,6 +186,13 @@ MEANINGS = {
     '2:13': 'And when it is said to them, "Believe as the people have believed," they say, "Should we believe as the fools have believed?" — Beware, it is they who are the fools, but they do not know.',
 }
 
+# Merge extra meanings fetched from quran.com API
+try:
+    from _extra_data import EXTRA_MEANINGS as _EM
+    MEANINGS.update(_EM)
+except ImportError:
+    pass
+
 
 # ── PAGE DEFINITIONS ──────────────────────────────────────────────────────
 # 'verses' lists verse keys in order for this page.
@@ -190,35 +204,35 @@ PAGES = [
      'revealed':'Makkah','verses_total':7,
      'new_surah':True,'bismillah_separate':False,
      'verses':['1:1','1:2','1:3','1:4','1:5','1:6','1:7'],
-     'wpr':5},
+     'wpr':10},
     {'num':2,'juz':1,
      'surah_en':'AL-BAQARAH','surah_meaning':'The Cow',
      'surah_ar':'سُورَةُ الْبَقَرَة','surah_no':2,
      'revealed':'Madinah','verses_total':286,
      'new_surah':True,'bismillah_separate':True,
-     'verses':['2:1','2:2','2:3','2:4'],
-     'wpr':5},
+     'verses':['2:1','2:2','2:3','2:4','2:5','2:6','2:7','2:8','2:9'],
+     'wpr':10},
     {'num':3,'juz':1,
      'surah_en':'AL-BAQARAH','surah_meaning':'The Cow',
      'surah_ar':'سُورَةُ الْبَقَرَة','surah_no':2,
      'revealed':'Madinah','verses_total':286,
      'new_surah':False,'bismillah_separate':False,
-     'verses':['2:5','2:6','2:7'],
-     'wpr':5},
+     'verses':['2:10','2:11','2:12','2:13','2:14','2:15','2:16','2:17'],
+     'wpr':10},
     {'num':4,'juz':1,
      'surah_en':'AL-BAQARAH','surah_meaning':'The Cow',
      'surah_ar':'سُورَةُ الْبَقَرَة','surah_no':2,
      'revealed':'Madinah','verses_total':286,
      'new_surah':False,'bismillah_separate':False,
-     'verses':['2:8','2:9','2:10'],
-     'wpr':5},
+     'verses':['2:18','2:19','2:20','2:21','2:22','2:23'],
+     'wpr':10},
     {'num':5,'juz':1,
      'surah_en':'AL-BAQARAH','surah_meaning':'The Cow',
      'surah_ar':'سُورَةُ الْبَقَرَة','surah_no':2,
      'revealed':'Madinah','verses_total':286,
      'new_surah':False,'bismillah_separate':False,
-     'verses':['2:11','2:12','2:13'],
-     'wpr':5},
+     'verses':['2:24','2:25','2:26','2:27','2:28'],
+     'wpr':10},
 ]
 
 # ── ROW BUILDER ───────────────────────────────────────────────────────────
@@ -404,7 +418,7 @@ CSS += """
     color:#2a1a06;line-height:1.5}
 
 /* RIGHT — continuous word flow across all verses */
-.vw{flex:1;display:flex;flex-direction:column;padding:1px 4px 0px}
+.vw{flex:1;display:flex;flex-direction:column;padding:0 3px}
 
 /* WORD ROW — fills column height, words sit flush, no gap */
 .wr{flex:1;display:flex;flex-direction:row-reverse;
@@ -424,22 +438,23 @@ CSS += """
 
 /* Transliteration — top, halved horizontal padding */
 .tr{font-family:'EB Garamond',serif;font-size:7.5px;font-style:italic;
-    color:#a07830;text-align:center;padding:1px 1px 0px;
-    min-height:10px;display:flex;align-items:center;justify-content:center;
-    letter-spacing:.1px}
+    color:#a07830;text-align:center;padding:0px 1px;
+    min-height:8px;display:flex;align-items:center;justify-content:center;
+    letter-spacing:.1px;line-height:1}
 
 /* Horizontal hairline — minimal margin */
 .hd{height:0.5px;background:#e4d0a8;margin:0 1px}
 
-/* Arabic — visual king, halved horizontal padding for tighter word spacing */
+/* Arabic — visual king, line-height tightened, font size preserved at 27px */
 .aw{font-family:'Amiri',serif;font-size:27px;direction:rtl;text-align:center;
-    padding:3px 1px 2px;flex:1;display:flex;align-items:center;
-    justify-content:center;color:rgba(0,0,0,.13);line-height:1.45}
+    padding:1px 1px;flex:1;display:flex;align-items:center;
+    justify-content:center;color:rgba(0,0,0,.13);line-height:1.05;
+    overflow:hidden}
 
 /* English meaning — bottom, halved horizontal padding */
 .mn{font-family:'EB Garamond',serif;font-size:8px;text-align:center;
-    color:#1e1206;padding:0px 1px 2px;min-height:13px;
-    display:flex;align-items:center;justify-content:center;line-height:1.25}
+    color:#1e1206;padding:0px 1px;min-height:10px;
+    display:flex;align-items:center;justify-content:center;line-height:1.1}
 
 /* FOOTER — gold rule */
 .pf{padding-top:5px;border-top:2px solid #8b6c14;display:flex;
