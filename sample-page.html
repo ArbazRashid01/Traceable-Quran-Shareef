@@ -7,52 +7,108 @@
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
   <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#ddd8ce;display:flex;flex-direction:column;align-items:center;padding:30px 20px;gap:30px;font-family:'EB Garamond',serif}
-.page{background:#fff;width:210mm;min-height:297mm;padding:10mm 11mm 10mm 11mm;box-shadow:0 4px 32px rgba(0,0,0,.18);display:flex;flex-direction:column;gap:0;position:relative}
+body{background:#a89870;display:flex;flex-direction:column;align-items:center;padding:35px 20px;gap:40px;font-family:'EB Garamond',serif}
 
-/* ── HEADER BAR ── */
-.ph{margin-bottom:0}
-.ph-bar{display:flex;justify-content:space-between;align-items:center;border-top:2.5px solid #1a1a1a;border-bottom:1px solid #888;padding:5px 4px;background:#fdfaf5}
-.ph-juz{font-size:10px;color:#555;letter-spacing:.5px;font-weight:600;text-transform:uppercase;min-width:50px}
-.ph-center{display:flex;align-items:center;gap:8px}
-.ph-orn{font-size:13px;color:#8b7355}
-.ph-name{font-size:14px;font-weight:700;letter-spacing:1.5px;color:#1a1a1a;text-transform:uppercase}
-.ph-pg{font-size:10px;color:#555;text-align:right;min-width:50px;letter-spacing:.5px;font-weight:600}
+/* PAGE — warm ivory, double gold frame like a Mushaf */
+.page{
+  background:#fdf7ed;
+  width:210mm;min-height:297mm;
+  padding:11mm 10mm 9mm 10mm;
+  /* Double-border: gold border, cream gap, gold outline */
+  border:1.5px solid #c9a84c;
+  box-shadow:0 0 0 4px #fdf7ed, 0 0 0 5.5px #c9a84c, 0 10px 50px rgba(0,0,0,.32);
+  display:flex;flex-direction:column;position:relative;
+}
+/* Inner frame hairline */
+.page::before{content:'';position:absolute;inset:8px;border:0.5px solid rgba(201,168,76,.45);pointer-events:none;z-index:0}
 
-/* ── SURAH DETAILS BAND ── */
-.surah-band{background:#f5f0e8;border-bottom:2px solid #c8b89a;padding:7px 8px;text-align:center}
-.surah-band-ar{font-family:'Amiri',serif;font-size:22px;direction:rtl;color:#3a2a1a;margin-bottom:3px}
-.surah-band-info{font-size:10.5px;color:#666;letter-spacing:.3px}
+/* HEADER — double gold rule, Mushaf-style */
+.ph{margin-bottom:4px;position:relative;z-index:1}
+.ph-bar{
+  display:flex;justify-content:space-between;align-items:center;
+  background:#f8f0dc;
+  border-top:2px solid #8b6c14;border-bottom:2px solid #8b6c14;
+  box-shadow:inset 0 2px 0 #e8d49a,inset 0 -2px 0 #e8d49a;
+  padding:5px 8px;
+}
+.ph-juz{font-size:9px;color:#7a5810;letter-spacing:1.2px;font-weight:700;text-transform:uppercase;min-width:58px}
+.ph-center{display:flex;align-items:center;gap:10px}
+.ph-orn{font-size:15px;color:#c9a84c;line-height:1}
+.ph-name{font-size:13px;font-weight:700;letter-spacing:2.5px;color:#1a0e04;text-transform:uppercase}
+.ph-pg{font-size:9px;color:#7a5810;text-align:right;min-width:58px;letter-spacing:.8px;font-weight:700}
 
-/* ── BISMILLAH ROW ── */
-.bism-row{border:1px solid #c8b89a;background:#fdfaf5;padding:8px 10px;text-align:center;margin-bottom:0}
-.bism-tr{font-size:9.5px;font-style:italic;color:#888;margin-bottom:3px;letter-spacing:.5px}
-.bism-ar{font-family:'Amiri',serif;font-size:30px;direction:rtl;color:rgba(0,0,0,.13);letter-spacing:2px}
+/* SURAH BAND — warm gold gradient, ornamental corners */
+.surah-band{
+  background:linear-gradient(135deg,#f4e8c4 0%,#ede0aa 50%,#f4e8c4 100%);
+  border-top:1px solid #c9a84c;border-bottom:1px solid #c9a84c;
+  padding:8px 30px 7px;text-align:center;position:relative;margin-bottom:2px;
+}
+.surah-band::before,.surah-band::after{content:'❖';position:absolute;top:50%;transform:translateY(-50%);color:#c9a84c;font-size:11px}
+.surah-band::before{left:9px}.surah-band::after{right:9px}
+.surah-band-ar{font-family:'Amiri',serif;font-size:21px;direction:rtl;color:#1a0e04;margin-bottom:3px;letter-spacing:1px}
+.surah-band-info{font-size:10px;color:#7a5810;letter-spacing:.5px}
 
-/* ── BODY TWO COLUMNS ── */
-.body{display:flex;flex:1;border:1px solid #c5bdb0}
+/* BISMILLAH — prominent, sacred */
+.bism-row{
+  background:linear-gradient(to right,#fdf7ed,#f5ead0,#fdf7ed);
+  border-top:0.5px solid #c9a84c;border-bottom:0.5px solid #c9a84c;
+  padding:9px 14px 7px;text-align:center;margin-bottom:3px;
+}
+.bism-tr{font-size:8.5px;font-style:italic;color:#a07830;margin-bottom:4px;letter-spacing:1.5px}
+.bism-ar{font-family:'Amiri',serif;font-size:34px;direction:rtl;color:rgba(0,0,0,.12);line-height:1.6}
 
-/* ── LEFT — MEANINGS ── */
-.mc{width:26%;min-width:26%;border-right:1.5px solid #c5bdb0;background:#faf8f4;padding:8px 7px;display:flex;flex-direction:column}
-.me{display:flex;flex-direction:column;align-items:center;padding:7px 3px;border-bottom:1px dashed #c8c0b4}
+/* BODY */
+.body{display:flex;flex:1;border:1px solid #d4b870;background:#fdf7ed}
+
+/* LEFT — parchment margin notes */
+.mc{width:24%;min-width:24%;border-right:1px solid #d4b870;background:#f7edd8;padding:7px 6px;display:flex;flex-direction:column}
+.me{display:flex;flex-direction:column;align-items:center;padding:6px 2px 8px;border-bottom:1px dashed #d4b870}
 .me:last-child{border-bottom:none}
-.vb{font-size:9px;font-weight:700;color:#888;border:1px solid #bbb;border-radius:50%;width:17px;height:17px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:4px;flex-shrink:0}
-.mp{font-size:10.5px;font-style:italic;color:#2a2a2a;text-align:center;line-height:1.55}
+.vb{font-size:8px;font-weight:700;color:#8b6c14;border:1px solid #c9a84c;border-radius:50%;width:15px;height:15px;display:inline-flex;align-items:center;justify-content:center;margin-bottom:4px;flex-shrink:0;background:#fdf7ed}
+.mp{font-size:10px;font-style:italic;color:#2a1a06;text-align:center;line-height:1.6}
 
-/* ── RIGHT — WORD ROWS ── */
-.wc{flex:1;display:flex;flex-direction:column;padding:7px 7px;gap:5px}
-.word-row{display:flex;flex-direction:row-reverse;border:1px solid #b5ada0;background:#fff}
-.word-cell{flex:1;display:flex;flex-direction:column;position:relative}
-.verse-start::before{content:attr(data-verse);position:absolute;top:2px;right:3px;font-family:'EB Garamond',serif;font-size:7px;font-weight:700;color:#fff;background:#a09080;border-radius:50%;width:12px;height:12px;display:flex;align-items:center;justify-content:center;z-index:1}
-.translit{font-family:'EB Garamond',serif;font-size:8.5px;font-style:italic;color:#888;text-align:center;padding:3px 3px 2px;min-height:18px;display:flex;align-items:center;justify-content:center;letter-spacing:.2px}
-.cdiv{height:1px;background:#ddd6cc}
-.arabic{font-family:'Amiri',serif;font-size:22px;direction:rtl;text-align:center;padding:5px 4px 3px;flex:1;display:flex;align-items:center;justify-content:center;color:rgba(0,0,0,.13)}
-.meaning{font-family:'EB Garamond',serif;font-size:8.5px;text-align:center;color:#1a1a1a;padding:3px 3px 4px;min-height:20px;display:flex;align-items:center;justify-content:center;line-height:1.25}
+/* RIGHT — word rows, NO heavy box borders — Mushaf line feel */
+.wc{flex:1;display:flex;flex-direction:column;padding:5px 8px 3px;gap:0}
 
-/* ── FOOTER ── */
-.pf{padding-top:6px;border-top:2px solid #1a1a1a;display:flex;justify-content:space-between;font-size:10px;color:#555;margin-top:8px;letter-spacing:.3px}
+/* Each row = one Mushaf line — bottom hairline only */
+.word-row{display:flex;flex-direction:row-reverse;border-bottom:0.5px solid #e4d4b0;padding:1px 0;background:transparent}
+.word-row:last-child{border-bottom:none}
 
-@media print{body{background:#fff;padding:0;gap:0}.page{box-shadow:none;page-break-after:always}}
+/* Word cell */
+.word-cell{flex:1;display:flex;flex-direction:column;position:relative;padding:0 3px}
+
+/* Gold verse boundary — between last word of verse N and first word of verse N+1 */
+.verse-start{border-right:1.5px solid #c9a84c}
+
+/* Verse number medallion — Mushaf gold style */
+.verse-start::before{
+  content:attr(data-verse);
+  position:absolute;top:3px;right:-1px;
+  font-family:'EB Garamond',serif;font-size:6.5px;font-weight:700;
+  color:#fff;
+  background:radial-gradient(circle at 38% 32%,#e8c050,#8b6000);
+  border-radius:50%;width:13px;height:13px;
+  display:flex;align-items:center;justify-content:center;
+  z-index:2;box-shadow:0 1px 3px rgba(0,0,0,.28);
+  border:0.5px solid #c9a84c;
+}
+
+/* TRANSLITERATION — top, warm amber */
+.translit{font-family:'EB Garamond',serif;font-size:7.5px;font-style:italic;color:#a07830;text-align:center;padding:3px 2px 1px;min-height:14px;display:flex;align-items:center;justify-content:center;letter-spacing:.1px}
+
+/* Horizontal hairline dividers */
+.cdiv{height:0.5px;background:#e4d0a8;margin:0 4px}
+
+/* ARABIC — visual king, largest element */
+.arabic{font-family:'Amiri',serif;font-size:27px;direction:rtl;text-align:center;padding:7px 4px 4px;flex:1;display:flex;align-items:center;justify-content:center;color:rgba(0,0,0,.13);line-height:1.5}
+
+/* MEANING — bottom, warm dark */
+.meaning{font-family:'EB Garamond',serif;font-size:8px;text-align:center;color:#1e1206;padding:2px 2px 4px;min-height:18px;display:flex;align-items:center;justify-content:center;line-height:1.25}
+
+/* FOOTER — gold rule matching header */
+.pf{padding-top:5px;border-top:2px solid #8b6c14;display:flex;justify-content:space-between;font-size:9px;color:#7a5810;margin-top:7px;letter-spacing:.6px;font-weight:600}
+
+@media print{body{background:#fdf7ed;padding:0;gap:0}.page{box-shadow:none;border-color:#8b6c14;page-break-after:always}.page::before{display:none}}
 </style>
 </head>
 <body>
