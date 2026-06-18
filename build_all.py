@@ -441,13 +441,13 @@ def write_juz(juz):
     html=(f'<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/>'
           f'<meta name="viewport" content="width=device-width,initial-scale=1.0"/>'
           f'<title>Traceable Quran &mdash; Juz {juz}</title>'
-          f'{fonts_block()}<style>{css()}</style></head><body>'
-          f'{"".join(pages)}</body></html>')
+          f'{fonts_block()}<style>{css()}{EDITOR_CSS}</style></head><body>'
+          f'{EDITOR_BAR}{"".join(pages)}{EDITOR_JS}</body></html>')
     out=OUTDIR/f'Juz-{juz:02d}.html'
     out.write_text(html,encoding='utf-8')
     return out,len(pages),out.stat().st_size
 
-if __name__=='__main__':
+def _main():
     import sys
     targets=range(2,31) if len(sys.argv)<2 else [int(x) for x in sys.argv[1:]]
     total=0
@@ -455,3 +455,117 @@ if __name__=='__main__':
         out,n,sz=write_juz(j); total+=n
         print(f'Juz {j:2d}: {n:3d} pages, {sz//1024} KB -> {out.name}')
     print(f'Total pages: {total}')
+
+
+
+# ═══════════════════════════════════════════════════════════════
+# IN-BROWSER EDITOR  (Edit Mode toolbar + change-only persistence)
+# Editable: Arabic words, transliterations, meanings, verse meanings,
+#           headers, surah/juz opener text. Saves ONLY changed cells.
+# ═══════════════════════════════════════════════════════════════
+EDITOR_CSS = """
+#tqbar{position:fixed;top:0;left:0;right:0;z-index:9999;display:flex;
+  align-items:center;gap:8px;flex-wrap:wrap;background:#1a0e04;
+  padding:8px 14px;box-shadow:0 2px 10px rgba(0,0,0,.45)}
+#tqbar .t{color:#f0e4c0;font:700 12px Georgia,serif;letter-spacing:1px;margin-right:auto}
+#tqbar button{background:#c9a84c;color:#1a0e04;border:none;padding:7px 14px;
+  border-radius:5px;cursor:pointer;font:700 12px Georgia,serif;letter-spacing:.4px}
+#tqbar button:hover{background:#e8c050}
+#tqbar button.alt{background:#5a4a2a;color:#f0e4c0}
+#tqbar button.on{background:#1a7a4a;color:#fff}
+#tqbar .s{color:#bda;font:italic 11px Georgia,serif}
+body.tqedit [data-tq]{cursor:text}
+body.tqedit [data-tq]:hover{background:rgba(201,168,76,.25);border-radius:3px}
+body.tqedit [data-tq]:focus{background:#fffbe9;box-shadow:0 0 0 2px #c9a84c;
+  border-radius:3px;outline:none}
+body.tqpad{padding-top:46px}
+@media print{#tqbar{display:none}body.tqpad{padding-top:0}}
+"""
+
+EDITOR_BAR = ('<div id="tqbar">'
+  '<span class="t">TRACEABLE QURAN &middot; EDIT</span>'
+  '<button id="tqEdit" onclick="tqToggle()">&#9998; Edit Mode</button>'
+  '<button class="alt" onclick="tqReset()">&#8635; Reset</button>'
+  '<button onclick="tqExport()">&#10515; Save / Export</button>'
+  '<span class="s" id="tqStatus"></span></div>')
+
+
+EDITOR_JS = """<script>
+(function(){
+  // Editable content selectors (Arabic, translit, meaning, panel, headers, openers)
+  var SEL=['.ar','.tr','.mn','.pnum','.ptxt','.h-mid',
+           '.s-ar','.s-en','.s-meta','.o-bignum','.o-arlabel','.o-intro',
+           '.c-para','.c-title','.c-subtitle','.c-arabic-main','.c-section',
+           '.c-arabic-hadith','.khatm-ar','.khatm-msg','.cover-main-ar',
+           '.cover-main-en','.cover-sub','.cover-desc'];
+  var KEY='tqedits::'+document.title;
+  var nodes=[];
+  function collect(){
+    nodes=[];
+    var seen=new Set();
+    SEL.forEach(function(s){
+      document.querySelectorAll(s).forEach(function(el){
+        if(el.closest('#tqbar')) return;
+        if(seen.has(el)) return; seen.add(el); nodes.push(el);
+      });
+    });
+    nodes.forEach(function(el,i){el.setAttribute('data-tq',i);});
+  }
+  function load(){
+    var raw=localStorage.getItem(KEY); if(!raw) return;
+    try{var d=JSON.parse(raw);
+      Object.keys(d).forEach(function(i){ if(nodes[i]) nodes[i].innerHTML=d[i]; });
+      status('Loaded your saved edits');
+    }catch(e){}
+  }
+  function save(){
+    var d={};
+    nodes.forEach(function(el,i){
+      var orig=el.getAttribute('data-orig');
+      if(orig===null){orig=el.getAttribute('data-orig')||'';}
+      if(el.innerHTML!==el.dataset.orig){ d[i]=el.innerHTML; }
+    });
+    try{localStorage.setItem(KEY,JSON.stringify(d));
+        status('Saved \u2713 '+new Date().toLocaleTimeString());}
+    catch(e){status('Storage full \u2014 use Export instead');}
+  }
+  var editing=false,t;
+  window.tqToggle=function(){
+    editing=!editing;
+    document.body.classList.toggle('tqedit',editing);
+    var b=document.getElementById('tqEdit');
+    b.classList.toggle('on',editing);
+    b.innerHTML=editing?'\u2713 Editing (click text)':'\u270e Edit Mode';
+    nodes.forEach(function(el){el.contentEditable=editing?'true':'false';});
+    document.querySelectorAll('a').forEach(function(a){
+      a.onclick=function(e){if(editing)e.preventDefault();};});
+    status(editing?'Edit mode ON \u2014 click any word, transliteration or meaning':'Edit mode off');
+  };
+  window.tqReset=function(){
+    if(!confirm('Clear all your edits on this Juz and restore the original text?'))return;
+    localStorage.removeItem(KEY); location.reload();
+  };
+  window.tqExport=function(){
+    var c=document.documentElement.cloneNode(true);
+    var bar=c.querySelector('#tqbar'); if(bar)bar.remove();
+    c.querySelectorAll('[contenteditable]').forEach(function(e){e.setAttribute('contenteditable','false');});
+    var b=c.querySelector('body'); if(b)b.classList.remove('tqedit');
+    var html='<!DOCTYPE html>\\n'+c.outerHTML;
+    var blob=new Blob([html],{type:'text/html'});
+    var u=URL.createObjectURL(blob),a=document.createElement('a');
+    a.href=u; a.download=document.title.replace(/[^A-Za-z0-9]+/g,'-')+'.html'; a.click();
+    URL.revokeObjectURL(u); status('Exported edited file \u2713');
+  };
+  function status(m){document.getElementById('tqStatus').textContent=m;}
+  document.addEventListener('input',function(){if(!editing)return;clearTimeout(t);t=setTimeout(save,500);});
+  document.body.classList.add('tqpad');
+  collect();
+  nodes.forEach(function(el){el.dataset.orig=el.innerHTML;});
+  load();
+})();
+</script>"""
+
+
+
+if __name__ == '__main__':
+    _main()

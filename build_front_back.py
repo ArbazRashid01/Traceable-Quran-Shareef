@@ -753,11 +753,12 @@ and every person will have what they intended.&#8221;
 
 def build_html(pages_list, title):
     body_pages = '\n\n'.join(pages_list)
+    import build_all as _B
     return (f'<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/>'
             f'<meta name="viewport" content="width=device-width,initial-scale=1.0"/>'
             f'<title>{title}</title>'
-            f'{fonts_block()}<style>{CSS}</style></head><body>'
-            f'{body_pages}</body></html>')
+            f'{fonts_block()}<style>{CSS}{_B.EDITOR_CSS}</style></head><body>'
+            f'{_B.EDITOR_BAR}{body_pages}{_B.EDITOR_JS}</body></html>')
 
 def main():
     # ── FRONT MATTER ──────────────────────────────────────

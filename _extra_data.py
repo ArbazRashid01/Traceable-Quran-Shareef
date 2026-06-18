@@ -2752,3 +2752,6 @@ EXTRA_MEANINGS = {
     '2:140': 'Or do you say that Abraham and Ishmael and Isaac and Jacob and the Descendants were Jews or Christians? Say, "Are you more knowing or is Allāh?" And who is more unjust than one who conceals a testimony1 he has from Allāh? And Allāh is not unaware of what you do.',
     '2:141': 'That is a nation which has passed on. It will have [the consequence of] what it earned, and you will have what you have earned. And you will not be asked about what they used to do.',
 }
+
+
+# (editor JS is defined in build_all.py)

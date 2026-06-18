@@ -195,8 +195,8 @@ def main():
     doc = (f'<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/>'
            f'<meta name="viewport" content="width=device-width,initial-scale=1.0"/>'
            f'<title>The Traceable Qur&#8217;an &mdash; Complete</title>'
-           f'{B.fonts_block()}<style>{combined_css()}</style></head><body>'
-           f'{"".join(html_pages)}</body></html>')
+           f'{B.fonts_block()}<style>{combined_css()}{B.EDITOR_CSS}</style></head><body>'
+           f'{B.EDITOR_BAR}{"".join(html_pages)}{B.EDITOR_JS}</body></html>')
     OUT.write_text(doc, encoding='utf-8')
     total = len(html_pages)
     print(f'Written {OUT.name}: {total} pages total '

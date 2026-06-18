@@ -115,7 +115,24 @@ body{display:flex;flex-direction:column;align-items:center;padding:28px 0;gap:28
 @media print{@page{size:A4;margin:0}body{background:#fdf7ed;padding:0;gap:0}
   .page{box-shadow:none;margin:0;page-break-after:always;break-after:page;overflow:visible}
   .page:last-of-type{page-break-after:auto;break-after:auto}}
-</style></head><body><div class="page"><div class="inner"><div class="header"><span class="h-side">TRACEABLE QURAN</span><span class="h-mid">KHATM UL-QURAN</span><span class="h-side h-r">BACK MATTER</span></div><div class="khatm-body">
+
+#tqbar{position:fixed;top:0;left:0;right:0;z-index:9999;display:flex;
+  align-items:center;gap:8px;flex-wrap:wrap;background:#1a0e04;
+  padding:8px 14px;box-shadow:0 2px 10px rgba(0,0,0,.45)}
+#tqbar .t{color:#f0e4c0;font:700 12px Georgia,serif;letter-spacing:1px;margin-right:auto}
+#tqbar button{background:#c9a84c;color:#1a0e04;border:none;padding:7px 14px;
+  border-radius:5px;cursor:pointer;font:700 12px Georgia,serif;letter-spacing:.4px}
+#tqbar button:hover{background:#e8c050}
+#tqbar button.alt{background:#5a4a2a;color:#f0e4c0}
+#tqbar button.on{background:#1a7a4a;color:#fff}
+#tqbar .s{color:#bda;font:italic 11px Georgia,serif}
+body.tqedit [data-tq]{cursor:text}
+body.tqedit [data-tq]:hover{background:rgba(201,168,76,.25);border-radius:3px}
+body.tqedit [data-tq]:focus{background:#fffbe9;box-shadow:0 0 0 2px #c9a84c;
+  border-radius:3px;outline:none}
+body.tqpad{padding-top:46px}
+@media print{#tqbar{display:none}body.tqpad{padding-top:0}}
+</style></head><body><div id="tqbar"><span class="t">TRACEABLE QURAN &middot; EDIT</span><button id="tqEdit" onclick="tqToggle()">&#9998; Edit Mode</button><button class="alt" onclick="tqReset()">&#8635; Reset</button><button onclick="tqExport()">&#10515; Save / Export</button><span class="s" id="tqStatus"></span></div><div class="page"><div class="inner"><div class="header"><span class="h-side">TRACEABLE QURAN</span><span class="h-mid">KHATM UL-QURAN</span><span class="h-side h-r">BACK MATTER</span></div><div class="khatm-body">
 <div class="c-ornament" style="font-size:24pt">&#10022; &#10022; &#10022;</div>
 <div class="khatm-ar">&#1578;&#1614;&#1605;&#1617; &#1576;&#1616;&#1581;&#1614;&#1605;&#1618;&#1583;&#1616; &#1575;&#1604;&#1604;&#1614;&#1617;&#1607;&#1616;</div>
 <div class="c-rule" style="width:60%;margin:4mm auto"></div>
@@ -243,4 +260,77 @@ and every person will have what they intended.&#8221;
   the rest of your chest, and the remover of your grief.<br/>
   <em>Ameen.</em>
 </p>
-</div><div class="footer"><span>Final Message</span><span></span></div></div></div></body></html>
+</div><div class="footer"><span>Final Message</span><span></span></div></div></div><script>
+(function(){
+  // Editable content selectors (Arabic, translit, meaning, panel, headers, openers)
+  var SEL=['.ar','.tr','.mn','.pnum','.ptxt','.h-mid',
+           '.s-ar','.s-en','.s-meta','.o-bignum','.o-arlabel','.o-intro',
+           '.c-para','.c-title','.c-subtitle','.c-arabic-main','.c-section',
+           '.c-arabic-hadith','.khatm-ar','.khatm-msg','.cover-main-ar',
+           '.cover-main-en','.cover-sub','.cover-desc'];
+  var KEY='tqedits::'+document.title;
+  var nodes=[];
+  function collect(){
+    nodes=[];
+    var seen=new Set();
+    SEL.forEach(function(s){
+      document.querySelectorAll(s).forEach(function(el){
+        if(el.closest('#tqbar')) return;
+        if(seen.has(el)) return; seen.add(el); nodes.push(el);
+      });
+    });
+    nodes.forEach(function(el,i){el.setAttribute('data-tq',i);});
+  }
+  function load(){
+    var raw=localStorage.getItem(KEY); if(!raw) return;
+    try{var d=JSON.parse(raw);
+      Object.keys(d).forEach(function(i){ if(nodes[i]) nodes[i].innerHTML=d[i]; });
+      status('Loaded your saved edits');
+    }catch(e){}
+  }
+  function save(){
+    var d={};
+    nodes.forEach(function(el,i){
+      var orig=el.getAttribute('data-orig');
+      if(orig===null){orig=el.getAttribute('data-orig')||'';}
+      if(el.innerHTML!==el.dataset.orig){ d[i]=el.innerHTML; }
+    });
+    try{localStorage.setItem(KEY,JSON.stringify(d));
+        status('Saved ✓ '+new Date().toLocaleTimeString());}
+    catch(e){status('Storage full — use Export instead');}
+  }
+  var editing=false,t;
+  window.tqToggle=function(){
+    editing=!editing;
+    document.body.classList.toggle('tqedit',editing);
+    var b=document.getElementById('tqEdit');
+    b.classList.toggle('on',editing);
+    b.innerHTML=editing?'✓ Editing (click text)':'✎ Edit Mode';
+    nodes.forEach(function(el){el.contentEditable=editing?'true':'false';});
+    document.querySelectorAll('a').forEach(function(a){
+      a.onclick=function(e){if(editing)e.preventDefault();};});
+    status(editing?'Edit mode ON — click any word, transliteration or meaning':'Edit mode off');
+  };
+  window.tqReset=function(){
+    if(!confirm('Clear all your edits on this Juz and restore the original text?'))return;
+    localStorage.removeItem(KEY); location.reload();
+  };
+  window.tqExport=function(){
+    var c=document.documentElement.cloneNode(true);
+    var bar=c.querySelector('#tqbar'); if(bar)bar.remove();
+    c.querySelectorAll('[contenteditable]').forEach(function(e){e.setAttribute('contenteditable','false');});
+    var b=c.querySelector('body'); if(b)b.classList.remove('tqedit');
+    var html='<!DOCTYPE html>\n'+c.outerHTML;
+    var blob=new Blob([html],{type:'text/html'});
+    var u=URL.createObjectURL(blob),a=document.createElement('a');
+    a.href=u; a.download=document.title.replace(/[^A-Za-z0-9]+/g,'-')+'.html'; a.click();
+    URL.revokeObjectURL(u); status('Exported edited file ✓');
+  };
+  function status(m){document.getElementById('tqStatus').textContent=m;}
+  document.addEventListener('input',function(){if(!editing)return;clearTimeout(t);t=setTimeout(save,500);});
+  document.body.classList.add('tqpad');
+  collect();
+  nodes.forEach(function(el){el.dataset.orig=el.innerHTML;});
+  load();
+})();
+</script></body></html>
