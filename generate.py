@@ -413,7 +413,7 @@ CSS += """
 .wr:last-child{border-bottom:none}
 
 /* WORD CELL — adaptive base width + grow to fill row width */
-.wc{flex:1 1 auto;min-width:36px;display:flex;flex-direction:column}
+.wc{flex:1 1 auto;min-width:18px;display:flex;flex-direction:column}
 
 /* AYAH END MARKER — compact */
 .am{flex:0 0 22px;display:flex;align-items:center;justify-content:center}
@@ -422,23 +422,23 @@ CSS += """
 
 /* ── 3-SECTION WORD CELL CONTENT ── */
 
-/* Transliteration — top, minimum footprint */
+/* Transliteration — top, halved horizontal padding */
 .tr{font-family:'EB Garamond',serif;font-size:7.5px;font-style:italic;
-    color:#a07830;text-align:center;padding:1px 2px 0px;
+    color:#a07830;text-align:center;padding:1px 1px 0px;
     min-height:10px;display:flex;align-items:center;justify-content:center;
     letter-spacing:.1px}
 
 /* Horizontal hairline — minimal margin */
 .hd{height:0.5px;background:#e4d0a8;margin:0 1px}
 
-/* Arabic — visual king, minimum padding, font size preserved at 27px */
+/* Arabic — visual king, halved horizontal padding for tighter word spacing */
 .aw{font-family:'Amiri',serif;font-size:27px;direction:rtl;text-align:center;
-    padding:3px 3px 2px;flex:1;display:flex;align-items:center;
+    padding:3px 1px 2px;flex:1;display:flex;align-items:center;
     justify-content:center;color:rgba(0,0,0,.13);line-height:1.45}
 
-/* English meaning — bottom, minimal padding */
+/* English meaning — bottom, halved horizontal padding */
 .mn{font-family:'EB Garamond',serif;font-size:8px;text-align:center;
-    color:#1e1206;padding:0px 2px 2px;min-height:13px;
+    color:#1e1206;padding:0px 1px 2px;min-height:13px;
     display:flex;align-items:center;justify-content:center;line-height:1.25}
 
 /* FOOTER — gold rule */
