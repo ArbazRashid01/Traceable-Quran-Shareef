@@ -95,96 +95,90 @@ body {
   overflow: hidden;
 }
 
-/* LEFT — meaning panel (22%, 12 fixed slots) */
+/* LEFT — meaning panel, free-flowing, no slot height constraints */
 .panel {
   flex: 0 0 22%;
   width: 22%;
-  height: 253mm;
   background: #f6ead6;
   border-right: 0.4mm solid #d4b870;
   display: flex; flex-direction: column;
   overflow: hidden;
+  padding: 2mm 2mm;
+  gap: 0;
 }
 .slot {
-  flex: 0 0 auto;
-  border-bottom: 0.2mm solid #e4d0a8;
-  padding: 1.5mm 2mm 2mm 2mm;
-  display: flex; flex-direction: column; gap: 0.8mm;
-  overflow: hidden;
+  padding: 2mm 1.5mm;
+  border-bottom: 0.3mm dashed #e4d0a8;
 }
 .slot:last-child { border-bottom: none; }
 .slot-num {
-  flex: 0 0 4mm; height: 4mm;
   font-family: 'Amiri', serif;
   font-size: 11pt; font-weight: 700;
-  color: #8b6c14;
-  line-height: 1;
-  overflow: hidden; white-space: nowrap;
+  color: #8b6c14; line-height: 1.4;
 }
 .slot-text {
-  font-size: 11pt;
-  color: #2a1a06;
-  font-style: italic;
-  line-height: 1.45;
-  letter-spacing: 0.15px;
-  word-break: normal;
-  overflow-wrap: break-word;
-  overflow: visible;
+  font-size: 11pt; font-style: italic;
+  color: #2a1a06; line-height: 1.5;
+  word-wrap: break-word;
 }
 
-/* RIGHT — 12 fixed rows */
+/* RIGHT — word rows, no fixed row count or height */
 .grid {
   flex: 1 1 auto;
-  height: 253mm;
-  display: grid;
-  grid-template-rows: repeat(12, 21.083333333333332mm);
-  grid-auto-rows: 0;
-  background: #fdf7ed;
+  display: flex; flex-direction: column;
   overflow: hidden;
+  background: #fdf7ed;
 }
+/* Each row sizes to tallest cell — no fixed height */
 .row {
-  height: 21.083333333333332mm;
-  border-bottom: 0.2mm solid #e4d0a8;
   display: flex;
   flex-direction: row-reverse;
   align-items: stretch;
-  overflow: hidden;
+  border-bottom: 0.3mm solid #e4d0a8;
+  flex-shrink: 0;
 }
 .row:last-child { border-bottom: none; }
 
+/* Cells: adaptive width, column stack, NO internal dividers */
 .cell {
-  height: 21.083333333333332mm;
   flex: 3;
   min-width: 0;
-  border-left: 0.2mm dotted #efe2c2;
   display: flex; flex-direction: column;
-  direction: ltr;
-  overflow: hidden;
+  align-items: center;
+  border-left: 0.2mm dotted rgba(200,180,140,.35);
+  padding: 1px;
 }
 .cell:last-child { border-left: none; }
 
+/* Transliteration — sits naturally above Arabic */
 .tr {
-  flex: 1;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 9pt; font-style: italic; color: #a07830;
-  padding: 1px;
-  overflow: hidden;
+  font-size: 9pt; font-style: italic;
+  color: #a07830;
+  text-align: center;
+  padding: 3px 2px 1px;
+  width: 100%;
+  white-space: nowrap;
 }
+
+/* Arabic — the visual centrepiece, generous natural space */
 .ar {
-  flex: 3;
-  display: flex; align-items: center; justify-content: center;
   font-family: 'Amiri', serif;
   font-size: 22pt;
   color: rgba(0,0,0,0.13);
-  direction: rtl;
-  overflow: hidden; white-space: nowrap;
+  direction: rtl; text-align: center;
+  padding: 4px 2px;
+  white-space: nowrap;
+  width: 100%;
 }
+
+/* Meaning — sits naturally below Arabic */
 .mn {
-  flex: 1;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 9pt; color: #2a1a06;
-  padding: 1px;
-  overflow: hidden;
+  font-size: 9pt;
+  color: #2a1a06;
+  text-align: center;
+  padding: 1px 2px 4px;
+  width: 100%;
+  white-space: nowrap;
 }
 
 .body-b {

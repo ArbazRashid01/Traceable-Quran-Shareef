@@ -163,96 +163,90 @@ CSS_STD = f"""
   overflow: hidden;
 }}
 
-/* LEFT — meaning panel (22%, 12 fixed slots) */
+/* LEFT — meaning panel, free-flowing, no slot height constraints */
 .panel {{
   flex: 0 0 {LEFT_PCT}%;
   width: {LEFT_PCT}%;
-  height: {BODY_H}mm;
   background: {PARCHMENT_2};
   border-right: 0.4mm solid {ROW_BORDER};
   display: flex; flex-direction: column;
   overflow: hidden;
+  padding: 2mm 2mm;
+  gap: 0;
 }}
 .slot {{
-  flex: 0 0 auto;
-  border-bottom: 0.2mm solid {HAIRLINE};
-  padding: 1.5mm 2mm 2mm 2mm;
-  display: flex; flex-direction: column; gap: 0.8mm;
-  overflow: hidden;
+  padding: 2mm 1.5mm;
+  border-bottom: 0.3mm dashed {HAIRLINE};
 }}
 .slot:last-child {{ border-bottom: none; }}
 .slot-num {{
-  flex: 0 0 4mm; height: 4mm;
   font-family: 'Amiri', serif;
   font-size: {MEANING_NUM_PT}pt; font-weight: 700;
-  color: {GOLD_DEEP};
-  line-height: 1;
-  overflow: hidden; white-space: nowrap;
+  color: {GOLD_DEEP}; line-height: 1.4;
 }}
 .slot-text {{
-  font-size: {MEANING_PT}pt;
-  color: {INK_BODY};
-  font-style: italic;
-  line-height: 1.45;
-  letter-spacing: 0.15px;
-  word-break: normal;
-  overflow-wrap: break-word;
-  overflow: visible;
+  font-size: {MEANING_PT}pt; font-style: italic;
+  color: {INK_BODY}; line-height: 1.5;
+  word-wrap: break-word;
 }}
 
-/* RIGHT — 12 fixed rows */
+/* RIGHT — word rows, no fixed row count or height */
 .grid {{
   flex: 1 1 auto;
-  height: {BODY_H}mm;
-  display: grid;
-  grid-template-rows: repeat({ROW_COUNT}, {ROW_H}mm);
-  grid-auto-rows: 0;
-  background: {PARCHMENT};
+  display: flex; flex-direction: column;
   overflow: hidden;
+  background: {PARCHMENT};
 }}
+/* Each row sizes to tallest cell — no fixed height */
 .row {{
-  height: {ROW_H}mm;
-  border-bottom: 0.2mm solid {HAIRLINE};
   display: flex;
   flex-direction: row-reverse;
   align-items: stretch;
-  overflow: hidden;
+  border-bottom: 0.3mm solid {HAIRLINE};
+  flex-shrink: 0;
 }}
 .row:last-child {{ border-bottom: none; }}
 
+/* Cells: adaptive width, column stack, NO internal dividers */
 .cell {{
-  height: {ROW_H}mm;
   flex: 3;
   min-width: 0;
-  border-left: 0.2mm dotted #efe2c2;
   display: flex; flex-direction: column;
-  direction: ltr;
-  overflow: hidden;
+  align-items: center;
+  border-left: 0.2mm dotted rgba(200,180,140,.35);
+  padding: 1px;
 }}
 .cell:last-child {{ border-left: none; }}
 
+/* Transliteration — sits naturally above Arabic */
 .tr {{
-  flex: 1;
-  display: flex; align-items: center; justify-content: center;
-  font-size: {TR_PT}pt; font-style: italic; color: {AMBER};
-  padding: 1px;
-  overflow: hidden;
+  font-size: {TR_PT}pt; font-style: italic;
+  color: {AMBER};
+  text-align: center;
+  padding: 3px 2px 1px;
+  width: 100%;
+  white-space: nowrap;
 }}
+
+/* Arabic — the visual centrepiece, generous natural space */
 .ar {{
-  flex: 3;
-  display: flex; align-items: center; justify-content: center;
   font-family: 'Amiri', serif;
   font-size: {AR_PT}pt;
   color: {GRAY_TRACE};
-  direction: rtl;
-  overflow: hidden; white-space: nowrap;
+  direction: rtl; text-align: center;
+  padding: 4px 2px;
+  white-space: nowrap;
+  width: 100%;
 }}
+
+/* Meaning — sits naturally below Arabic */
 .mn {{
-  flex: 1;
-  display: flex; align-items: center; justify-content: center;
-  font-size: {MN_PT_CELL}pt; color: {INK_BODY};
-  padding: 1px;
-  overflow: hidden;
+  font-size: {MN_PT_CELL}pt;
+  color: {INK_BODY};
+  text-align: center;
+  padding: 1px 2px 4px;
+  width: 100%;
+  white-space: nowrap;
 }}
 """
 
