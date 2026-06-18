@@ -224,7 +224,7 @@ def build_pages():
     ))
 
     # ── PAGES 2+ — Al-Baqarah greedy pack to ~16 rows (160 items at wpr=10)
-    target  = 80    # 8 rows × 10 wpr — sized for larger 32/36px text
+    target  = 95    # ~9-10 rows × 10 wpr — sized for 32px Arabic on A4
     page_no = 2
     bucket  = []
     items   = 0
@@ -236,7 +236,7 @@ def build_pages():
             continue
         v_items = len(WORDS[vk]) + 1          # +1 marker
         # Flush bucket if adding this verse would exceed target (with small tolerance)
-        if bucket and items + v_items > target + 10:
+        if bucket and items + v_items > target + 5:
             pages.append(make_page(
                 num=page_no, verses=bucket[:],
                 surah_en='AL-BAQARAH', surah_meaning='The Cow',
@@ -465,22 +465,22 @@ CSS += """
 /* ── 3-SECTION WORD CELL CONTENT ── */
 
 /* Transliteration — top, halved horizontal padding */
-.tr{font-family:'EB Garamond',serif;font-size:32px;font-style:italic;
-    color:#a07830;text-align:center;padding:4px 2px 2px;
-    min-height:36px;display:flex;align-items:center;justify-content:center;
+.tr{font-family:'EB Garamond',serif;font-size:18px;font-style:italic;
+    color:#a07830;text-align:center;padding:2px 2px 1px;
+    min-height:20px;display:flex;align-items:center;justify-content:center;
     letter-spacing:.1px;line-height:1}
 
 /* Horizontal hairline — slightly more margin with bigger rows */
 .hd{height:0.5px;background:#e4d0a8;margin:0 2px}
 
-/* Arabic — 32px, overflow visible, no clipping */
+/* Arabic — 32px, halved padding for 10-row layout */
 .aw{font-family:'Amiri',serif;font-size:32px;direction:rtl;text-align:center;
-    padding:4px 2px 3px;flex:1;display:flex;align-items:center;
+    padding:2px 2px 1px;flex:1;display:flex;align-items:center;
     justify-content:center;color:rgba(0,0,0,.13);line-height:1.1}
 
-/* English meaning — 36px (2x of 18px) */
-.mn{font-family:'EB Garamond',serif;font-size:36px;text-align:center;
-    color:#1e1206;padding:2px 2px 5px;min-height:40px;
+/* English meaning — 18px, halved padding for 10-row layout */
+.mn{font-family:'EB Garamond',serif;font-size:18px;text-align:center;
+    color:#1e1206;padding:1px 2px 2px;min-height:22px;
     display:flex;align-items:center;justify-content:center;line-height:1.2}
 
 /* FOOTER — gold rule */
