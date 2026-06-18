@@ -72,14 +72,14 @@ body{background:#9e8f72;display:flex;flex-direction:column;align-items:center;
 /* RIGHT — continuous word flow across all verses */
 .vw{flex:1;display:flex;flex-direction:column;padding:1px 4px 0px}
 
-/* WORD ROW — natural height, zero gap, words sit flush */
-.wr{display:flex;flex-direction:row-reverse;
+/* WORD ROW — fills column height, words sit flush, no gap */
+.wr{flex:1;display:flex;flex-direction:row-reverse;
     align-items:stretch;border-bottom:0.5px solid #e8d8b8;
     gap:0;justify-content:flex-start}
 .wr:last-child{border-bottom:none}
 
-/* WORD CELL — adaptive width: short words narrow, long words wider */
-.wc{flex:0 1 auto;min-width:28px;display:flex;flex-direction:column}
+/* WORD CELL — adaptive base width + grow to fill row width */
+.wc{flex:1 1 auto;min-width:36px;display:flex;flex-direction:column}
 
 /* AYAH END MARKER — compact */
 .am{flex:0 0 22px;display:flex;align-items:center;justify-content:center}
