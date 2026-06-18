@@ -210,28 +210,28 @@ PAGES = [
      'surah_ar':'سُورَةُ الْبَقَرَة','surah_no':2,
      'revealed':'Madinah','verses_total':286,
      'new_surah':True,'bismillah_separate':True,
-     'verses':['2:1','2:2','2:3','2:4','2:5','2:6','2:7','2:8','2:9'],
+     'verses':['2:1','2:2','2:3','2:4','2:5','2:6','2:7','2:8','2:9','2:10','2:11','2:12','2:13','2:14','2:15'],
      'wpr':10},
     {'num':3,'juz':1,
      'surah_en':'AL-BAQARAH','surah_meaning':'The Cow',
      'surah_ar':'سُورَةُ الْبَقَرَة','surah_no':2,
      'revealed':'Madinah','verses_total':286,
      'new_surah':False,'bismillah_separate':False,
-     'verses':['2:10','2:11','2:12','2:13','2:14','2:15','2:16','2:17'],
+     'verses':['2:16','2:17','2:18','2:19','2:20','2:21','2:22','2:23','2:24'],
      'wpr':10},
     {'num':4,'juz':1,
      'surah_en':'AL-BAQARAH','surah_meaning':'The Cow',
      'surah_ar':'سُورَةُ الْبَقَرَة','surah_no':2,
      'revealed':'Madinah','verses_total':286,
      'new_surah':False,'bismillah_separate':False,
-     'verses':['2:18','2:19','2:20','2:21','2:22','2:23'],
+     'verses':['2:25','2:26','2:27','2:28','2:29','2:30'],
      'wpr':10},
     {'num':5,'juz':1,
      'surah_en':'AL-BAQARAH','surah_meaning':'The Cow',
      'surah_ar':'سُورَةُ الْبَقَرَة','surah_no':2,
      'revealed':'Madinah','verses_total':286,
      'new_surah':False,'bismillah_separate':False,
-     'verses':['2:24','2:25','2:26','2:27','2:28'],
+     'verses':['2:31','2:32','2:33','2:34','2:35','2:36','2:37','2:38'],
      'wpr':10},
 ]
 
@@ -250,7 +250,6 @@ def word_cell(vkey, widx):
             f'<div class="tr">{t}</div>'
             f'<div class="hd"></div>'
             f'<div class="aw">{a}</div>'
-            f'<div class="hd"></div>'
             f'<div class="mn">{e}</div>'
             f'</div>')
 
@@ -490,10 +489,11 @@ if __name__ == '__main__':
     html = build_html()
     with open('sample-page.html', 'w', encoding='utf-8') as f:
         f.write(html)
-    # Report per-page row counts for verification
+    # Report per-page row counts (continuous flow — actual rendered rows)
     for p in PAGES:
-        total_rows = sum(len(verse_rows(vk, p['wpr'])) for vk in p['verses'])
+        total_items = sum(len(WORDS[vk]) + 1 for vk in p['verses'])  # +1 marker per verse
+        actual_rows = -(-total_items // p['wpr'])                     # ceil division
         print(f"Page {p['num']} ({p['surah_en']}): {len(p['verses'])} verses, "
-              f"{total_rows} total rows, "
+              f"{total_items} items, {actual_rows} rows, "
               f"verses: {', '.join(p['verses'])}")
     print(f"\nGenerated sample-page.html — {len(html):,} chars")
