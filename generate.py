@@ -224,7 +224,7 @@ def build_pages():
     ))
 
     # ── PAGES 2+ — Al-Baqarah greedy pack to ~16 rows (160 items at wpr=10)
-    target  = 120   # 12 rows × 10 wpr — optimised for A4 print
+    target  = 80    # 8 rows × 10 wpr — sized for larger 32/36px text
     page_no = 2
     bucket  = []
     items   = 0
@@ -429,7 +429,7 @@ body{background:#9e8f72;display:flex;flex-direction:column;align-items:center;
 CSS += """
 /* VERSE BODY — flex-ROW: left meaning list | right continuous word flow */
 .vb{flex:1;display:flex;flex-direction:row;
-    border:1px solid #d4b870;background:#fdf7ed;overflow:hidden}
+    border:1px solid #d4b870;background:#fdf7ed}
 
 /* LEFT — compact numbered meaning list, full page height */
 .mc{width:21%;min-width:21%;border-right:1px solid #d4b870;
@@ -454,8 +454,8 @@ CSS += """
     gap:0;justify-content:flex-start}
 .wr:last-child{border-bottom:none}
 
-/* WORD CELL — adaptive base width + grow to fill row width */
-.wc{flex:1 1 auto;min-width:18px;display:flex;flex-direction:column}
+/* WORD CELL — min-width raised to match 32px Arabic text */
+.wc{flex:1 1 auto;min-width:40px;display:flex;flex-direction:column}
 
 /* AYAH END MARKER — compact */
 .am{flex:0 0 22px;display:flex;align-items:center;justify-content:center}
@@ -465,23 +465,22 @@ CSS += """
 /* ── 3-SECTION WORD CELL CONTENT ── */
 
 /* Transliteration — top, halved horizontal padding */
-.tr{font-family:'EB Garamond',serif;font-size:16px;font-style:italic;
-    color:#a07830;text-align:center;padding:3px 1px 1px;
-    min-height:20px;display:flex;align-items:center;justify-content:center;
+.tr{font-family:'EB Garamond',serif;font-size:32px;font-style:italic;
+    color:#a07830;text-align:center;padding:4px 2px 2px;
+    min-height:36px;display:flex;align-items:center;justify-content:center;
     letter-spacing:.1px;line-height:1}
 
 /* Horizontal hairline — slightly more margin with bigger rows */
 .hd{height:0.5px;background:#e4d0a8;margin:0 2px}
 
-/* Arabic — print-optimised size, more vertical space with 12 rows/page */
-.aw{font-family:'Amiri',serif;font-size:34px;direction:rtl;text-align:center;
-    padding:4px 1px 3px;flex:1;display:flex;align-items:center;
-    justify-content:center;color:rgba(0,0,0,.13);line-height:1.1;
-    overflow:hidden}
+/* Arabic — 32px, overflow visible, no clipping */
+.aw{font-family:'Amiri',serif;font-size:32px;direction:rtl;text-align:center;
+    padding:4px 2px 3px;flex:1;display:flex;align-items:center;
+    justify-content:center;color:rgba(0,0,0,.13);line-height:1.1}
 
-/* English meaning — 2x size */
-.mn{font-family:'EB Garamond',serif;font-size:18px;text-align:center;
-    color:#1e1206;padding:2px 1px 3px;min-height:28px;
+/* English meaning — 36px (2x of 18px) */
+.mn{font-family:'EB Garamond',serif;font-size:36px;text-align:center;
+    color:#1e1206;padding:2px 2px 5px;min-height:40px;
     display:flex;align-items:center;justify-content:center;line-height:1.2}
 
 /* FOOTER — gold rule */
