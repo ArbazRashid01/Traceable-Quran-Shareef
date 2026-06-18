@@ -174,11 +174,10 @@ CSS_STD = f"""
   overflow: hidden;
 }}
 .slot {{
-  flex: 0 0 {MEANING_SLOT_H}mm;
-  height: {MEANING_SLOT_H}mm;
+  flex: 0 0 auto;
   border-bottom: 0.2mm solid {HAIRLINE};
-  padding: 1.5mm 2mm;
-  display: flex; flex-direction: column; gap: 0.6mm;
+  padding: 1.5mm 2mm 2mm 2mm;
+  display: flex; flex-direction: column; gap: 0.8mm;
   overflow: hidden;
 }}
 .slot:last-child {{ border-bottom: none; }}
@@ -191,17 +190,14 @@ CSS_STD = f"""
   overflow: hidden; white-space: nowrap;
 }}
 .slot-text {{
-  flex: 1 1 0;
   font-size: {MEANING_PT}pt;
-  color: {PH_TX};
+  color: {INK_BODY};
   font-style: italic;
-  line-height: 1.35;
+  line-height: 1.45;
   letter-spacing: 0.15px;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  word-break: break-word;
+  word-break: normal;
+  overflow-wrap: break-word;
+  overflow: visible;
 }}
 
 /* RIGHT — 12 fixed rows */
@@ -238,8 +234,7 @@ CSS_STD = f"""
 .tr {{
   flex: 0 0 {TR_H}mm; height: {TR_H}mm;
   display: flex; align-items: center; justify-content: center;
-  font-size: {TR_PT}pt; font-style: italic; color: {PH_TX};
-  background: {PH_BG};
+  font-size: {TR_PT}pt; font-style: italic; color: {AMBER};
   overflow: hidden;
 }}
 .div {{
@@ -259,8 +254,7 @@ CSS_STD = f"""
 .mn {{
   flex: 0 0 {MN_H}mm; height: {MN_H}mm;
   display: flex; align-items: center; justify-content: center;
-  font-size: {MN_PT_CELL}pt; color: {PH_TX};
-  background: {PH_BG};
+  font-size: {MN_PT_CELL}pt; color: {INK_BODY};
   overflow: hidden;
 }}
 """

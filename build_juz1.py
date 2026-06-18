@@ -27,18 +27,13 @@ OUT      = BASE / 'Traceable-Quran-Juz1.html'
 PAREN_RX = re.compile(r'[\(\[][^\)\]]*[\)\]]')
 
 def short_word_meaning(text: str, limit: int = 20) -> str:
-    """Strip parentheticals, collapse whitespace — longer limit with adaptive widths."""
+    """Strip parentheticals only — no hard truncation."""
     text = PAREN_RX.sub('', text or '').replace('  ', ' ').strip(' ,;:.')
-    if len(text) > limit:
-        cut = text.rfind(' ', 0, limit)
-        if cut < limit - 5:
-            cut = limit
-        text = text[:cut].rstrip(' ,;:.')
     return text
 
 def short_translit(text: str, limit: int = 18) -> str:
-    """Longer limit now that cells are adaptive width."""
-    return (text or '').strip()[:limit]
+    """Return full transliteration — no truncation."""
+    return (text or '').strip()
 
 # ─── ADAPTIVE WIDTH ───────────────────────────────────────────────
 _DIAC = re.compile(

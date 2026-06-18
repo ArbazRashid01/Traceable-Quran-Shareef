@@ -106,11 +106,10 @@ body {
   overflow: hidden;
 }
 .slot {
-  flex: 0 0 21.083333333333332mm;
-  height: 21.083333333333332mm;
+  flex: 0 0 auto;
   border-bottom: 0.2mm solid #e4d0a8;
-  padding: 1.5mm 2mm;
-  display: flex; flex-direction: column; gap: 0.6mm;
+  padding: 1.5mm 2mm 2mm 2mm;
+  display: flex; flex-direction: column; gap: 0.8mm;
   overflow: hidden;
 }
 .slot:last-child { border-bottom: none; }
@@ -123,17 +122,14 @@ body {
   overflow: hidden; white-space: nowrap;
 }
 .slot-text {
-  flex: 1 1 0;
   font-size: 11pt;
-  color: #bfa770;
+  color: #2a1a06;
   font-style: italic;
-  line-height: 1.35;
+  line-height: 1.45;
   letter-spacing: 0.15px;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  word-break: break-word;
+  word-break: normal;
+  overflow-wrap: break-word;
+  overflow: visible;
 }
 
 /* RIGHT — 12 fixed rows */
@@ -149,15 +145,17 @@ body {
 .row {
   height: 21.083333333333332mm;
   border-bottom: 0.2mm solid #e4d0a8;
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  direction: rtl;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: stretch;
   overflow: hidden;
 }
 .row:last-child { border-bottom: none; }
 
 .cell {
   height: 21.083333333333332mm;
+  flex: 3;
+  min-width: 0;
   border-left: 0.2mm dotted #efe2c2;
   display: flex; flex-direction: column;
   direction: ltr;
@@ -168,9 +166,8 @@ body {
 .tr {
   flex: 0 0 4.5mm; height: 4.5mm;
   display: flex; align-items: center; justify-content: center;
-  font-size: 9pt; font-style: italic; color: #bfa770;
-  background: #f8f1dc;
-  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  font-size: 9pt; font-style: italic; color: #a07830;
+  overflow: hidden;
 }
 .div {
   flex: 0 0 0.3mm; height: 0.3mm;
@@ -189,9 +186,8 @@ body {
 .mn {
   flex: 0 0 4.5mm; height: 4.5mm;
   display: flex; align-items: center; justify-content: center;
-  font-size: 9pt; color: #bfa770;
-  background: #f8f1dc;
-  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+  font-size: 9pt; color: #2a1a06;
+  overflow: hidden;
 }
 
 .body-b {
