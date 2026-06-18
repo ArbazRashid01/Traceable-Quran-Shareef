@@ -176,41 +176,59 @@ def verses_in_rows(page_rows):
                 seen.append(it['vk'])
     return seen
 
-# ─── COMPLETE-AYAH PAGINATION ────────────────────────────────────
-# Each page ends at a complete verse. Only a verse longer than a full
-# page is split across pages (Mushaf-style). Returns list of pages,
-# each page = flat list of rows (for row-based rendering).
+# ─── DENSE + COMPLETE-AYAH PAGINATION ────────────────────────────
+# Rows fill densely across ayah boundaries (next ayah continues on the
+# same line). Page breaks happen only at complete ayahs: each page holds
+# a whole number of verses, packed densely. A verse longer than a page
+# is split across pages (Mushaf-style).
+
+def _pack_items(items):
+    rows, cur, cw = [], [], 0.0
+    for it in items:
+        if cur and cw + it['width'] > WORD_W_MM:
+            rows.append(cur); cur, cw = [], 0.0
+        cur.append(it); cw += it['width']
+    if cur:
+        rows.append(cur)
+    return rows
+
+def _page_height(items):
+    return sum(row_height(r) for r in _pack_items(items))
 
 def paginate_complete_ayah(verse_keys):
     limit = BODY_H - 2
-    blocks = []
+    verse_items = []
     for vk in verse_keys:
         items = [make_word_item(vk, i) for i in range(len(WORDS[vk]))]
         items.append(make_marker_item(vk))
-        blocks.append(pack_verse_rows(items))
+        verse_items.append(items)
 
-    pages, cur, cur_h = [], [], 0.0
-    def flush():
-        nonlocal cur, cur_h
-        if cur:
-            pages.append(cur); cur, cur_h = [], 0.0
-
-    for rows in blocks:
-        bh = block_height(rows)
-        if bh <= limit:
-            if cur and cur_h + bh > limit:
-                flush()
-            cur.extend(rows); cur_h += bh
-        else:
-            # verse taller than a page — split its rows across pages
-            flush()
+    pages, cur = [], []
+    i = 0
+    while i < len(verse_items):
+        items = verse_items[i]
+        trial = cur + items
+        if _page_height(trial) <= limit:
+            cur = trial
+            i += 1
+        elif not cur:
+            # single verse taller than a whole page — split its rows
+            rows = _pack_items(items)
+            chunk, ch = [], 0.0
             for r in rows:
                 h = row_height(r)
-                if cur and cur_h + h > limit:
-                    flush()
-                cur.append(r); cur_h += h
-            flush()
-    flush()
+                if chunk and ch + h > limit:
+                    pages.append(chunk); chunk, ch = [], 0.0
+                chunk.append(r); ch += h
+            if chunk:
+                pages.append(chunk)
+            i += 1
+        else:
+            # current page is full — finalize, start fresh page with this verse
+            pages.append(_pack_items(cur))
+            cur = []
+    if cur:
+        pages.append(_pack_items(cur))
     return pages
 
 
