@@ -489,11 +489,34 @@ CSS += """
     justify-content:space-between;font-size:9px;color:#7a5810;
     margin-top:7px;letter-spacing:.5px;font-weight:600}
 
+/* ── PRINT STYLES ── */
 @media print{
-  body{background:#fdf7ed;padding:0;gap:0}
-  .page{box-shadow:none;border-color:#8b6c14;page-break-after:always}
-  .page::before{display:none}
+  @page{ size:A4; margin:0 }
+  *{ -webkit-print-color-adjust:exact; print-color-adjust:exact }
+  body{ background:#fdf7ed !important; padding:0 !important; gap:0 !important }
+  .page{
+    box-shadow:none !important;
+    border-color:#8b6c14 !important;
+    page-break-after:always;
+    break-after:page;
+    width:210mm !important;
+    min-height:297mm !important;
+    margin:0 !important;
+  }
+  .page:last-of-type{ page-break-after:auto; break-after:auto }
+  .page::before{ display:none !important }
+  .print-btn{ display:none !important }
 }
+/* ── PRINT BUTTON (screen only) ── */
+.print-btn{
+  position:fixed; bottom:24px; right:24px; z-index:999;
+  background:#c9a84c; color:#1a0e04; border:none;
+  padding:10px 20px; border-radius:4px; cursor:pointer;
+  font-family:'EB Garamond',serif; font-size:13px;
+  font-weight:700; letter-spacing:.5px;
+  box-shadow:0 3px 12px rgba(0,0,0,.3);
+}
+.print-btn:hover{ background:#e8c050 }
 """
 
 
@@ -505,11 +528,12 @@ def build_html():
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Traceable Quran &#8212; 5 Page Preview</title>
+  <title>Traceable Quran &#8212; Para 1 (Juz 1)</title>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
   <style>{CSS}</style>
 </head>
 <body>
+<button class="print-btn" onclick="window.print()">&#128424; Print / Save as PDF</button>
 {pages_html}
 </body>
 </html>"""
