@@ -197,43 +197,72 @@ except ImportError:
 # ── PAGE DEFINITIONS ──────────────────────────────────────────────────────
 # 'verses' lists verse keys in order for this page.
 # Rows are computed automatically from word count.
-PAGES = [
-    {'num':1,'juz':1,
-     'surah_en':'AL-FATIHA','surah_meaning':'The Opening',
-     'surah_ar':'سُورَةُ الْفَاتِحَة','surah_no':1,
-     'revealed':'Makkah','verses_total':7,
-     'new_surah':True,'bismillah_separate':False,
-     'verses':['1:1','1:2','1:3','1:4','1:5','1:6','1:7'],
-     'wpr':10},
-    {'num':2,'juz':1,
-     'surah_en':'AL-BAQARAH','surah_meaning':'The Cow',
-     'surah_ar':'سُورَةُ الْبَقَرَة','surah_no':2,
-     'revealed':'Madinah','verses_total':286,
-     'new_surah':True,'bismillah_separate':True,
-     'verses':['2:1','2:2','2:3','2:4','2:5','2:6','2:7','2:8','2:9','2:10','2:11','2:12','2:13','2:14','2:15'],
-     'wpr':10},
-    {'num':3,'juz':1,
-     'surah_en':'AL-BAQARAH','surah_meaning':'The Cow',
-     'surah_ar':'سُورَةُ الْبَقَرَة','surah_no':2,
-     'revealed':'Madinah','verses_total':286,
-     'new_surah':False,'bismillah_separate':False,
-     'verses':['2:16','2:17','2:18','2:19','2:20','2:21','2:22','2:23','2:24'],
-     'wpr':10},
-    {'num':4,'juz':1,
-     'surah_en':'AL-BAQARAH','surah_meaning':'The Cow',
-     'surah_ar':'سُورَةُ الْبَقَرَة','surah_no':2,
-     'revealed':'Madinah','verses_total':286,
-     'new_surah':False,'bismillah_separate':False,
-     'verses':['2:25','2:26','2:27','2:28','2:29','2:30'],
-     'wpr':10},
-    {'num':5,'juz':1,
-     'surah_en':'AL-BAQARAH','surah_meaning':'The Cow',
-     'surah_ar':'سُورَةُ الْبَقَرَة','surah_no':2,
-     'revealed':'Madinah','verses_total':286,
-     'new_surah':False,'bismillah_separate':False,
-     'verses':['2:31','2:32','2:33','2:34','2:35','2:36','2:37','2:38'],
-     'wpr':10},
-]
+PAGES = []   # populated by build_pages() below — Juz 1 = Al-Fatiha + Al-Baqarah 1-141
+
+def make_page(num, verses, surah_en, surah_meaning, surah_ar, surah_no,
+              revealed, verses_total, new_surah, bismillah_separate, juz=1):
+    return {
+        'num': num, 'juz': juz,
+        'surah_en': surah_en, 'surah_meaning': surah_meaning,
+        'surah_ar': surah_ar, 'surah_no': surah_no,
+        'revealed': revealed, 'verses_total': verses_total,
+        'new_surah': new_surah, 'bismillah_separate': bismillah_separate,
+        'verses': verses, 'wpr': 10,
+    }
+
+def build_pages():
+    """Auto-distribute Juz 1 verses across pages, ~16 rows each."""
+    pages = []
+
+    # ── PAGE 1 — Al-Fatiha (full surah) ───────────────────────────────
+    pages.append(make_page(
+        num=1, verses=['1:1','1:2','1:3','1:4','1:5','1:6','1:7'],
+        surah_en='AL-FATIHA', surah_meaning='The Opening',
+        surah_ar='سُورَةُ الْفَاتِحَة', surah_no=1,
+        revealed='Makkah', verses_total=7,
+        new_surah=True, bismillah_separate=False,
+    ))
+
+    # ── PAGES 2+ — Al-Baqarah greedy pack to ~16 rows (160 items at wpr=10)
+    target  = 160
+    page_no = 2
+    bucket  = []
+    items   = 0
+    first_baqarah_page = True
+
+    for vn in range(1, 142):                  # Al-Baqarah 2:1..2:141
+        vk = f'2:{vn}'
+        if vk not in WORDS:                   # safety: skip if data missing
+            continue
+        v_items = len(WORDS[vk]) + 1          # +1 marker
+        # Flush bucket if adding this verse would exceed target (with small tolerance)
+        if bucket and items + v_items > target + 10:
+            pages.append(make_page(
+                num=page_no, verses=bucket[:],
+                surah_en='AL-BAQARAH', surah_meaning='The Cow',
+                surah_ar='سُورَةُ الْبَقَرَة', surah_no=2,
+                revealed='Madinah', verses_total=286,
+                new_surah=first_baqarah_page,
+                bismillah_separate=first_baqarah_page,
+            ))
+            page_no += 1
+            first_baqarah_page = False
+            bucket, items = [], 0
+        bucket.append(vk)
+        items += v_items
+
+    if bucket:
+        pages.append(make_page(
+            num=page_no, verses=bucket[:],
+            surah_en='AL-BAQARAH', surah_meaning='The Cow',
+            surah_ar='سُورَةُ الْبَقَرَة', surah_no=2,
+            revealed='Madinah', verses_total=286,
+            new_surah=first_baqarah_page,
+            bismillah_separate=first_baqarah_page,
+        ))
+    return pages
+
+PAGES = build_pages()
 
 # ── ROW BUILDER ───────────────────────────────────────────────────────────
 def verse_rows(vkey, wpr):
