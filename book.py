@@ -34,14 +34,14 @@ PANEL_PCT      = 24                                  # left meaning panel
 WORD_W_MM      = BODY_W * (100 - PANEL_PCT) / 100    # ~140.6 mm usable for words
 
 # ─── TYPOGRAPHY (pt) ─────────────────────────────────────────────
-AR_PT          = 28      # Arabic — traceable, dominant
+AR_PT          = 24      # Arabic — traceable, dominant (large-print, very readable)
 TR_PT          = 10      # transliteration
 MN_PT          = 10      # word meaning
 PANEL_NUM_PT   = 12      # ayah number in panel
 PANEL_TXT_PT   = 11      # verse meaning in panel
 
 # ─── WIDTH MODEL (mm per character, empirically calibrated) ──────
-AR_CHAR_MM     = 4.0     # 28pt Amiri base char (connected-script calibrated)
+AR_CHAR_MM     = 3.8     # 24pt Amiri base char (connected-script calibrated, safe)
 TR_CHAR_MM     = 2.0     # 10pt EB Garamond
 MN_CHAR_MM     = 2.0
 CELL_PAD_MM    = 4       # horizontal breathing room per cell
@@ -49,8 +49,8 @@ CELL_MIN_MM    = 14      # never narrower than this
 CELL_MAX_MM    = WORD_W_MM   # never wider than the word area
 
 # ─── ROW HEIGHT MODEL (mm) ───────────────────────────────────────
-ROW_BASE_MM    = 26      # 1-line tr + 28pt arabic + 1-line mn + tightened padding
-ROW_LINE_MM    = 5.0     # extra height when tr or mn wraps to 2 lines
+ROW_BASE_MM    = 24      # 1-line tr + 24pt arabic + 1-line mn + tight padding (measured safe)
+ROW_LINE_MM    = 4.6     # extra height when tr or mn wraps to 2 lines
 
 # ─── DIACRITIC STRIP (for width measurement only) ────────────────
 _DIAC  = re.compile(r'[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06E4\u06E7\u06E8\u06EA-\u06ED]')
@@ -100,16 +100,13 @@ def _ceil(x):
     return int(math.ceil(x))
 
 
-# ─── ROW PACKING (greedy, RTL) ───────────────────────────────────
+# ─── ROW PACKING (greedy, RTL, per-verse) ────────────────────────
 
-def pack_rows(items):
-    """
-    items: list of dicts, each either a word or an ayah-marker.
-    Greedily pack into rows that fit within WORD_W_MM.
-    Returns list of rows; each row = list of items with computed widths.
-    """
+def pack_verse_rows(verse_items):
+    """Pack ONE verse's items into rows that fit within WORD_W_MM.
+    A verse never shares a row with another verse."""
     rows, cur, cur_w = [], [], 0.0
-    for it in items:
+    for it in verse_items:
         w = it['width']
         if cur and cur_w + w > WORD_W_MM:
             rows.append(cur)
@@ -120,26 +117,59 @@ def pack_rows(items):
         rows.append(cur)
     return rows
 
+def build_verse_blocks(verse_keys):
+    """Return list of (verse_key, rows) — each verse as its own block."""
+    blocks = []
+    for vk in verse_keys:
+        items = [make_word_item(vk, i) for i in range(len(WORDS[vk]))]
+        items.append(make_marker_item(vk))
+        blocks.append((vk, pack_verse_rows(items)))
+    return blocks
+
 def row_height(row):
     return max(it['height'] for it in row)
 
+def block_height(rows):
+    return sum(row_height(r) for r in rows)
 
-# ─── PAGINATION (pre-computed) ───────────────────────────────────
 
-def paginate(rows):
-    """Group rows into pages so total row height <= BODY_H. No row split.
-    A safety margin keeps the last row clear of the page boundary."""
-    limit = BODY_H - 3      # 3mm safety buffer against rendering variance
+# ─── PAGINATION — pages end at a complete ayah whenever possible ──
+# Only a verse that is itself taller than a full page is split (Mushaf-style).
+
+def paginate_blocks(blocks):
+    limit = BODY_H - 3
     pages, cur, cur_h = [], [], 0.0
-    for r in rows:
-        h = row_height(r)
-        if cur and cur_h + h > limit:
+
+    def flush():
+        nonlocal cur, cur_h
+        if cur:
             pages.append(cur)
             cur, cur_h = [], 0.0
-        cur.append(r)
-        cur_h += h
-    if cur:
-        pages.append(cur)
+
+    for vk, rows in blocks:
+        bh = block_height(rows)
+
+        if bh <= limit:
+            # Whole verse fits on a page — keep it intact
+            if cur and cur_h + bh > limit:
+                flush()
+            cur.append((vk, rows))
+            cur_h += bh
+        else:
+            # Verse longer than a page — must span pages, split at row boundaries
+            flush()
+            chunk, chunk_h = [], 0.0
+            for r in rows:
+                h = row_height(r)
+                if chunk and chunk_h + h > limit:
+                    pages.append([(vk, chunk)])
+                    chunk, chunk_h = [], 0.0
+                chunk.append(r)
+                chunk_h += h
+            if chunk:
+                cur.append((vk, chunk))
+                cur_h += chunk_h
+    flush()
     return pages
 
 
@@ -207,13 +237,8 @@ def _esc(s):
 
 # ─── PANEL (left verse-meaning column) ───────────────────────────
 
-def verses_in_page(page_rows):
-    seen = []
-    for row in page_rows:
-        for it in row:
-            if it['vk'] not in seen:
-                seen.append(it['vk'])
-    return seen
+def verses_in_blocks(page_blocks):
+    return [vk for vk, _ in page_blocks]
 
 def emit_panel(verse_keys):
     items = []
@@ -248,13 +273,16 @@ def footer(left, page, juz):
         f'</div>'
     )
 
-def page_standard(juz, page_no, surah_label, page_rows):
-    panel = emit_panel(verses_in_page(page_rows))
-    rows  = ''.join(emit_row(r) for r in page_rows)
+def page_standard(juz, page_no, surah_label, page_blocks):
+    panel = emit_panel(verses_in_blocks(page_blocks))
+    rows_html = ''
+    for vk, rows in page_blocks:
+        for r in rows:
+            rows_html += emit_row(r)
     return (
         f'<div class="page"><div class="inner">'
         f'{header(juz, surah_label, page_no)}'
-        f'<div class="body">{panel}<div class="words">{rows}</div></div>'
+        f'<div class="body">{panel}<div class="words">{rows_html}</div></div>'
         f'{footer(surah_label, page_no, juz)}'
         f'</div></div>'
     )
@@ -465,11 +493,10 @@ def build():
         pno += 1
         pages.append(page_surah_opener(1, pno, sd))
 
-        items = build_surah_items(vks)
-        rows  = pack_rows(items)
-        for page_rows in paginate(rows):
+        blocks = build_verse_blocks(vks)
+        for page_blocks in paginate_blocks(blocks):
             pno += 1
-            pages.append(page_standard(1, pno, sd['english'], page_rows))
+            pages.append(page_standard(1, pno, sd['english'], page_blocks))
 
     css = build_css() + CSS_OPEN
     html = (f'<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/>'
