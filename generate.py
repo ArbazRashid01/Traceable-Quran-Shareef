@@ -376,18 +376,17 @@ CSS += """
 .vt{font-family:'EB Garamond',serif;font-size:10px;font-style:italic;
     color:#2a1a06;text-align:center;line-height:1.62}
 
-/* RIGHT — word rows for this verse */
-.vw{flex:1;display:flex;flex-direction:column;padding:3px 7px 2px}
+/* RIGHT — word rows for this verse, tighter padding */
+.vw{flex:1;display:flex;flex-direction:column;padding:2px 5px 1px}
 
-/* WORD ROW — no box border, only bottom hairline between rows */
+/* WORD ROW — hairline between rows, words pack naturally from right */
 .wr{flex:1;display:flex;flex-direction:row-reverse;
-    align-items:stretch;border-bottom:0.5px solid #e8d8b8}
+    align-items:stretch;border-bottom:0.5px solid #e8d8b8;
+    gap:2px;justify-content:flex-start}
 .wr:last-child{border-bottom:none}
 
-/* WORD CELL — 3 sections: transliteration / Arabic / meaning */
-.wc{flex:1;display:flex;flex-direction:column;
-    border-right:0.3px solid rgba(220,200,160,.55)}
-.wc:first-child{border-right:none}
+/* WORD CELL — adaptive width: short words narrow, long words wider */
+.wc{flex:0 1 auto;min-width:28px;display:flex;flex-direction:column}
 
 /* AYAH END MARKER — ۝ with Arabic-Indic numeral, gold, narrow */
 .am{flex:0 0 26px;display:flex;align-items:center;justify-content:center}
@@ -396,23 +395,23 @@ CSS += """
 
 /* ── 3-SECTION WORD CELL CONTENT ── */
 
-/* Transliteration — top, amber italic */
+/* Transliteration — top, amber italic, tighter */
 .tr{font-family:'EB Garamond',serif;font-size:7.5px;font-style:italic;
-    color:#a07830;text-align:center;padding:3px 2px 1px;
-    min-height:14px;display:flex;align-items:center;justify-content:center;
+    color:#a07830;text-align:center;padding:2px 2px 0px;
+    min-height:12px;display:flex;align-items:center;justify-content:center;
     letter-spacing:.1px}
 
-/* Horizontal hairline */
-.hd{height:0.5px;background:#e4d0a8;margin:0 3px}
+/* Horizontal hairline — tighter margin */
+.hd{height:0.5px;background:#e4d0a8;margin:0 2px}
 
-/* Arabic — visual king, largest, traceable gray shadow */
+/* Arabic — visual king, reduced padding, font size preserved */
 .aw{font-family:'Amiri',serif;font-size:27px;direction:rtl;text-align:center;
-    padding:7px 4px 4px;flex:1;display:flex;align-items:center;
+    padding:4px 4px 3px;flex:1;display:flex;align-items:center;
     justify-content:center;color:rgba(0,0,0,.13);line-height:1.45}
 
-/* English meaning — bottom */
+/* English meaning — bottom, tighter padding */
 .mn{font-family:'EB Garamond',serif;font-size:8px;text-align:center;
-    color:#1e1206;padding:2px 2px 4px;min-height:18px;
+    color:#1e1206;padding:1px 2px 3px;min-height:15px;
     display:flex;align-items:center;justify-content:center;line-height:1.25}
 
 /* FOOTER — gold rule */
