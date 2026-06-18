@@ -48,8 +48,8 @@ CELL_PAD_MM    = 3
 CELL_MIN_MM    = 12
 CELL_MAX_MM    = WORD_W_MM
 
-ROW_BASE_MM    = 18      # 1-line tr + 20pt arabic + 1-line mn + tight padding (measured safe)
-ROW_LINE_MM    = 3.8
+ROW_BASE_MM    = 23      # 1-line tr + 20pt arabic + 1-line mn + breathing room (measured safe)
+ROW_LINE_MM    = 4.4
 
 # ─── DIACRITIC STRIP (for width measurement only) ────────────────
 _DIAC  = re.compile(r'[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06E4\u06E7\u06E8\u06EA-\u06ED]')
@@ -477,12 +477,14 @@ body{{display:flex;flex-direction:column;align-items:center;padding:28px 0;gap:2
 .cell{{display:flex;flex-direction:column;align-items:center;justify-content:center;
   padding:0.6mm 1mm}}
 .tr{{font-size:{TR_PT}pt;font-style:italic;color:#a07830;text-align:center;
-  line-height:1.1;width:100%;word-break:break-word;overflow-wrap:break-word}}
+  line-height:1.2;width:100%;margin-bottom:1.2mm;
+  word-break:break-word;overflow-wrap:break-word}}
 .ar{{font-family:'Amiri',serif;font-size:{AR_PT}pt;color:rgba(0,0,0,.18);
-  direction:rtl;text-align:center;line-height:1.15;width:100%;
-  white-space:nowrap;padding:0.2mm 0}}
+  direction:rtl;text-align:center;line-height:1.4;width:100%;
+  white-space:nowrap;padding:0.4mm 0}}
 .mn{{font-size:{MN_PT}pt;color:#1e1206;text-align:center;
-  line-height:1.1;width:100%;word-break:break-word;overflow-wrap:break-word}}
+  line-height:1.2;width:100%;margin-top:1.2mm;
+  word-break:break-word;overflow-wrap:break-word}}
 .marker .ar.mk{{color:#c9a84c;font-size:18pt}}
 """
 
@@ -589,7 +591,8 @@ def build():
         pno += 1
         pages.append(page_surah_opener(1, pno, sd))
 
-        for page_rows in paginate_complete_ayah(vks):
+        rows = pack_all_rows(vks)
+        for page_rows in paginate_rows(rows):
             pno += 1
             pages.append(page_standard(1, pno, sd['english'], page_rows))
 
