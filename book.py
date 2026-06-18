@@ -41,7 +41,7 @@ PANEL_NUM_PT   = 12      # ayah number in panel
 PANEL_TXT_PT   = 11      # verse meaning in panel
 
 # ─── WIDTH MODEL (mm per character, empirically calibrated) ──────
-AR_CHAR_MM     = 4.4     # 28pt Amiri base char (connected-script calibrated)
+AR_CHAR_MM     = 4.0     # 28pt Amiri base char (connected-script calibrated)
 TR_CHAR_MM     = 2.0     # 10pt EB Garamond
 MN_CHAR_MM     = 2.0
 CELL_PAD_MM    = 4       # horizontal breathing room per cell
@@ -49,7 +49,7 @@ CELL_MIN_MM    = 14      # never narrower than this
 CELL_MAX_MM    = WORD_W_MM   # never wider than the word area
 
 # ─── ROW HEIGHT MODEL (mm) ───────────────────────────────────────
-ROW_BASE_MM    = 30      # 1-line tr + 28pt arabic + 1-line mn + padding (measured)
+ROW_BASE_MM    = 26      # 1-line tr + 28pt arabic + 1-line mn + tightened padding
 ROW_LINE_MM    = 5.0     # extra height when tr or mn wraps to 2 lines
 
 # ─── DIACRITIC STRIP (for width measurement only) ────────────────
@@ -351,12 +351,12 @@ body{{display:flex;flex-direction:column;align-items:center;padding:28px 0;gap:2
 
 /* WORD CELL — unified unit, no dividers */
 .cell{{display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:2.5mm 1mm}}
+  padding:1.2mm 1mm}}
 .tr{{font-size:{TR_PT}pt;font-style:italic;color:#a07830;text-align:center;
   line-height:1.25;width:100%;word-break:break-word;overflow-wrap:break-word}}
 .ar{{font-family:'Amiri',serif;font-size:{AR_PT}pt;color:rgba(0,0,0,.18);
   direction:rtl;text-align:center;line-height:1.3;width:100%;
-  white-space:nowrap;padding:1.5mm 0}}
+  white-space:nowrap;padding:0.6mm 0}}
 .mn{{font-size:{MN_PT}pt;color:#1e1206;text-align:center;
   line-height:1.25;width:100%;word-break:break-word;overflow-wrap:break-word}}
 .marker .ar.mk{{color:#c9a84c;font-size:18pt}}
