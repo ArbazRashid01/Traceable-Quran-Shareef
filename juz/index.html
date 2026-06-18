@@ -3,73 +3,222 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Traceable Quran — Complete Workbook</title>
+<title>The Traceable Quran — Master Index</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#9e8f72;font-family:'Georgia',serif;color:#1a0e04;
-  padding:40px 20px;display:flex;flex-direction:column;align-items:center}
-h1{color:#fdf7ed;font-size:28px;letter-spacing:2px;margin-bottom:4px;text-align:center}
-.ar{font-family:serif;font-size:22px;color:#f0e4c0;direction:rtl;margin-bottom:4px}
-.sub{color:#f0e4c0;font-style:italic;margin-bottom:28px;text-align:center;font-size:14px}
-.section-title{color:#f0e4c0;font-size:12px;font-weight:700;letter-spacing:3px;
-  text-transform:uppercase;margin:24px 0 10px;text-align:center;opacity:.85}
-.special-grid{display:flex;flex-direction:column;gap:10px;max-width:780px;width:100%;margin-bottom:6px}
-.special-card{display:flex;align-items:center;justify-content:space-between;
-  background:#fdf7ed;border:1.5px solid #c9a84c;border-radius:8px;
-  padding:12px 18px;text-decoration:none;color:#1a0e04;
+:root{--gold:#c9a84c;--gold-deep:#8b6c14;--ink:#1a0e04;--parch:#fdf7ed;--parch2:#f6ead6;--bg:#9e8f72}
+body{background:var(--bg);font-family:'Georgia',serif;color:var(--ink);
+  padding:0 0 60px;display:flex;flex-direction:column;align-items:center}
+
+/* ── TOOLBAR ── */
+.toolbar{position:sticky;top:0;z-index:50;width:100%;display:flex;
+  align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;
+  background:#1a0e04;padding:10px 16px;box-shadow:0 2px 12px rgba(0,0,0,.4)}
+.toolbar .ttl{color:#f0e4c0;font-size:13px;letter-spacing:1px;margin-right:auto;font-weight:700}
+.btn{background:var(--gold);color:#1a0e04;border:none;padding:8px 16px;
+  border-radius:6px;cursor:pointer;font-family:Georgia,serif;font-size:13px;
+  font-weight:700;letter-spacing:.5px;transition:background .15s}
+.btn:hover{background:#e8c050}
+.btn.alt{background:#5a4a2a;color:#f0e4c0}
+.btn.alt:hover{background:#6e5c38}
+.btn.on{background:#1a7a4a;color:#fff}
+.status{color:#bda;font-size:11px;font-style:italic;margin-left:4px}
+
+/* ── EDIT MODE VISUALS ── */
+[contenteditable="true"]{outline:none}
+body.editing [data-edit]{cursor:text;border-radius:4px;
+  transition:background .12s,box-shadow .12s}
+body.editing [data-edit]:hover{background:rgba(201,168,76,.18)}
+body.editing [data-edit]:focus{background:#fffbe9;
+  box-shadow:0 0 0 2px var(--gold);padding:2px 4px}
+
+/* ── CONTENT ── */
+.wrap{width:100%;max-width:820px;padding:34px 20px 0;display:flex;
+  flex-direction:column;align-items:center}
+.ar{font-family:serif;font-size:24px;color:#f0e4c0;direction:rtl;margin-bottom:6px}
+h1{color:var(--parch);font-size:30px;letter-spacing:2px;text-align:center;margin-bottom:6px}
+.sub{color:#f0e4c0;font-style:italic;margin-bottom:6px;text-align:center;font-size:15px}
+.byline{color:#d8c89c;font-size:12px;text-align:center;margin-bottom:26px;letter-spacing:.5px}
+.section-title{color:#f0e4c0;font-size:13px;font-weight:700;letter-spacing:3px;
+  text-transform:uppercase;margin:26px 0 12px;text-align:center;opacity:.9}
+
+.special-grid{display:flex;flex-direction:column;gap:11px;width:100%;margin-bottom:6px}
+.special-card{display:flex;align-items:center;justify-content:space-between;gap:14px;
+  background:var(--parch);border:1.5px solid var(--gold);border-radius:9px;
+  padding:13px 20px;text-decoration:none;color:var(--ink);
   box-shadow:0 3px 12px rgba(0,0,0,.25)}
 .special-card:hover{background:#f8f0dc}
-.sc-label{font-size:13px;font-weight:700;letter-spacing:.5px;color:#8b6c14}
-.sc-sub{font-size:11px;color:#7a5810;font-style:italic;margin-top:2px}
-.sc-pages{font-size:11px;font-weight:700;color:#c9a84c}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));
-  gap:12px;max-width:780px;width:100%}
-a.j{display:flex;flex-direction:column;align-items:center;justify-content:center;
-  background:#fdf7ed;border:1.5px solid #c9a84c;border-radius:8px;
-  padding:14px 8px;text-decoration:none;color:#1a0e04;
-  box-shadow:0 3px 12px rgba(0,0,0,.25);transition:transform .1s}
-a.j:hover{transform:translateY(-3px);background:#f8f0dc}
-.jn{font-size:24px;font-weight:700;color:#8b6c14}
-.jl{font-size:10px;letter-spacing:1px;color:#7a5810;margin-top:3px;text-transform:uppercase}
-.print-note{color:#f0e4c0;font-size:11px;margin-top:20px;text-align:center;
-  font-style:italic;max-width:600px;opacity:.8}
+.sc-label{font-size:14px;font-weight:700;letter-spacing:.5px;color:var(--gold-deep)}
+.sc-sub{font-size:12px;color:#7a5810;font-style:italic;margin-top:3px}
+.sc-pages{font-size:12px;font-weight:700;color:var(--gold);white-space:nowrap}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
+  gap:13px;width:100%}
+.j{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:var(--parch);border:1.5px solid var(--gold);border-radius:9px;
+  padding:15px 8px;text-decoration:none;color:var(--ink);
+  box-shadow:0 3px 12px rgba(0,0,0,.25);transition:transform .1s;position:relative}
+.j:hover{transform:translateY(-3px);background:#f8f0dc}
+.jn{font-size:26px;font-weight:700;color:var(--gold-deep)}
+.jl{font-size:11px;letter-spacing:1px;color:#7a5810;margin-top:4px;text-transform:uppercase}
+.jt{font-size:10px;color:#9a7a30;margin-top:3px;font-style:italic;text-align:center;line-height:1.25}
+
+.note{color:#f0e4c0;font-size:12px;margin-top:24px;text-align:center;
+  font-style:italic;max-width:620px;opacity:.85;line-height:1.6}
+
+@media print{.toolbar{display:none}body{background:#fff}}
 </style>
 </head>
 <body>
-<div class="ar">الْقُرْآنُ الْكَرِيمُ</div>
-<h1>THE TRACEABLE QURAN</h1>
-<div class="sub">Complete Word-by-Word Learning &amp; Tracing Workbook &mdash; All 30 Juz</div>
 
-<div class="section-title">Front &amp; Back Matter</div>
-<div class="special-grid">
-  <a class="special-card" href="Front-Matter.html">
-    <div><div class="sc-label">&#10022; Front Matter</div>
-    <div class="sc-sub">Cover &middot; Preface &middot; How to Use &middot; Juz &amp; Surah Index &middot; Introduction &middot; Etiquettes</div></div>
-    <span class="sc-pages">16 pages</span>
-  </a>
-  <a class="special-card" href="Back-Matter.html">
-    <div><div class="sc-label">&#10022; Back Matter</div>
-    <div class="sc-sub">Khatm ul-Quran &middot; Du&#8216;a &middot; Reflection &middot; About This Workbook &middot; Closing Message</div></div>
-    <span class="sc-pages">5 pages</span>
-  </a>
+<div class="toolbar">
+  <span class="ttl">TRACEABLE QURAN · MASTER INDEX</span>
+  <button class="btn" id="editBtn" onclick="toggleEdit()">✎ Edit Mode</button>
+  <button class="btn alt" id="addBtn" onclick="addJuz()" style="display:none">＋ Add Tile</button>
+  <button class="btn alt" onclick="resetAll()">↺ Reset</button>
+  <button class="btn" onclick="downloadHTML()">⤓ Save / Export</button>
+  <span class="status" id="status"></span>
 </div>
 
-<div class="section-title">The 30 Juz</div>
-<div class="grid" id="g"></div>
+<div class="wrap">
+  <div class="ar" data-edit>الْقُرْآنُ الْكَرِيمُ</div>
+  <h1 data-edit>THE TRACEABLE QURAN</h1>
+  <div class="sub" data-edit>Complete Word-by-Word Learning &amp; Tracing Workbook — All 30 Juz</div>
+  <div class="byline" data-edit>6,236 Verses · 114 Surahs · 77,429 Words · 1,645 Pages</div>
 
-<p class="print-note">
-  Download any file &rarr; open in Chrome &rarr; Ctrl+P &rarr; Save as PDF &rarr;
-  A4, no margins, background graphics ON.
-</p>
+  <div class="section-title" data-edit>The Complete Book</div>
+  <div class="special-grid">
+    <a class="special-card" href="../Traceable-Quran-Complete.html">
+      <div><div class="sc-label" data-edit>❖ Complete Book (Single File)</div>
+      <div class="sc-sub" data-edit>Front Matter · All 30 Juz · Back Matter — one continuous offline book</div></div>
+      <span class="sc-pages" data-edit>1,645 pages</span>
+    </a>
+  </div>
+
+  <div class="section-title" data-edit>Front &amp; Back Matter</div>
+  <div class="special-grid">
+    <a class="special-card" href="Front-Matter.html">
+      <div><div class="sc-label" data-edit>❖ Front Matter</div>
+      <div class="sc-sub" data-edit>Cover · Preface · How to Use · Indexes · Introduction · Etiquettes</div></div>
+      <span class="sc-pages" data-edit>16 pages</span>
+    </a>
+    <a class="special-card" href="Back-Matter.html">
+      <div><div class="sc-label" data-edit>❖ Back Matter</div>
+      <div class="sc-sub" data-edit>Khatm ul-Quran · Du‘a · Reflection · About · Closing Message</div></div>
+      <span class="sc-pages" data-edit>5 pages</span>
+    </a>
+  </div>
+
+  <div class="section-title" data-edit>The 30 Juz</div>
+  <div class="grid" id="grid"></div>
+
+  <div class="note" data-edit>To print: open any file in Chrome → Ctrl+P → Save as PDF → A4, no margins, background graphics ON.</div>
+</div>
 
 <script>
-const g=document.getElementById('g');
-for(let i=1;i<=30;i++){
-  const a=document.createElement('a');
-  a.className='j'; a.href='Juz-'+String(i).padStart(2,'0')+'.html';
-  a.innerHTML='<span class="jn">'+i+'</span><span class="jl">Juz '+i+'</span>';
-  g.appendChild(a);
+// Optional per-Juz titles (editable). Default blank.
+const JUZ_TITLES = JSON.parse(localStorage.getItem('tq_juztitles')||'{}');
+
+function buildGrid(){
+  const g=document.getElementById('grid'); g.innerHTML='';
+  for(let i=1;i<=30;i++){
+    const a=document.createElement('a');
+    a.className='j'; a.href='Juz-'+String(i).padStart(2,'0')+'.html';
+    a.dataset.juz=i;
+    a.innerHTML='<span class="jn" data-edit>'+i+'</span>'+
+                '<span class="jl" data-edit>Juz '+i+'</span>'+
+                '<span class="jt" data-edit>'+(JUZ_TITLES[i]||'')+'</span>';
+    g.appendChild(a);
+  }
+  applyEditState();
 }
+
+let editing=false;
+function toggleEdit(){
+  editing=!editing;
+  document.body.classList.toggle('editing',editing);
+  document.getElementById('editBtn').classList.toggle('on',editing);
+  document.getElementById('editBtn').textContent = editing ? '✓ Editing (click text)' : '✎ Edit Mode';
+  document.getElementById('addBtn').style.display = editing ? '' : 'none';
+  applyEditState();
+  setStatus(editing ? 'Edit mode ON — click any text to change it' : 'Edit mode off');
+}
+
+function applyEditState(){
+  document.querySelectorAll('[data-edit]').forEach(el=>{
+    el.contentEditable = editing ? 'true' : 'false';
+  });
+  // prevent links from navigating while editing
+  document.querySelectorAll('a').forEach(a=>{
+    a.onclick = (e)=>{ if(editing){ e.preventDefault(); } };
+  });
+}
+
+// Save edits to localStorage (debounced)
+let t;
+document.addEventListener('input',e=>{
+  if(!editing) return;
+  clearTimeout(t);
+  t=setTimeout(saveState,400);
+});
+function saveState(){
+  // store full inner HTML of the wrap
+  localStorage.setItem('tq_index_html', document.querySelector('.wrap').innerHTML);
+  // store juz titles
+  const jt={};
+  document.querySelectorAll('.j').forEach(j=>{
+    const tt=j.querySelector('.jt'); const n=j.dataset.juz;
+    if(tt && tt.textContent.trim()) jt[n]=tt.textContent.trim();
+  });
+  localStorage.setItem('tq_juztitles',JSON.stringify(jt));
+  setStatus('Saved ✓ '+new Date().toLocaleTimeString());
+}
+function setStatus(m){document.getElementById('status').textContent=m;}
+
+function addJuz(){
+  // adds a custom blank tile to the grid for the user to fill
+  const g=document.getElementById('grid');
+  const a=document.createElement('a');
+  a.className='j'; a.href='#';
+  a.innerHTML='<span class="jn" data-edit>＋</span>'+
+              '<span class="jl" data-edit>New</span>'+
+              '<span class="jt" data-edit>custom</span>';
+  g.appendChild(a); applyEditState(); saveState();
+}
+
+function resetAll(){
+  if(!confirm('Reset the index to its original layout? This clears your edits.')) return;
+  localStorage.removeItem('tq_index_html');
+  localStorage.removeItem('tq_juztitles');
+  location.reload();
+}
+
+function downloadHTML(){
+  // export the current document (with edits baked in) as a standalone file
+  const clone=document.documentElement.cloneNode(true);
+  // turn off editing artifacts
+  clone.querySelector('body').classList.remove('editing');
+  clone.querySelectorAll('[contenteditable]').forEach(el=>el.setAttribute('contenteditable','false'));
+  const html='<!DOCTYPE html>\n'+clone.outerHTML;
+  const blob=new Blob([html],{type:'text/html'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download='Traceable-Quran-Index.html'; a.click();
+  URL.revokeObjectURL(url);
+  setStatus('Exported file downloaded ✓');
+}
+
+// Restore saved edits if present
+(function init(){
+  const saved=localStorage.getItem('tq_index_html');
+  if(saved){
+    document.querySelector('.wrap').innerHTML=saved;
+  }else{
+    buildGrid();
+  }
+  // if restored, grid already in saved html; ensure edit handlers
+  applyEditState();
+})();
 </script>
 </body>
 </html>
