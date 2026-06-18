@@ -64,9 +64,15 @@ CELL_PAD_MM=3; CELL_MIN_MM=12
 ROW_BASE_MM=23; ROW_LINE_MM=4.4
 
 _DIAC = re.compile(r'[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06E4\u06E7\u06E8\u06EA-\u06ED]')
+_SUP  = re.compile(r'<sup[^>]*>.*?</sup>', re.S)   # footnote marker incl. its number
+_TAG  = re.compile(r'<[^>]+>')                      # any other HTML tags
 _PAREN = re.compile(r'[\(\[][^\)\]]*[\)\]]')
 def ar_base_len(s): return sum(1 for c in _DIAC.sub('', s or '') if '\u0600' <= c <= '\u06FF')
-def clean_m(s): return _PAREN.sub('', s or '').replace('  ',' ').strip(' ,;:.')
+def clean_m(s):
+    s = _SUP.sub('', s or '')                       # drop footnote markers + numbers
+    s = _TAG.sub('', s)                             # drop any remaining tags
+    s = _PAREN.sub('', s)
+    return s.replace('  ', ' ').strip(' ,;:.')
 def _esc(s): return (s or '').replace('&','&amp;').replace('<','&lt;').replace('>','&gt;')
 
 def longest_tok(t, mm):
