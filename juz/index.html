@@ -3,34 +3,70 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Traceable Quran &mdash; All 30 Juz</title>
+<title>Traceable Quran — Complete Workbook</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#9e8f72;font-family:'Georgia',serif;color:#1a0e04;padding:40px 20px;
-  display:flex;flex-direction:column;align-items:center}
-h1{color:#fdf7ed;font-size:28px;letter-spacing:2px;margin-bottom:6px;text-align:center}
-.sub{color:#f0e4c0;font-style:italic;margin-bottom:30px;text-align:center}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));
-  gap:14px;max-width:780px;width:100%}
+body{background:#9e8f72;font-family:'Georgia',serif;color:#1a0e04;
+  padding:40px 20px;display:flex;flex-direction:column;align-items:center}
+h1{color:#fdf7ed;font-size:28px;letter-spacing:2px;margin-bottom:4px;text-align:center}
+.ar{font-family:serif;font-size:22px;color:#f0e4c0;direction:rtl;margin-bottom:4px}
+.sub{color:#f0e4c0;font-style:italic;margin-bottom:28px;text-align:center;font-size:14px}
+.section-title{color:#f0e4c0;font-size:12px;font-weight:700;letter-spacing:3px;
+  text-transform:uppercase;margin:24px 0 10px;text-align:center;opacity:.85}
+.special-grid{display:flex;flex-direction:column;gap:10px;max-width:780px;width:100%;margin-bottom:6px}
+.special-card{display:flex;align-items:center;justify-content:space-between;
+  background:#fdf7ed;border:1.5px solid #c9a84c;border-radius:8px;
+  padding:12px 18px;text-decoration:none;color:#1a0e04;
+  box-shadow:0 3px 12px rgba(0,0,0,.25)}
+.special-card:hover{background:#f8f0dc}
+.sc-label{font-size:13px;font-weight:700;letter-spacing:.5px;color:#8b6c14}
+.sc-sub{font-size:11px;color:#7a5810;font-style:italic;margin-top:2px}
+.sc-pages{font-size:11px;font-weight:700;color:#c9a84c}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));
+  gap:12px;max-width:780px;width:100%}
 a.j{display:flex;flex-direction:column;align-items:center;justify-content:center;
   background:#fdf7ed;border:1.5px solid #c9a84c;border-radius:8px;
-  padding:16px 8px;text-decoration:none;color:#1a0e04;
+  padding:14px 8px;text-decoration:none;color:#1a0e04;
   box-shadow:0 3px 12px rgba(0,0,0,.25);transition:transform .1s}
 a.j:hover{transform:translateY(-3px);background:#f8f0dc}
-.jn{font-size:26px;font-weight:700;color:#8b6c14}
-.jl{font-size:11px;letter-spacing:1px;color:#7a5810;margin-top:4px;text-transform:uppercase}
+.jn{font-size:24px;font-weight:700;color:#8b6c14}
+.jl{font-size:10px;letter-spacing:1px;color:#7a5810;margin-top:3px;text-transform:uppercase}
+.print-note{color:#f0e4c0;font-size:11px;margin-top:20px;text-align:center;
+  font-style:italic;max-width:600px;opacity:.8}
 </style>
 </head>
 <body>
-<h1>TRACEABLE QURAN</h1>
-<div class="sub">Word-by-word tracing workbook &mdash; all 30 Juz</div>
+<div class="ar">الْقُرْآنُ الْكَرِيمُ</div>
+<h1>THE TRACEABLE QURAN</h1>
+<div class="sub">Complete Word-by-Word Learning &amp; Tracing Workbook &mdash; All 30 Juz</div>
+
+<div class="section-title">Front &amp; Back Matter</div>
+<div class="special-grid">
+  <a class="special-card" href="Front-Matter.html">
+    <div><div class="sc-label">&#10022; Front Matter</div>
+    <div class="sc-sub">Cover &middot; Preface &middot; How to Use &middot; Juz &amp; Surah Index &middot; Introduction &middot; Etiquettes</div></div>
+    <span class="sc-pages">16 pages</span>
+  </a>
+  <a class="special-card" href="Back-Matter.html">
+    <div><div class="sc-label">&#10022; Back Matter</div>
+    <div class="sc-sub">Khatm ul-Quran &middot; Du&#8216;a &middot; Reflection &middot; About This Workbook &middot; Closing Message</div></div>
+    <span class="sc-pages">5 pages</span>
+  </a>
+</div>
+
+<div class="section-title">The 30 Juz</div>
 <div class="grid" id="g"></div>
+
+<p class="print-note">
+  Download any file &rarr; open in Chrome &rarr; Ctrl+P &rarr; Save as PDF &rarr;
+  A4, no margins, background graphics ON.
+</p>
+
 <script>
 const g=document.getElementById('g');
 for(let i=1;i<=30;i++){
   const a=document.createElement('a');
-  a.className='j';
-  a.href='Juz-'+String(i).padStart(2,'0')+'.html';
+  a.className='j'; a.href='Juz-'+String(i).padStart(2,'0')+'.html';
   a.innerHTML='<span class="jn">'+i+'</span><span class="jl">Juz '+i+'</span>';
   g.appendChild(a);
 }
