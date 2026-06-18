@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <title>Traceable Quran &#8212; Template System</title>
+  <title>Traceable Quran &#8212; Workbook Framework v3</title>
   <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=EB+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet"/>
   <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -18,13 +18,12 @@ body {
   padding: 30px 0; gap: 30px;
 }
 
-/* PAGE — fixed A4, never grows */
 .page {
   position: relative;
-  background: #fdf7ed;
   width: 210mm;
   height: 297mm;
   padding: 10mm;
+  background: #fdf7ed;
   border: 0.5mm solid #c9a84c;
   box-shadow:
     0 0 0 1.5mm #fdf7ed,
@@ -44,303 +43,322 @@ body {
   position: relative;
   width: 100%; height: 100%;
   display: flex; flex-direction: column;
+  overflow: hidden;
 }
 
-/* HEADER (identical for A, B, C) */
+/* HEADER (identical on A, B, C) */
 .header {
   flex: 0 0 14mm;
+  height: 14mm;
   display: flex; align-items: center; justify-content: space-between;
   background: #f8f0dc;
-  border-top:    0.6mm solid #8b6c14;
+  border-top: 0.6mm solid #8b6c14;
   border-bottom: 0.6mm solid #8b6c14;
   box-shadow: inset 0 0.6mm 0 #e8d49a, inset 0 -0.6mm 0 #e8d49a;
   padding: 0 4mm;
+  overflow: hidden;
 }
 .header-juz, .header-page {
   font-size: 9pt; font-weight: 700; color: #8b6c14;
   letter-spacing: 1.2px; text-transform: uppercase; width: 22mm;
+  overflow: hidden; white-space: nowrap; text-overflow: clip;
 }
 .header-page { text-align: right; }
-.header-mid { display: flex; align-items: center; gap: 3mm; }
+.header-mid {
+  display: flex; align-items: center; gap: 3mm;
+  overflow: hidden; max-width: 130mm;
+}
 .header-orn { font-size: 11pt; color: #c9a84c; line-height: 1; }
 .header-name {
   font-size: 12pt; font-weight: 700; letter-spacing: 2.4px;
   color: #1a0e04; text-transform: uppercase;
+  overflow: hidden; white-space: nowrap; text-overflow: clip;
 }
 
-/* FOOTER (identical for A, B, C) */
+/* FOOTER (identical on A, B, C) */
 .footer {
   flex: 0 0 10mm;
+  height: 10mm;
   display: flex; align-items: center; justify-content: space-between;
   border-top: 0.6mm solid #8b6c14;
   padding: 0 4mm;
-  font-size: 9pt; font-weight: 600; color: #8b6c14; letter-spacing: 0.4px;
+  font-size: 9pt; font-weight: 600; color: #8b6c14;
+  letter-spacing: 0.4px;
+  overflow: hidden; white-space: nowrap;
 }
 
-.body-standard {
-  flex: 0 0 253mm; height: 253mm;
+.body-c {
+  flex: 0 0 253mm;
+  height: 253mm;
   display: flex; flex-direction: row;
   border: 0.3mm solid #d4b870;
+  overflow: hidden;
 }
 
-.meaning-panel {
-  flex: 0 0 30%; width: 30%;
+/* LEFT — meaning panel (22%, 12 fixed slots) */
+.panel {
+  flex: 0 0 22%;
+  width: 22%;
+  height: 253mm;
   background: #f6ead6;
   border-right: 0.4mm solid #d4b870;
-  padding: 3mm; gap: 2mm;
   display: flex; flex-direction: column;
   overflow: hidden;
 }
-.meaning-panel-title {
-  font-size: 8pt; font-weight: 700; letter-spacing: 1.5px;
-  color: #8b6c14; text-transform: uppercase;
-  padding-bottom: 1.5mm;
-  border-bottom: 0.3mm dashed #d4b870;
+.slot {
+  flex: 0 0 21.083333333333332mm;
+  height: 21.083333333333332mm;
+  border-bottom: 0.2mm solid #e4d0a8;
+  padding: 1.5mm 2mm;
+  display: flex; flex-direction: column; gap: 0.6mm;
+  overflow: hidden;
 }
-.meaning-item {
-  display: flex; flex-direction: column; gap: 1mm;
-  padding: 1.5mm 1mm;
-  border: 0.2mm dashed #bfa770;
-  background: #f8f1dc;
-  border-radius: 1mm;
-}
-.meaning-num {
+.slot:last-child { border-bottom: none; }
+.slot-num {
+  flex: 0 0 4mm; height: 4mm;
   font-family: 'Amiri', serif;
-  font-size: 10pt; font-weight: 700;
+  font-size: 11pt; font-weight: 700;
   color: #8b6c14;
+  line-height: 1;
+  overflow: hidden; white-space: nowrap;
 }
-.meaning-text {
-  font-size: 13pt;
-  font-style: italic;
+.slot-text {
+  flex: 1 1 0;
+  font-size: 11pt;
   color: #bfa770;
-  line-height: 1.45;
-  letter-spacing: 0.2px;
+  font-style: italic;
+  line-height: 1.35;
+  letter-spacing: 0.15px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  word-break: break-word;
 }
 
+/* RIGHT — 12 fixed rows */
 .grid {
-  flex: 1 1 auto; height: 100%;
-  display: flex; flex-direction: column;
-  background: #fdf7ed;
-}
-.grid-rows {
-  flex: 0 0 240mm;
-  height: 240mm;
+  flex: 1 1 auto;
+  height: 253mm;
   display: grid;
-  grid-template-rows: repeat(12, 20.0mm);
+  grid-template-rows: repeat(12, 21.083333333333332mm);
   grid-auto-rows: 0;
+  background: #fdf7ed;
+  overflow: hidden;
 }
-
 .row {
-  height: 20.0mm;
+  height: 21.083333333333332mm;
   border-bottom: 0.2mm solid #e4d0a8;
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   direction: rtl;
+  overflow: hidden;
 }
 .row:last-child { border-bottom: none; }
 
 .cell {
-  height: 20.0mm;
+  height: 21.083333333333332mm;
   border-left: 0.2mm dotted #efe2c2;
-  display: grid;
-  grid-template-rows: 1fr auto 2fr auto 1fr;
-  align-items: stretch;
+  display: flex; flex-direction: column;
   direction: ltr;
+  overflow: hidden;
 }
 .cell:last-child { border-left: none; }
 
-.cell-tr { display:flex; align-items:center; justify-content:center;
-  font-size:11pt; font-style:italic; color:#bfa770;
-  background:#f8f1dc; }
-.cell-div { height: 0.2mm; background: #e4d0a8; }
-.cell-ar { display:flex; align-items:center; justify-content:center;
-  font-family:'Amiri',serif; font-size:27pt; color:rgba(0,0,0,0.13); direction:rtl; }
-.cell-mn { display:flex; align-items:center; justify-content:center;
-  font-size:11pt; color:#bfa770; background:#f8f1dc; }
-
-/* TRACKER STRIP (subtle bottom band on Standard & Surah pages) */
-.tracker {
-  flex: 0 0 13mm; height: 13mm;
-  display: flex; align-items: center; gap: 4mm;
-  padding: 0 4mm;
-  background: #f6ead6;
-  border-top: 0.3mm solid #d4b870;
-  font-size: 8pt; color: #8b6c14;
+.tr {
+  flex: 0 0 4.5mm; height: 4.5mm;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9pt; font-style: italic; color: #bfa770;
+  background: #f8f1dc;
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
 }
-.tracker-check { display:flex; align-items:center; gap: 1.5mm; }
-.tracker-box {
-  display: inline-block;
-  width: 3.5mm; height: 3.5mm;
-  border: 0.3mm solid #8b6c14;
-  background: #fdf7ed;
-  border-radius: 0.5mm;
+.div {
+  flex: 0 0 0.3mm; height: 0.3mm;
+  background: #e4d0a8;
+  overflow: hidden;
 }
-.tracker-line {
-  flex: 1 1 auto;
-  border-bottom: 0.2mm solid #d4b870;
-  height: 0;
-  margin-bottom: 0.5mm;
-}
-.tracker-label { font-weight: 600; letter-spacing: 0.3px; }
-
-.body-surah {
-  flex: 0 0 253mm; height: 253mm;
-  display: flex; flex-direction: column;
-}
-
-.surah-card {
-  flex: 0 0 90mm;
-  height: 90mm;
-  position: relative;
-  background: linear-gradient(135deg,#f4e8c4 0%,#ede0aa 50%,#f4e8c4 100%);
-  border: 0.4mm solid #c9a84c;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 6mm 12mm;
-  gap: 3mm;
-}
-.surah-card::before, .surah-card::after {
-  content: '\2756';
-  position: absolute; top: 50%; transform: translateY(-50%);
-  color: #c9a84c; font-size: 16pt;
-}
-.surah-card::before { left: 4mm; }
-.surah-card::after  { right: 4mm; }
-
-.surah-arabic {
+.ar {
+  flex: 0 0 11.483mm; height: 11.483mm;
+  display: flex; align-items: center; justify-content: center;
   font-family: 'Amiri', serif;
-  font-size: 32pt; font-weight: 700;
-  color: #1a0e04;
-  direction: rtl; letter-spacing: 1px;
-}
-.surah-english {
-  font-size: 14pt; font-weight: 700;
-  letter-spacing: 4px; text-transform: uppercase;
-  color: #8b6c14;
-}
-.surah-meta {
-  font-size: 10pt; color: #8b6c14;
-  letter-spacing: 0.6px;
-}
-.surah-overview {
-  font-size: 10pt; font-style: italic;
-  color: #2a1a06;
-  text-align: center; line-height: 1.5;
-  max-width: 140mm;
-  margin-top: 1mm;
-}
-.surah-bismillah {
-  font-family: 'Amiri', serif;
-  font-size: 18pt;
-  color: rgba(0,0,0,0.18);
+  font-size: 22pt;
+  color: rgba(0,0,0,0.13);
   direction: rtl;
-  margin-top: 1mm;
+  overflow: hidden; white-space: nowrap;
+}
+.mn {
+  flex: 0 0 4.5mm; height: 4.5mm;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9pt; color: #bfa770;
+  background: #f8f1dc;
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
 }
 
-/* Surah-opener uses 6 rows × 25mm */
-.body-surah .grid-rows {
-  flex: 0 0 150mm;
-  height: 150mm;
-  grid-template-rows: repeat(6, 25.0mm);
-}
-.body-surah .row, .body-surah .cell { height: 25.0mm; }
-
-.body-juz {
-  flex: 0 0 253mm; height: 253mm;
-  display: flex; flex-direction: column;
-  padding: 6mm 6mm;
-  gap: 5mm;
-  background: #fdf7ed;
-}
-
-.juz-title-block {
-  flex: 0 0 70mm; height: 70mm;
+.body-b {
+  flex: 0 0 253mm;
+  height: 253mm;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
-  border: 0.5mm double #c9a84c;
-  background: linear-gradient(180deg, #f4e8c4 0%, #fdf7ed 100%);
+  padding: 18mm 16mm;
+  background: linear-gradient(180deg, #fdf7ed 0%, #faedc6 50%, #fdf7ed 100%);
+  overflow: hidden;
   position: relative;
 }
-.juz-corner {
-  position: absolute;
-  width: 8mm; height: 8mm;
-  border-color: #c9a84c;
-  border-style: solid;
+.body-b::before, .body-b::after {
+  content: '';
+  position: absolute; left: 0; right: 0;
+  height: 0; border-top: 0.4mm double #c9a84c;
+  pointer-events: none;
 }
-.juz-corner.tl { top: 1mm; left: 1mm; border-width: 0.4mm 0 0 0.4mm; }
-.juz-corner.tr { top: 1mm; right: 1mm; border-width: 0.4mm 0.4mm 0 0; }
-.juz-corner.bl { bottom: 1mm; left: 1mm; border-width: 0 0 0.4mm 0.4mm; }
-.juz-corner.br { bottom: 1mm; right: 1mm; border-width: 0 0.4mm 0.4mm 0; }
+.body-b::before { top: 8mm; }
+.body-b::after  { bottom: 8mm; }
 
-.juz-eyebrow {
-  font-size: 10pt; font-weight: 700;
-  letter-spacing: 5px; text-transform: uppercase;
-  color: #8b6c14;
-  margin-bottom: 4mm;
+.b-orn-top, .b-orn-bot {
+  font-size: 18pt; color: #c9a84c;
+  letter-spacing: 12px; text-align: center;
+  height: 10mm; line-height: 10mm;
+  flex: 0 0 10mm;
+  overflow: hidden;
 }
-.juz-number {
-  font-family: 'Amiri', serif;
-  font-size: 60pt; font-weight: 700;
-  color: #1a0e04;
-  line-height: 1;
+.b-arabic {
+  flex: 0 0 28mm; height: 28mm;
+  font-family: 'Amiri', serif; font-weight: 700;
+  font-size: 38pt; color: #1a0e04;
+  direction: rtl; text-align: center;
+  letter-spacing: 1px;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; white-space: nowrap;
 }
-.juz-arabic-label {
-  font-family: 'Amiri', serif;
-  font-size: 18pt;
-  color: #8b6c14;
-  margin-top: 3mm;
+.b-english {
+  flex: 0 0 10mm; height: 10mm;
+  font-size: 18pt; font-weight: 700;
+  letter-spacing: 6px; text-transform: uppercase;
+  color: #8b6c14; text-align: center;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; white-space: nowrap;
 }
-
-.juz-meta-row {
-  flex: 0 0 50mm; height: 50mm;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 5mm;
-}
-.juz-card {
-  border: 0.3mm solid #c9a84c;
-  background: #f6ead6;
-  padding: 4mm;
-  display: flex; flex-direction: column; gap: 2mm;
-}
-.juz-card-title {
-  font-size: 9pt; font-weight: 700;
-  letter-spacing: 2px; text-transform: uppercase;
-  color: #8b6c14;
-  border-bottom: 0.3mm solid #c9a84c;
-  padding-bottom: 1.5mm;
-}
-.juz-card-body {
-  font-size: 11pt; color: #bfa770; font-style: italic;
-  line-height: 1.5;
-}
-
-.juz-intro {
-  flex: 1 1 auto;
-  border: 0.3mm solid #c9a84c;
-  background: #f6ead6;
-  padding: 5mm 7mm;
-  display: flex; flex-direction: column; gap: 2mm;
-}
-.juz-intro-title {
-  font-size: 10pt; font-weight: 700;
-  letter-spacing: 2.5px; text-transform: uppercase;
-  color: #8b6c14;
+.b-meta {
+  flex: 0 0 8mm; height: 8mm;
+  font-size: 10pt; color: #8b6c14;
+  letter-spacing: 1.2px;
   text-align: center;
-  padding-bottom: 2mm;
-  border-bottom: 0.3mm dashed #d4b870;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; white-space: nowrap;
 }
-.juz-intro-body {
-  font-size: 11pt; line-height: 1.65;
-  color: #bfa770; font-style: italic;
-  text-align: justify;
-}
-
-.juz-flourish {
+.b-divider {
+  flex: 0 0 8mm; height: 8mm;
   text-align: center;
-  font-size: 22pt; color: #c9a84c;
+  font-size: 14pt; color: #c9a84c;
   letter-spacing: 8px;
-  margin-top: 1mm;
+  line-height: 8mm;
+  overflow: hidden;
+}
+.b-overview {
+  flex: 0 0 60mm; height: 60mm;
+  font-size: 12pt; font-style: italic;
+  color: #2a1a06;
+  text-align: center; line-height: 1.65;
+  padding: 0 8mm;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 8;
+  -webkit-box-orient: vertical;
+}
+.b-bismillah {
+  flex: 0 0 22mm; height: 22mm;
+  font-family: 'Amiri', serif;
+  font-size: 28pt; color: rgba(0,0,0,0.18);
+  direction: rtl; text-align: center;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; white-space: nowrap;
+}
+
+.body-a {
+  flex: 0 0 253mm;
+  height: 253mm;
+  display: flex; flex-direction: column;
+  align-items: center;
+  padding: 14mm 16mm;
+  background: #fdf7ed;
+  overflow: hidden;
+  position: relative;
+}
+
+.a-eyebrow {
+  flex: 0 0 10mm; height: 10mm;
+  font-size: 11pt; font-weight: 700;
+  letter-spacing: 8px; text-transform: uppercase;
+  color: #8b6c14;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; white-space: nowrap;
+}
+.a-divider-top {
+  flex: 0 0 6mm; height: 6mm;
+  text-align: center;
+  font-size: 13pt; color: #c9a84c;
+  letter-spacing: 10px;
+  line-height: 6mm;
+  overflow: hidden;
+}
+.a-number {
+  flex: 0 0 70mm; height: 70mm;
+  font-family: 'Amiri', serif; font-weight: 700;
+  font-size: 80pt;
+  color: #1a0e04;
+  text-align: center;
+  display: flex; align-items: center; justify-content: center;
+  line-height: 1;
+  overflow: hidden;
+}
+.a-arabic-label {
+  flex: 0 0 14mm; height: 14mm;
+  font-family: 'Amiri', serif;
+  font-size: 22pt; color: #8b6c14;
+  direction: rtl; text-align: center;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; white-space: nowrap;
+}
+.a-divider-mid {
+  flex: 0 0 6mm; height: 6mm;
+  text-align: center;
+  font-size: 13pt; color: #c9a84c;
+  letter-spacing: 10px;
+  line-height: 6mm;
+  overflow: hidden;
+}
+.a-intro {
+  flex: 0 0 60mm; height: 60mm;
+  font-size: 11pt; font-style: italic;
+  color: #2a1a06;
+  text-align: center; line-height: 1.7;
+  padding: 0 8mm;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 8;
+  -webkit-box-orient: vertical;
+}
+.a-themes {
+  flex: 0 0 30mm; height: 30mm;
+  width: 100%;
+  border-top: 0.3mm solid #d4b870;
+  padding: 4mm 8mm 0 8mm;
+  overflow: hidden;
+}
+.a-themes-title {
+  font-size: 9pt; font-weight: 700;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: #8b6c14;
+  text-align: center;
+  margin-bottom: 2mm;
+}
+.a-themes-text {
+  font-size: 11pt; font-style: italic;
+  color: #2a1a06; text-align: center;
+  line-height: 1.5;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
 @media print {
@@ -348,7 +366,7 @@ body {
   body  { background: #fdf7ed; padding: 0; gap: 0; }
   .page { box-shadow: none; margin: 0; page-break-after: always; break-after: page; }
   .page:last-of-type { page-break-after: auto; break-after: auto; }
-  .row { page-break-inside: avoid; break-inside: avoid; }
+  .row, .slot { page-break-inside: avoid; break-inside: avoid; }
 }
 </style>
 </head>
@@ -356,44 +374,23 @@ body {
 <div class="page">
   <div class="page-inner">
     <div class="header"><span class="header-juz">JUZ 1</span><div class="header-mid"><span class="header-orn">&#10022;</span><span class="header-name">[ JUZ OPENING ]</span><span class="header-orn">&#10022;</span></div><span class="header-page">PAGE 1</span></div>
-    <div class="body-juz">
-
-      <div class="juz-title-block">
-        <div class="juz-corner tl"></div>
-        <div class="juz-corner tr"></div>
-        <div class="juz-corner bl"></div>
-        <div class="juz-corner br"></div>
-        <div class="juz-eyebrow">PARA &middot; JUZ</div>
-        <div class="juz-number">1</div>
-        <div class="juz-arabic-label">[ &#1580;&#1586;&#1569; ]</div>
+    <div class="body-a">
+      <div class="a-eyebrow">PARA &middot; JUZ</div>
+      <div class="a-divider-top">&middot; &middot; &middot;</div>
+      <div class="a-number">1</div>
+      <div class="a-arabic-label">[ &#1580;&#1586;&#1569; ]</div>
+      <div class="a-divider-mid">&middot; &middot; &middot;</div>
+      <div class="a-intro">
+        [ short introduction placeholder &mdash; one or two paragraphs orienting the
+        reader to this Juz: which surahs are covered, the central themes, and what
+        the reader will learn. Italic, comfortable for older readers. ]
       </div>
-
-      <div class="juz-meta-row">
-        <div class="juz-card">
-          <div class="juz-card-title">Key Themes</div>
-          <div class="juz-card-body">
-            [ placeholder &mdash; theme one, theme two, theme three ]
-          </div>
-        </div>
-        <div class="juz-card">
-          <div class="juz-card-title">Learning Objectives</div>
-          <div class="juz-card-body">
-            [ placeholder &mdash; objective one, objective two, objective three ]
-          </div>
+      <div class="a-themes">
+        <div class="a-themes-title">Key Themes</div>
+        <div class="a-themes-text">
+          [ theme one &middot; theme two &middot; theme three &middot; theme four ]
         </div>
       </div>
-
-      <div class="juz-intro">
-        <div class="juz-intro-title">Introduction</div>
-        <div class="juz-intro-body">
-          [ placeholder for the introductory text that orients the reader to this Juz.
-          Two to four short paragraphs describing the surahs covered, the central message,
-          and the spiritual focus of this Para. Spacious, italic, easy to read for older
-          learners. ]
-        </div>
-        <div class="juz-flourish">&middot; &middot; &middot;</div>
-      </div>
-
     </div>
     <div class="footer"><span>[ Juz Opening ]</span><span>Page 1 &nbsp;|&nbsp; Juz 1</span></div>
   </div>
@@ -402,27 +399,22 @@ body {
 <div class="page">
   <div class="page-inner">
     <div class="header"><span class="header-juz">JUZ 1</span><div class="header-mid"><span class="header-orn">&#10022;</span><span class="header-name">[ SURAH OPENING ]</span><span class="header-orn">&#10022;</span></div><span class="header-page">PAGE 2</span></div>
-    <div class="body-surah">
-
-      <div class="surah-card">
-        <div class="surah-arabic">[ &#1587;&#1615;&#1608;&#1585;&#1614;&#1577; ]</div>
-        <div class="surah-english">[ SURAH NAME ]</div>
-        <div class="surah-meta">
-          Surah [ # ] &nbsp;&middot;&nbsp; [ Meaning ] &nbsp;&middot;&nbsp;
-          Revealed in [ Place ] &nbsp;&middot;&nbsp; [ # ] Verses
-        </div>
-        <div class="surah-overview">
-          [ short overview of this surah &mdash; one or two sentences explaining
-          the central message and context for the reader ]
-        </div>
-        <div class="surah-bismillah">[ &#1576;&#1614;&#1587;&#1614;&#1605; ]</div>
+    <div class="body-b">
+      <div class="b-orn-top">&#10022; &#10022; &#10022;</div>
+      <div class="b-arabic">[ &#1587;&#1615;&#1608;&#1585;&#1614;&#1577; ]</div>
+      <div class="b-english">[ SURAH NAME ]</div>
+      <div class="b-meta">
+        Surah [ # ] &nbsp;&middot;&nbsp; [ Meaning ] &nbsp;&middot;&nbsp;
+        [ Place ] &nbsp;&middot;&nbsp; [ # ] Verses
       </div>
-
-      <div class="grid-rows">
-        <div class="row" data-row="1"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div><div class="row" data-row="2"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div><div class="row" data-row="3"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div><div class="row" data-row="4"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div><div class="row" data-row="5"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div><div class="row" data-row="6"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div>
+      <div class="b-divider">&middot; &middot; &middot;</div>
+      <div class="b-overview">
+        [ overview placeholder &mdash; a short, calm introduction to this Surah&apos;s
+        central message, when it was revealed, and why it matters. Three to five lines
+        of italic text, generously spaced, easy to read. ]
       </div>
-
-      <div class="tracker"><div class="tracker-check"><span class="tracker-box"></span><span class="tracker-label">Completed</span></div><div class="tracker-check"><span class="tracker-box"></span><span class="tracker-label">Reviewed</span></div><div class="tracker-check"><span class="tracker-box"></span><span class="tracker-label">Memorized</span></div><span class="tracker-label">&nbsp;Date</span><div class="tracker-line"></div><span class="tracker-label">Notes</span><div class="tracker-line"></div></div>
+      <div class="b-bismillah">[ &#1576;&#1614;&#1587;&#1614;&#1605; ]</div>
+      <div class="b-orn-bot">&#10022; &#10022; &#10022;</div>
     </div>
     <div class="footer"><span>[ Surah Opening ]</span><span>Page 2 &nbsp;|&nbsp; Juz 1</span></div>
   </div>
@@ -431,20 +423,9 @@ body {
 <div class="page">
   <div class="page-inner">
     <div class="header"><span class="header-juz">JUZ 1</span><div class="header-mid"><span class="header-orn">&#10022;</span><span class="header-name">[ SURAH PLACEHOLDER ]</span><span class="header-orn">&#10022;</span></div><span class="header-page">PAGE 3</span></div>
-    <div class="body-standard">
-
-      <div class="meaning-panel">
-        <div class="meaning-panel-title">Verse Meanings</div>
-        <div class="meaning-item"><span class="meaning-num">[ 1 ]</span><span class="meaning-text">[ verse meaning placeholder — comfortable readable text for older learners ]</span></div><div class="meaning-item"><span class="meaning-num">[ 2 ]</span><span class="meaning-text">[ verse meaning placeholder — comfortable readable text for older learners ]</span></div><div class="meaning-item"><span class="meaning-num">[ 3 ]</span><span class="meaning-text">[ verse meaning placeholder — comfortable readable text for older learners ]</span></div><div class="meaning-item"><span class="meaning-num">[ 4 ]</span><span class="meaning-text">[ verse meaning placeholder — comfortable readable text for older learners ]</span></div><div class="meaning-item"><span class="meaning-num">[ 5 ]</span><span class="meaning-text">[ verse meaning placeholder — comfortable readable text for older learners ]</span></div><div class="meaning-item"><span class="meaning-num">[ 6 ]</span><span class="meaning-text">[ verse meaning placeholder — comfortable readable text for older learners ]</span></div><div class="meaning-item"><span class="meaning-num">[ 7 ]</span><span class="meaning-text">[ verse meaning placeholder — comfortable readable text for older learners ]</span></div><div class="meaning-item"><span class="meaning-num">[ 8 ]</span><span class="meaning-text">[ verse meaning placeholder — comfortable readable text for older learners ]</span></div>
-      </div>
-
-      <div class="grid">
-        <div class="grid-rows">
-          <div class="row" data-row="1"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div><div class="row" data-row="2"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div><div class="row" data-row="3"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div><div class="row" data-row="4"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div><div class="row" data-row="5"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div><div class="row" data-row="6"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div><div class="row" data-row="7"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div><div class="row" data-row="8"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div><div class="row" data-row="9"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div><div class="row" data-row="10"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div><div class="row" data-row="11"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div><div class="row" data-row="12"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div>
-        </div>
-        <div class="tracker"><div class="tracker-check"><span class="tracker-box"></span><span class="tracker-label">Completed</span></div><div class="tracker-check"><span class="tracker-box"></span><span class="tracker-label">Reviewed</span></div><div class="tracker-check"><span class="tracker-box"></span><span class="tracker-label">Memorized</span></div><span class="tracker-label">&nbsp;Date</span><div class="tracker-line"></div><span class="tracker-label">Notes</span><div class="tracker-line"></div></div>
-      </div>
-
+    <div class="body-c">
+      <div class="panel"><div class="slot"><div class="slot-num">[ 1 ]</div><div class="slot-text">[ verse meaning placeholder &mdash; a comfortable italic summary, capped at three lines and clipped beyond ]</div></div><div class="slot"><div class="slot-num">[ 2 ]</div><div class="slot-text">[ verse meaning placeholder &mdash; a comfortable italic summary, capped at three lines and clipped beyond ]</div></div><div class="slot"><div class="slot-num">[ 3 ]</div><div class="slot-text">[ verse meaning placeholder &mdash; a comfortable italic summary, capped at three lines and clipped beyond ]</div></div><div class="slot"><div class="slot-num">[ 4 ]</div><div class="slot-text">[ verse meaning placeholder &mdash; a comfortable italic summary, capped at three lines and clipped beyond ]</div></div><div class="slot"><div class="slot-num">[ 5 ]</div><div class="slot-text">[ verse meaning placeholder &mdash; a comfortable italic summary, capped at three lines and clipped beyond ]</div></div><div class="slot"><div class="slot-num">[ 6 ]</div><div class="slot-text">[ verse meaning placeholder &mdash; a comfortable italic summary, capped at three lines and clipped beyond ]</div></div><div class="slot"><div class="slot-num">[ 7 ]</div><div class="slot-text">[ verse meaning placeholder &mdash; a comfortable italic summary, capped at three lines and clipped beyond ]</div></div><div class="slot"><div class="slot-num">[ 8 ]</div><div class="slot-text">[ verse meaning placeholder &mdash; a comfortable italic summary, capped at three lines and clipped beyond ]</div></div><div class="slot"><div class="slot-num">[ 9 ]</div><div class="slot-text">[ verse meaning placeholder &mdash; a comfortable italic summary, capped at three lines and clipped beyond ]</div></div><div class="slot"><div class="slot-num">[ 10 ]</div><div class="slot-text">[ verse meaning placeholder &mdash; a comfortable italic summary, capped at three lines and clipped beyond ]</div></div><div class="slot"><div class="slot-num">[ 11 ]</div><div class="slot-text">[ verse meaning placeholder &mdash; a comfortable italic summary, capped at three lines and clipped beyond ]</div></div><div class="slot"><div class="slot-num">[ 12 ]</div><div class="slot-text">[ verse meaning placeholder &mdash; a comfortable italic summary, capped at three lines and clipped beyond ]</div></div></div>
+      <div class="grid"><div class="row" data-row="1"><div class="cell"><div class="tr">tr-1</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-1</div></div><div class="cell"><div class="tr">tr-2</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-2</div></div><div class="cell"><div class="tr">tr-3</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-3</div></div><div class="cell"><div class="tr">tr-4</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-4</div></div><div class="cell"><div class="tr">tr-5</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-5</div></div><div class="cell"><div class="tr">tr-6</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-6</div></div><div class="cell"><div class="tr">tr-7</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-7</div></div><div class="cell"><div class="tr">tr-8</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-8</div></div><div class="cell"><div class="tr">tr-9</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-9</div></div><div class="cell"><div class="tr">tr-10</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-10</div></div></div><div class="row" data-row="2"><div class="cell"><div class="tr">tr-1</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-1</div></div><div class="cell"><div class="tr">tr-2</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-2</div></div><div class="cell"><div class="tr">tr-3</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-3</div></div><div class="cell"><div class="tr">tr-4</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-4</div></div><div class="cell"><div class="tr">tr-5</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-5</div></div><div class="cell"><div class="tr">tr-6</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-6</div></div><div class="cell"><div class="tr">tr-7</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-7</div></div><div class="cell"><div class="tr">tr-8</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-8</div></div><div class="cell"><div class="tr">tr-9</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-9</div></div><div class="cell"><div class="tr">tr-10</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-10</div></div></div><div class="row" data-row="3"><div class="cell"><div class="tr">tr-1</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-1</div></div><div class="cell"><div class="tr">tr-2</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-2</div></div><div class="cell"><div class="tr">tr-3</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-3</div></div><div class="cell"><div class="tr">tr-4</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-4</div></div><div class="cell"><div class="tr">tr-5</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-5</div></div><div class="cell"><div class="tr">tr-6</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-6</div></div><div class="cell"><div class="tr">tr-7</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-7</div></div><div class="cell"><div class="tr">tr-8</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-8</div></div><div class="cell"><div class="tr">tr-9</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-9</div></div><div class="cell"><div class="tr">tr-10</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-10</div></div></div><div class="row" data-row="4"><div class="cell"><div class="tr">tr-1</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-1</div></div><div class="cell"><div class="tr">tr-2</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-2</div></div><div class="cell"><div class="tr">tr-3</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-3</div></div><div class="cell"><div class="tr">tr-4</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-4</div></div><div class="cell"><div class="tr">tr-5</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-5</div></div><div class="cell"><div class="tr">tr-6</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-6</div></div><div class="cell"><div class="tr">tr-7</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-7</div></div><div class="cell"><div class="tr">tr-8</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-8</div></div><div class="cell"><div class="tr">tr-9</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-9</div></div><div class="cell"><div class="tr">tr-10</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-10</div></div></div><div class="row" data-row="5"><div class="cell"><div class="tr">tr-1</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-1</div></div><div class="cell"><div class="tr">tr-2</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-2</div></div><div class="cell"><div class="tr">tr-3</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-3</div></div><div class="cell"><div class="tr">tr-4</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-4</div></div><div class="cell"><div class="tr">tr-5</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-5</div></div><div class="cell"><div class="tr">tr-6</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-6</div></div><div class="cell"><div class="tr">tr-7</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-7</div></div><div class="cell"><div class="tr">tr-8</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-8</div></div><div class="cell"><div class="tr">tr-9</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-9</div></div><div class="cell"><div class="tr">tr-10</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-10</div></div></div><div class="row" data-row="6"><div class="cell"><div class="tr">tr-1</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-1</div></div><div class="cell"><div class="tr">tr-2</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-2</div></div><div class="cell"><div class="tr">tr-3</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-3</div></div><div class="cell"><div class="tr">tr-4</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-4</div></div><div class="cell"><div class="tr">tr-5</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-5</div></div><div class="cell"><div class="tr">tr-6</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-6</div></div><div class="cell"><div class="tr">tr-7</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-7</div></div><div class="cell"><div class="tr">tr-8</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-8</div></div><div class="cell"><div class="tr">tr-9</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-9</div></div><div class="cell"><div class="tr">tr-10</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-10</div></div></div><div class="row" data-row="7"><div class="cell"><div class="tr">tr-1</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-1</div></div><div class="cell"><div class="tr">tr-2</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-2</div></div><div class="cell"><div class="tr">tr-3</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-3</div></div><div class="cell"><div class="tr">tr-4</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-4</div></div><div class="cell"><div class="tr">tr-5</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-5</div></div><div class="cell"><div class="tr">tr-6</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-6</div></div><div class="cell"><div class="tr">tr-7</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-7</div></div><div class="cell"><div class="tr">tr-8</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-8</div></div><div class="cell"><div class="tr">tr-9</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-9</div></div><div class="cell"><div class="tr">tr-10</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-10</div></div></div><div class="row" data-row="8"><div class="cell"><div class="tr">tr-1</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-1</div></div><div class="cell"><div class="tr">tr-2</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-2</div></div><div class="cell"><div class="tr">tr-3</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-3</div></div><div class="cell"><div class="tr">tr-4</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-4</div></div><div class="cell"><div class="tr">tr-5</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-5</div></div><div class="cell"><div class="tr">tr-6</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-6</div></div><div class="cell"><div class="tr">tr-7</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-7</div></div><div class="cell"><div class="tr">tr-8</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-8</div></div><div class="cell"><div class="tr">tr-9</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-9</div></div><div class="cell"><div class="tr">tr-10</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-10</div></div></div><div class="row" data-row="9"><div class="cell"><div class="tr">tr-1</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-1</div></div><div class="cell"><div class="tr">tr-2</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-2</div></div><div class="cell"><div class="tr">tr-3</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-3</div></div><div class="cell"><div class="tr">tr-4</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-4</div></div><div class="cell"><div class="tr">tr-5</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-5</div></div><div class="cell"><div class="tr">tr-6</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-6</div></div><div class="cell"><div class="tr">tr-7</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-7</div></div><div class="cell"><div class="tr">tr-8</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-8</div></div><div class="cell"><div class="tr">tr-9</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-9</div></div><div class="cell"><div class="tr">tr-10</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-10</div></div></div><div class="row" data-row="10"><div class="cell"><div class="tr">tr-1</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-1</div></div><div class="cell"><div class="tr">tr-2</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-2</div></div><div class="cell"><div class="tr">tr-3</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-3</div></div><div class="cell"><div class="tr">tr-4</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-4</div></div><div class="cell"><div class="tr">tr-5</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-5</div></div><div class="cell"><div class="tr">tr-6</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-6</div></div><div class="cell"><div class="tr">tr-7</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-7</div></div><div class="cell"><div class="tr">tr-8</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-8</div></div><div class="cell"><div class="tr">tr-9</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-9</div></div><div class="cell"><div class="tr">tr-10</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-10</div></div></div><div class="row" data-row="11"><div class="cell"><div class="tr">tr-1</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-1</div></div><div class="cell"><div class="tr">tr-2</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-2</div></div><div class="cell"><div class="tr">tr-3</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-3</div></div><div class="cell"><div class="tr">tr-4</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-4</div></div><div class="cell"><div class="tr">tr-5</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-5</div></div><div class="cell"><div class="tr">tr-6</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-6</div></div><div class="cell"><div class="tr">tr-7</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-7</div></div><div class="cell"><div class="tr">tr-8</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-8</div></div><div class="cell"><div class="tr">tr-9</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-9</div></div><div class="cell"><div class="tr">tr-10</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-10</div></div></div><div class="row" data-row="12"><div class="cell"><div class="tr">tr-1</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-1</div></div><div class="cell"><div class="tr">tr-2</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-2</div></div><div class="cell"><div class="tr">tr-3</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-3</div></div><div class="cell"><div class="tr">tr-4</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-4</div></div><div class="cell"><div class="tr">tr-5</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-5</div></div><div class="cell"><div class="tr">tr-6</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-6</div></div><div class="cell"><div class="tr">tr-7</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-7</div></div><div class="cell"><div class="tr">tr-8</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-8</div></div><div class="cell"><div class="tr">tr-9</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-9</div></div><div class="cell"><div class="tr">tr-10</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-10</div></div></div></div>
     </div>
     <div class="footer"><span>[ Standard Page ]</span><span>Page 3 &nbsp;|&nbsp; Juz 1</span></div>
   </div>
@@ -453,20 +434,9 @@ body {
 <div class="page">
   <div class="page-inner">
     <div class="header"><span class="header-juz">JUZ 1</span><div class="header-mid"><span class="header-orn">&#10022;</span><span class="header-name">[ SURAH PLACEHOLDER ]</span><span class="header-orn">&#10022;</span></div><span class="header-page">PAGE 4</span></div>
-    <div class="body-standard">
-
-      <div class="meaning-panel">
-        <div class="meaning-panel-title">Verse Meanings</div>
-        <div class="meaning-item"><span class="meaning-num">[ 1 ]</span><span class="meaning-text">[ verse meaning placeholder — comfortable readable text for older learners ]</span></div><div class="meaning-item"><span class="meaning-num">[ 2 ]</span><span class="meaning-text">[ verse meaning placeholder — comfortable readable text for older learners ]</span></div><div class="meaning-item"><span class="meaning-num">[ 3 ]</span><span class="meaning-text">[ verse meaning placeholder — comfortable readable text for older learners ]</span></div><div class="meaning-item"><span class="meaning-num">[ 4 ]</span><span class="meaning-text">[ verse meaning placeholder — comfortable readable text for older learners ]</span></div><div class="meaning-item"><span class="meaning-num">[ 5 ]</span><span class="meaning-text">[ verse meaning placeholder — comfortable readable text for older learners ]</span></div><div class="meaning-item"><span class="meaning-num">[ 6 ]</span><span class="meaning-text">[ verse meaning placeholder — comfortable readable text for older learners ]</span></div><div class="meaning-item"><span class="meaning-num">[ 7 ]</span><span class="meaning-text">[ verse meaning placeholder — comfortable readable text for older learners ]</span></div><div class="meaning-item"><span class="meaning-num">[ 8 ]</span><span class="meaning-text">[ verse meaning placeholder — comfortable readable text for older learners ]</span></div>
-      </div>
-
-      <div class="grid">
-        <div class="grid-rows">
-          <div class="row" data-row="1"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div><div class="row" data-row="2"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div><div class="row" data-row="3"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div><div class="row" data-row="4"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div><div class="row" data-row="5"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div><div class="row" data-row="6"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div><div class="row" data-row="7"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div><div class="row" data-row="8"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div><div class="row" data-row="9"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div><div class="row" data-row="10"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div><div class="row" data-row="11"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div><div class="row" data-row="12"><div class="cell" data-cell="1"><div class="cell-tr">tr-1</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-1</div></div><div class="cell" data-cell="2"><div class="cell-tr">tr-2</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-2</div></div><div class="cell" data-cell="3"><div class="cell-tr">tr-3</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-3</div></div><div class="cell" data-cell="4"><div class="cell-tr">tr-4</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-4</div></div><div class="cell" data-cell="5"><div class="cell-tr">tr-5</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-5</div></div><div class="cell" data-cell="6"><div class="cell-tr">tr-6</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-6</div></div><div class="cell" data-cell="7"><div class="cell-tr">tr-7</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-7</div></div><div class="cell" data-cell="8"><div class="cell-tr">tr-8</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-8</div></div><div class="cell" data-cell="9"><div class="cell-tr">tr-9</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-9</div></div><div class="cell" data-cell="10"><div class="cell-tr">tr-10</div><div class="cell-div"></div><div class="cell-ar">&#1593;</div><div class="cell-div"></div><div class="cell-mn">m-10</div></div></div>
-        </div>
-        <div class="tracker"><div class="tracker-check"><span class="tracker-box"></span><span class="tracker-label">Completed</span></div><div class="tracker-check"><span class="tracker-box"></span><span class="tracker-label">Reviewed</span></div><div class="tracker-check"><span class="tracker-box"></span><span class="tracker-label">Memorized</span></div><span class="tracker-label">&nbsp;Date</span><div class="tracker-line"></div><span class="tracker-label">Notes</span><div class="tracker-line"></div></div>
-      </div>
-
+    <div class="body-c">
+      <div class="panel"><div class="slot"><div class="slot-num">[ 1 ]</div><div class="slot-text">[ verse meaning placeholder &mdash; a comfortable italic summary, capped at three lines and clipped beyond ]</div></div><div class="slot"><div class="slot-num">[ 2 ]</div><div class="slot-text">[ verse meaning placeholder &mdash; a comfortable italic summary, capped at three lines and clipped beyond ]</div></div><div class="slot"><div class="slot-num">[ 3 ]</div><div class="slot-text">[ verse meaning placeholder &mdash; a comfortable italic summary, capped at three lines and clipped beyond ]</div></div><div class="slot"><div class="slot-num">[ 4 ]</div><div class="slot-text">[ verse meaning placeholder &mdash; a comfortable italic summary, capped at three lines and clipped beyond ]</div></div><div class="slot"><div class="slot-num">[ 5 ]</div><div class="slot-text">[ verse meaning placeholder &mdash; a comfortable italic summary, capped at three lines and clipped beyond ]</div></div><div class="slot"><div class="slot-num">[ 6 ]</div><div class="slot-text">[ verse meaning placeholder &mdash; a comfortable italic summary, capped at three lines and clipped beyond ]</div></div><div class="slot"><div class="slot-num">[ 7 ]</div><div class="slot-text">[ verse meaning placeholder &mdash; a comfortable italic summary, capped at three lines and clipped beyond ]</div></div><div class="slot"><div class="slot-num">[ 8 ]</div><div class="slot-text">[ verse meaning placeholder &mdash; a comfortable italic summary, capped at three lines and clipped beyond ]</div></div><div class="slot"><div class="slot-num">[ 9 ]</div><div class="slot-text">[ verse meaning placeholder &mdash; a comfortable italic summary, capped at three lines and clipped beyond ]</div></div><div class="slot"><div class="slot-num">[ 10 ]</div><div class="slot-text">[ verse meaning placeholder &mdash; a comfortable italic summary, capped at three lines and clipped beyond ]</div></div><div class="slot"><div class="slot-num">[ 11 ]</div><div class="slot-text">[ verse meaning placeholder &mdash; a comfortable italic summary, capped at three lines and clipped beyond ]</div></div><div class="slot"><div class="slot-num">[ 12 ]</div><div class="slot-text">[ verse meaning placeholder &mdash; a comfortable italic summary, capped at three lines and clipped beyond ]</div></div></div>
+      <div class="grid"><div class="row" data-row="1"><div class="cell"><div class="tr">tr-1</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-1</div></div><div class="cell"><div class="tr">tr-2</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-2</div></div><div class="cell"><div class="tr">tr-3</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-3</div></div><div class="cell"><div class="tr">tr-4</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-4</div></div><div class="cell"><div class="tr">tr-5</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-5</div></div><div class="cell"><div class="tr">tr-6</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-6</div></div><div class="cell"><div class="tr">tr-7</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-7</div></div><div class="cell"><div class="tr">tr-8</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-8</div></div><div class="cell"><div class="tr">tr-9</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-9</div></div><div class="cell"><div class="tr">tr-10</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-10</div></div></div><div class="row" data-row="2"><div class="cell"><div class="tr">tr-1</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-1</div></div><div class="cell"><div class="tr">tr-2</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-2</div></div><div class="cell"><div class="tr">tr-3</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-3</div></div><div class="cell"><div class="tr">tr-4</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-4</div></div><div class="cell"><div class="tr">tr-5</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-5</div></div><div class="cell"><div class="tr">tr-6</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-6</div></div><div class="cell"><div class="tr">tr-7</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-7</div></div><div class="cell"><div class="tr">tr-8</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-8</div></div><div class="cell"><div class="tr">tr-9</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-9</div></div><div class="cell"><div class="tr">tr-10</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-10</div></div></div><div class="row" data-row="3"><div class="cell"><div class="tr">tr-1</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-1</div></div><div class="cell"><div class="tr">tr-2</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-2</div></div><div class="cell"><div class="tr">tr-3</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-3</div></div><div class="cell"><div class="tr">tr-4</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-4</div></div><div class="cell"><div class="tr">tr-5</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-5</div></div><div class="cell"><div class="tr">tr-6</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-6</div></div><div class="cell"><div class="tr">tr-7</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-7</div></div><div class="cell"><div class="tr">tr-8</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-8</div></div><div class="cell"><div class="tr">tr-9</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-9</div></div><div class="cell"><div class="tr">tr-10</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-10</div></div></div><div class="row" data-row="4"><div class="cell"><div class="tr">tr-1</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-1</div></div><div class="cell"><div class="tr">tr-2</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-2</div></div><div class="cell"><div class="tr">tr-3</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-3</div></div><div class="cell"><div class="tr">tr-4</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-4</div></div><div class="cell"><div class="tr">tr-5</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-5</div></div><div class="cell"><div class="tr">tr-6</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-6</div></div><div class="cell"><div class="tr">tr-7</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-7</div></div><div class="cell"><div class="tr">tr-8</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-8</div></div><div class="cell"><div class="tr">tr-9</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-9</div></div><div class="cell"><div class="tr">tr-10</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-10</div></div></div><div class="row" data-row="5"><div class="cell"><div class="tr">tr-1</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-1</div></div><div class="cell"><div class="tr">tr-2</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-2</div></div><div class="cell"><div class="tr">tr-3</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-3</div></div><div class="cell"><div class="tr">tr-4</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-4</div></div><div class="cell"><div class="tr">tr-5</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-5</div></div><div class="cell"><div class="tr">tr-6</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-6</div></div><div class="cell"><div class="tr">tr-7</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-7</div></div><div class="cell"><div class="tr">tr-8</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-8</div></div><div class="cell"><div class="tr">tr-9</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-9</div></div><div class="cell"><div class="tr">tr-10</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-10</div></div></div><div class="row" data-row="6"><div class="cell"><div class="tr">tr-1</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-1</div></div><div class="cell"><div class="tr">tr-2</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-2</div></div><div class="cell"><div class="tr">tr-3</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-3</div></div><div class="cell"><div class="tr">tr-4</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-4</div></div><div class="cell"><div class="tr">tr-5</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-5</div></div><div class="cell"><div class="tr">tr-6</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-6</div></div><div class="cell"><div class="tr">tr-7</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-7</div></div><div class="cell"><div class="tr">tr-8</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-8</div></div><div class="cell"><div class="tr">tr-9</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-9</div></div><div class="cell"><div class="tr">tr-10</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-10</div></div></div><div class="row" data-row="7"><div class="cell"><div class="tr">tr-1</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-1</div></div><div class="cell"><div class="tr">tr-2</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-2</div></div><div class="cell"><div class="tr">tr-3</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-3</div></div><div class="cell"><div class="tr">tr-4</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-4</div></div><div class="cell"><div class="tr">tr-5</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-5</div></div><div class="cell"><div class="tr">tr-6</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-6</div></div><div class="cell"><div class="tr">tr-7</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-7</div></div><div class="cell"><div class="tr">tr-8</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-8</div></div><div class="cell"><div class="tr">tr-9</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-9</div></div><div class="cell"><div class="tr">tr-10</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-10</div></div></div><div class="row" data-row="8"><div class="cell"><div class="tr">tr-1</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-1</div></div><div class="cell"><div class="tr">tr-2</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-2</div></div><div class="cell"><div class="tr">tr-3</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-3</div></div><div class="cell"><div class="tr">tr-4</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-4</div></div><div class="cell"><div class="tr">tr-5</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-5</div></div><div class="cell"><div class="tr">tr-6</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-6</div></div><div class="cell"><div class="tr">tr-7</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-7</div></div><div class="cell"><div class="tr">tr-8</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-8</div></div><div class="cell"><div class="tr">tr-9</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-9</div></div><div class="cell"><div class="tr">tr-10</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-10</div></div></div><div class="row" data-row="9"><div class="cell"><div class="tr">tr-1</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-1</div></div><div class="cell"><div class="tr">tr-2</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-2</div></div><div class="cell"><div class="tr">tr-3</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-3</div></div><div class="cell"><div class="tr">tr-4</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-4</div></div><div class="cell"><div class="tr">tr-5</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-5</div></div><div class="cell"><div class="tr">tr-6</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-6</div></div><div class="cell"><div class="tr">tr-7</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-7</div></div><div class="cell"><div class="tr">tr-8</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-8</div></div><div class="cell"><div class="tr">tr-9</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-9</div></div><div class="cell"><div class="tr">tr-10</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-10</div></div></div><div class="row" data-row="10"><div class="cell"><div class="tr">tr-1</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-1</div></div><div class="cell"><div class="tr">tr-2</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-2</div></div><div class="cell"><div class="tr">tr-3</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-3</div></div><div class="cell"><div class="tr">tr-4</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-4</div></div><div class="cell"><div class="tr">tr-5</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-5</div></div><div class="cell"><div class="tr">tr-6</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-6</div></div><div class="cell"><div class="tr">tr-7</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-7</div></div><div class="cell"><div class="tr">tr-8</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-8</div></div><div class="cell"><div class="tr">tr-9</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-9</div></div><div class="cell"><div class="tr">tr-10</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-10</div></div></div><div class="row" data-row="11"><div class="cell"><div class="tr">tr-1</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-1</div></div><div class="cell"><div class="tr">tr-2</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-2</div></div><div class="cell"><div class="tr">tr-3</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-3</div></div><div class="cell"><div class="tr">tr-4</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-4</div></div><div class="cell"><div class="tr">tr-5</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-5</div></div><div class="cell"><div class="tr">tr-6</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-6</div></div><div class="cell"><div class="tr">tr-7</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-7</div></div><div class="cell"><div class="tr">tr-8</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-8</div></div><div class="cell"><div class="tr">tr-9</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-9</div></div><div class="cell"><div class="tr">tr-10</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-10</div></div></div><div class="row" data-row="12"><div class="cell"><div class="tr">tr-1</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-1</div></div><div class="cell"><div class="tr">tr-2</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-2</div></div><div class="cell"><div class="tr">tr-3</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-3</div></div><div class="cell"><div class="tr">tr-4</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-4</div></div><div class="cell"><div class="tr">tr-5</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-5</div></div><div class="cell"><div class="tr">tr-6</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-6</div></div><div class="cell"><div class="tr">tr-7</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-7</div></div><div class="cell"><div class="tr">tr-8</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-8</div></div><div class="cell"><div class="tr">tr-9</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-9</div></div><div class="cell"><div class="tr">tr-10</div><div class="div"></div><div class="ar">&#1593;</div><div class="div"></div><div class="mn">m-10</div></div></div></div>
     </div>
     <div class="footer"><span>[ Standard Page ]</span><span>Page 4 &nbsp;|&nbsp; Juz 1</span></div>
   </div>
