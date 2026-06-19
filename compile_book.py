@@ -157,6 +157,8 @@ def main():
     front.append(('Symbols &amp; Conventions', inner_of(F.p_symbols()), True))
     front.append(('Learning Roadmap', inner_of(F.p_learning_roadmap()), True))
     front.append(('Qur&#8217;an Structure', inner_of(F.p_quran_structure()), True))
+    front.append(('About the Arabic Text', inner_of(F.p_about_arabic_text()), True))
+    front.append(('About the Translation', inner_of(F.p_about_translation()), True))
     front.append(('Juz Index', juz_index_inner(juz_start, 0), True))
     front.append(('Surah Index', surah_index_inner(surah_start, 0, 1, 57), True))
     front.append(('Surah Index', surah_index_inner(surah_start, 0, 58, 114), True))
