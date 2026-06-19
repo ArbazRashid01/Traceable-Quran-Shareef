@@ -479,15 +479,83 @@ body.tqedit [data-tq]:hover{background:rgba(201,168,76,.25);border-radius:3px}
 body.tqedit [data-tq]:focus{background:#fffbe9;box-shadow:0 0 0 2px #c9a84c;
   border-radius:3px;outline:none}
 body.tqpad{padding-top:46px}
-@media print{#tqbar{display:none}body.tqpad{padding-top:0}}
+@media print{#tqbar{display:none}body.tqpad{padding-top:0}#tqcolors{display:none!important}}
+
+/* ── COLOUR VARIABLES + OVERRIDES (live-editable theme) ── */
+:root{
+  --c-sheet:#fdf7ed; --c-words:#fdf7ed; --c-panel:#f6ead6; --c-header:#f8f0dc;
+  --c-arabic:rgba(0,0,0,0.18); --c-translit:#a07830; --c-meaning:#1e1206;
+  --c-vmeaning:#2a1a06; --c-gold:#c9a84c;
+}
+.page{background:var(--c-sheet)!important;border-color:var(--c-gold)!important}
+.words{background:var(--c-words)!important}
+.panel{background:var(--c-panel)!important}
+.header{background:var(--c-header)!important}
+.ar{color:var(--c-arabic)!important}
+.marker .ar.mk{color:var(--c-gold)!important}
+.tr{color:var(--c-translit)!important}
+.mn{color:var(--c-meaning)!important}
+.ptxt,.pnum{color:var(--c-vmeaning)!important}
+
+/* ── COLOUR PANEL ── */
+#tqcolors{position:fixed;top:46px;right:10px;z-index:9998;width:250px;
+  background:#fdf7ed;border:1.5px solid #c9a84c;border-radius:8px;
+  box-shadow:0 8px 28px rgba(0,0,0,.4);padding:12px 14px;display:none;
+  font:12px Georgia,serif;color:#1a0e04;max-height:82vh;overflow:auto}
+#tqcolors.show{display:block}
+#tqcolors h4{font-size:12px;letter-spacing:1px;color:#8b6c14;margin:0 0 8px;
+  text-transform:uppercase;border-bottom:1px solid #d4b870;padding-bottom:5px}
+.tqrow{display:flex;align-items:center;justify-content:space-between;
+  gap:8px;margin:7px 0}
+.tqrow label{font-size:11.5px;color:#2a1a06}
+.tqrow input[type=color]{width:34px;height:24px;border:1px solid #c9a84c;
+  border-radius:4px;background:none;cursor:pointer;padding:0}
+.tqrow input[type=range]{width:90px}
+#tqcolors .presets{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px}
+#tqcolors .presets button{flex:1;min-width:60px;font-size:10px;padding:5px 4px;
+  border:1px solid #c9a84c;border-radius:4px;cursor:pointer;background:#f6ead6;color:#1a0e04}
+#tqcolors .presets button:hover{background:#ece0c4}
 """
 
 EDITOR_BAR = ('<div id="tqbar">'
   '<span class="t">TRACEABLE QURAN &middot; EDIT</span>'
   '<button id="tqEdit" onclick="tqToggle()">&#9998; Edit Mode</button>'
+  '<button class="alt" onclick="tqColors()">&#127912; Colors</button>'
   '<button class="alt" onclick="tqReset()">&#8635; Reset</button>'
   '<button onclick="tqExport()">&#10515; Save / Export</button>'
-  '<span class="s" id="tqStatus"></span></div>')
+  '<span class="s" id="tqStatus"></span></div>'
+  '<div id="tqcolors">'
+    '<h4>Theme Presets</h4>'
+    '<div class="presets">'
+      '<button onclick="tqPreset(\'ivory\')">Ivory</button>'
+      '<button onclick="tqPreset(\'white\')">White</button>'
+      '<button onclick="tqPreset(\'sepia\')">Sepia</button>'
+      '<button onclick="tqPreset(\'night\')">Night</button>'
+      '<button onclick="tqPreset(\'mint\')">Mint</button>'
+    '</div>'
+    '<h4>Custom Colours</h4>'
+    '<div class="tqrow"><label>Sheet background</label>'
+      '<input type="color" id="cv-sheet" data-var="--c-sheet"></div>'
+    '<div class="tqrow"><label>Word area background</label>'
+      '<input type="color" id="cv-words" data-var="--c-words"></div>'
+    '<div class="tqrow"><label>Meaning box background</label>'
+      '<input type="color" id="cv-panel" data-var="--c-panel"></div>'
+    '<div class="tqrow"><label>Header background</label>'
+      '<input type="color" id="cv-header" data-var="--c-header"></div>'
+    '<div class="tqrow"><label>Border / accent</label>'
+      '<input type="color" id="cv-gold" data-var="--c-gold"></div>'
+    '<h4>Text Colours</h4>'
+    '<div class="tqrow"><label>Arabic trace</label>'
+      '<input type="color" id="cv-arabic"></div>'
+    '<div class="tqrow"><label>Arabic darkness</label>'
+      '<input type="range" id="cv-arabic-op" min="8" max="100" value="18"></div>'
+    '<div class="tqrow"><label>Transliteration</label>'
+      '<input type="color" id="cv-translit" data-var="--c-translit"></div>'
+    '<div class="tqrow"><label>Word meaning</label>'
+      '<input type="color" id="cv-meaning" data-var="--c-meaning"></div>'
+    '<div class="tqrow"><label>Verse meaning</label>'
+      '<input type="color" id="cv-vmeaning" data-var="--c-vmeaning"></div>'
+  '</div>')
 
 
 EDITOR_JS = """<script>
@@ -558,10 +626,67 @@ EDITOR_JS = """<script>
   };
   function status(m){document.getElementById('tqStatus').textContent=m;}
   document.addEventListener('input',function(){if(!editing)return;clearTimeout(t);t=setTimeout(save,500);});
+
+  /* ── COLOUR THEME ENGINE ── */
+  var CKEY='tqcolors::'+document.title;
+  var root=document.documentElement;
+  var PRESETS={
+    ivory:{'--c-sheet':'#fdf7ed','--c-words':'#fdf7ed','--c-panel':'#f6ead6','--c-header':'#f8f0dc','--c-gold':'#c9a84c','--c-translit':'#a07830','--c-meaning':'#1e1206','--c-vmeaning':'#2a1a06','--c-arabic':'rgba(0,0,0,0.18)'},
+    white:{'--c-sheet':'#ffffff','--c-words':'#ffffff','--c-panel':'#f4f4f2','--c-header':'#eeeeee','--c-gold':'#b8964a','--c-translit':'#8a6a28','--c-meaning':'#1a1a1a','--c-vmeaning':'#222222','--c-arabic':'rgba(0,0,0,0.20)'},
+    sepia:{'--c-sheet':'#f3e7d0','--c-words':'#f3e7d0','--c-panel':'#ead9bb','--c-header':'#e6d3ad','--c-gold':'#a9852f','--c-translit':'#8a5a1c','--c-meaning':'#3a2410','--c-vmeaning':'#43301a','--c-arabic':'rgba(40,20,0,0.22)'},
+    night:{'--c-sheet':'#222018','--c-words':'#222018','--c-panel':'#2c2a20','--c-header':'#1a1812','--c-gold':'#c9a84c','--c-translit':'#d8b36a','--c-meaning':'#ece0c4','--c-vmeaning':'#e6d8b8','--c-arabic':'rgba(255,255,255,0.28)'},
+    mint:{'--c-sheet':'#eef6f0','--c-words':'#eef6f0','--c-panel':'#dcebe0','--c-header':'#d6e8da','--c-gold':'#4a9e74','--c-translit':'#2f7a52','--c-meaning':'#13301f','--c-vmeaning':'#1c3a28','--c-arabic':'rgba(0,40,20,0.20)'}
+  };
+  function hexToRgba(hex,a){var n=hex.replace('#','');
+    var r=parseInt(n.substr(0,2),16),g=parseInt(n.substr(2,2),16),b=parseInt(n.substr(4,2),16);
+    return 'rgba('+r+','+g+','+b+','+a+')';}
+  function rgbaParts(v){var m=/rgba?\\(([^)]+)\\)/.exec(v);if(!m)return null;
+    var p=m[1].split(',');return {r:+p[0],g:+p[1],b:+p[2],a:p[3]!==undefined?+p[3]:1};}
+  function rgbToHex(r,g,b){return '#'+[r,g,b].map(function(x){return ('0'+(x|0).toString(16)).slice(-2);}).join('');}
+  function applyVars(map){Object.keys(map).forEach(function(k){root.style.setProperty(k,map[k]);});}
+  function saveColors(){
+    var d={}; ['--c-sheet','--c-words','--c-panel','--c-header','--c-gold',
+      '--c-translit','--c-meaning','--c-vmeaning','--c-arabic'].forEach(function(k){
+        var v=root.style.getPropertyValue(k); if(v) d[k]=v.trim(); });
+    localStorage.setItem(CKEY,JSON.stringify(d));
+    status('Theme saved \\u2713');
+  }
+  function syncPickers(){
+    document.querySelectorAll('#tqcolors input[data-var]').forEach(function(inp){
+      var cur=getComputedStyle(root).getPropertyValue(inp.dataset.var).trim();
+      if(cur && cur[0]==='#') inp.value=cur;
+      else if(cur.indexOf('rgb')===0){var p=rgbaParts(cur);if(p)inp.value=rgbToHex(p.r,p.g,p.b);}
+    });
+    var av=getComputedStyle(root).getPropertyValue('--c-arabic').trim();
+    var p=rgbaParts(av);
+    if(p){document.getElementById('cv-arabic').value=rgbToHex(p.r,p.g,p.b);
+          document.getElementById('cv-arabic-op').value=Math.round(p.a*100);}
+  }
+  window.tqColors=function(){document.getElementById('tqcolors').classList.toggle('show');syncPickers();};
+  window.tqPreset=function(name){applyVars(PRESETS[name]);saveColors();syncPickers();status('Applied '+name+' theme');};
+  // wire pickers
+  function wireColors(){
+    document.querySelectorAll('#tqcolors input[data-var]').forEach(function(inp){
+      inp.addEventListener('input',function(){root.style.setProperty(inp.dataset.var,inp.value);saveColors();});
+    });
+    function setArabic(){
+      var hex=document.getElementById('cv-arabic').value;
+      var op=(+document.getElementById('cv-arabic-op').value)/100;
+      root.style.setProperty('--c-arabic',hexToRgba(hex,op));saveColors();
+    }
+    document.getElementById('cv-arabic').addEventListener('input',setArabic);
+    document.getElementById('cv-arabic-op').addEventListener('input',setArabic);
+  }
+  function loadColors(){
+    var raw=localStorage.getItem(CKEY); if(!raw)return;
+    try{applyVars(JSON.parse(raw));}catch(e){}
+  }
   document.body.classList.add('tqpad');
   collect();
   nodes.forEach(function(el){el.dataset.orig=el.innerHTML;});
   load();
+  wireColors();
+  loadColors();
 })();
 </script>"""
 

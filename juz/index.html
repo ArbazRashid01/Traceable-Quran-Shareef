@@ -74,6 +74,7 @@ h1{color:var(--parch);font-size:30px;letter-spacing:2px;text-align:center;margin
 <div class="toolbar">
   <span class="ttl">TRACEABLE QURAN · MASTER INDEX</span>
   <button class="btn" id="editBtn" onclick="toggleEdit()">✎ Edit Mode</button>
+  <button class="btn alt" onclick="cycleTheme()">🎨 Theme</button>
   <button class="btn alt" id="addBtn" onclick="addJuz()" style="display:none">＋ Add Tile</button>
   <button class="btn alt" onclick="resetAll()">↺ Reset</button>
   <button class="btn" onclick="downloadHTML()">⤓ Save / Export</button>
@@ -174,6 +175,21 @@ function saveState(){
   setStatus('Saved ✓ '+new Date().toLocaleTimeString());
 }
 function setStatus(m){document.getElementById('status').textContent=m;}
+
+// ── Theme cycling for the index page ──
+const IDX_THEMES=[
+  {bg:'#9e8f72',name:'Default'},
+  {bg:'#2a2620',name:'Night'},
+  {bg:'#6e5a3c',name:'Walnut'},
+  {bg:'#4a5e50',name:'Forest'},
+  {bg:'#5a4a5e',name:'Plum'}
+];
+let idxTheme=parseInt(localStorage.getItem('tq_idx_theme')||'0');
+function applyTheme(){document.body.style.background=IDX_THEMES[idxTheme].bg;}
+function cycleTheme(){idxTheme=(idxTheme+1)%IDX_THEMES.length;
+  localStorage.setItem('tq_idx_theme',idxTheme);applyTheme();
+  setStatus('Theme: '+IDX_THEMES[idxTheme].name);}
+applyTheme();
 
 function addJuz(){
   // adds a custom blank tile to the grid for the user to fill
