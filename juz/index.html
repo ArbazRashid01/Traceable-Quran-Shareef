@@ -74,6 +74,7 @@ h1{color:var(--parch);font-size:30px;letter-spacing:2px;text-align:center;margin
 <div class="toolbar">
   <span class="ttl">TRACEABLE QURAN · MASTER INDEX</span>
   <button class="btn" id="editBtn" onclick="toggleEdit()">✎ Edit Mode</button>
+  <button class="btn alt" id="langBtn" onclick="toggleLang()">اردو Roman Urdu</button>
   <button class="btn alt" onclick="cycleTheme()">🎨 Theme</button>
   <button class="btn alt" id="addBtn" onclick="addJuz()" style="display:none">＋ Add Tile</button>
   <button class="btn alt" onclick="resetAll()">↺ Reset</button>
@@ -110,7 +111,7 @@ h1{color:var(--parch);font-size:30px;letter-spacing:2px;text-align:center;margin
     </a>
   </div>
 
-  <div class="section-title" data-edit>The 30 Juz</div>
+  <div class="section-title" data-edit id="juzTitle">The 30 Juz — English</div>
   <div class="grid" id="grid"></div>
 
   <div class="note" data-edit>To print: open any file in Chrome → Ctrl+P → Save as PDF → A4, no margins, background graphics ON.</div>
@@ -120,11 +121,22 @@ h1{color:var(--parch);font-size:30px;letter-spacing:2px;text-align:center;margin
 // Optional per-Juz titles (editable). Default blank.
 const JUZ_TITLES = JSON.parse(localStorage.getItem('tq_juztitles')||'{}');
 
+let lang='en';
+function toggleLang(){
+  lang = (lang==='en') ? 'ur' : 'en';
+  document.getElementById('langBtn').textContent = (lang==='en') ? 'اردو Roman Urdu' : 'EN English';
+  document.getElementById('juzTitle').textContent = (lang==='en') ? 'The 30 Juz — English' : 'The 30 Juz — Roman Urdu';
+  buildGrid();
+  setStatus(lang==='en' ? 'Showing English edition' : 'Showing Roman Urdu edition');
+}
+
 function buildGrid(){
   const g=document.getElementById('grid'); g.innerHTML='';
   for(let i=1;i<=30;i++){
     const a=document.createElement('a');
-    a.className='j'; a.href='Juz-'+String(i).padStart(2,'0')+'.html';
+    a.className='j';
+    const suffix = (lang==='ur') ? '-Urdu' : '';
+    a.href='Juz-'+String(i).padStart(2,'0')+suffix+'.html';
     a.dataset.juz=i;
     a.innerHTML='<span class="jn" data-edit>'+i+'</span>'+
                 '<span class="jl" data-edit>Juz '+i+'</span>'+

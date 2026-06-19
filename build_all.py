@@ -438,12 +438,14 @@ body{{display:flex;flex-direction:column;align-items:center;padding:28px 0;gap:2
 
 def write_juz(juz):
     pages=build_juz(juz)
+    suffix=globals().get('VARIANT','')
+    tsuf=globals().get('TITLE_SUFFIX','')
     html=(f'<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/>'
           f'<meta name="viewport" content="width=device-width,initial-scale=1.0"/>'
-          f'<title>Traceable Quran &mdash; Juz {juz}</title>'
+          f'<title>Traceable Quran &mdash; Juz {juz}{tsuf}</title>'
           f'{fonts_block()}<style>{css()}{EDITOR_CSS}</style></head><body>'
           f'{EDITOR_BAR}{"".join(pages)}{EDITOR_JS}</body></html>')
-    out=OUTDIR/f'Juz-{juz:02d}.html'
+    out=OUTDIR/f'Juz-{juz:02d}{suffix}.html'
     out.write_text(html,encoding='utf-8')
     return out,len(pages),out.stat().st_size
 
